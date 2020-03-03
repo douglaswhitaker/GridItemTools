@@ -36,6 +36,7 @@ make.grid9s <- function(grid.items.names){
   return(grid9s)
 }
 
+# This is wrong! Need to write grid.tr() because diagonal is (1,5) through (5,1)
 # trace + trace of two submatrices
 library(psych)
 within1diag <- function(mat,col=5){
