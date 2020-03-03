@@ -35,3 +35,13 @@ make.grid9s <- function(grid.items.names){
   grid9s <- grid9s[-1,]
   return(grid9s)
 }
+
+# trace + trace of two submatrices
+library(psych)
+within1diag <- function(mat,col=5){
+  count <- 0
+  count <- count + psych::tr(mat)
+  count <- count + psych::tr(mat[1:(col-1),2:col])
+  count <- count + psych::tr(mat[2:col,1:(col-1)])
+  return(count)
+}

@@ -34,7 +34,7 @@ Page2Grids <- list()
 for (i in 1:length(grid.items.page2.names)){
   Page2Grids[[grid.items.page2.names[i]]] <- matrix(0,nrow=5,ncol=5)
   for (current.row in 3:3){
-    grid.column <- which(!is.na(grid.items.page2.dat[current.row,((i-1)*25):(i*25)])) # should only be one value
+    grid.column <- which(!is.na(grid.items.page2.dat[current.row,((i-1)*25+1):(i*25)])) # should only be one value
     grid.xy <- col2xy(grid.column)
     Page2Grids[[grid.items.page2.names[i]]][grid.xy] <- Page2Grids[[grid.items.page2.names[i]]][grid.xy] + 1
   }
