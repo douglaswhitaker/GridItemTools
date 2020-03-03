@@ -74,9 +74,12 @@ for (i in 1:length(grid.resp.items)){
     ggtitle(paste(names(grid.resp.items[i]),": Heat Map - Grid Pilot March 2020",sep=""))
 }
 
-grid.arrange(grobs=heat.list[1:9],nrow=3)
-grid.arrange(grobs=heat.list[10:19],nrow=4)
-grid.arrange(grobs=heat.list[20:22],nrow=3)
+# Calling this n=10 on morning of March 3rd because there are 10 complete
+# A more accurate description would be n=13 because of the 3 partial
+grid.arrange(grobs=heat.list[1:10],nrow=3) # Page 2 = Group B (10 items)
+grid.arrange(grobs=heat.list[11:19],nrow=3) # Page 4 = Group A (9 items)
+grid.arrange(grobs=heat.list[20:22],nrow=3) # Page 5 = Group C (3 items)
+grid.arrange(grobs=heat.list[20:22],nrow=2) # Page 5 = Group C (3 items)
 
 
 
