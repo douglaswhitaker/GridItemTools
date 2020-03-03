@@ -1,15 +1,25 @@
 
+# read data
 dat.raw <- read.csv("data/real/results-survey945827-202003030207-code.csv")
 
+# To do: build in a better consent checking mechanism. Right now we ONLY have item data from people who did consent 
+# The ONLY columns that we need to deal with are:
+#         interviewtime. Total time	
+#         groupTime18654. Group time: Informed Consent
+# Quotas were used to ensure that anyone who did not select (Yes, Yes, 19+, Yes) was not presented the survey.
+
+
+# identify the columns of the dataset that contain the data for the grid items
+# each grid item occupies 25 columns; 24 values are NA and one value is 1
 all.grid.item.cols <- sapply(names(dat.raw),grepl,pattern="_",simplify=TRUE)
-
-
 all.grid.item.names <- grid.item.names(names(dat.raw)[which(all.grid.item.cols)]) # length 22 vector of names
 
+# subset the dataset so that we can step through in increments of 25
+# it might be better to not subset this and instead have a more sophisticated looping mechanism, but that's for later 
 dat.grid <- dat.raw[,which(all.grid.item.cols)]
 
-
-grid.resp.items <- grid.resp.participant <- list()
+# empty results vector
+grid.resp.items <- list()
 
 ##########################################################
 # This should produce counts in each cell for all 22 items 
@@ -22,21 +32,30 @@ for (i in 1:length(all.grid.item.names)){
   }
 }
 
-## ## ## Diagonal direction is WRONG - it isn't (1,1) through (5,5)
-## It is (1,5) through (5,1)
-## Write a grid.tr() function to do this instead.
-
+# Examining the proportion of responses to each item that are ON the diagonal or NEAR the diagonal
 grid.count.all <- sapply(grid.resp.items,sum,simplify=TRUE)
-
-library(psych)
-grid.count.diag <- sapply(grid.resp.items,tr,simplify=TRUE)
-
-round(grid.count.diag/grid.count.all,2)
-
-
+grid.count.diag <- sapply(grid.resp.items,grid.tr,simplify=TRUE)
 grid.count.within1 <- sapply(grid.resp.items,within1diag,simplify = TRUE)
+round(grid.count.diag/grid.count.all,2)
 round(grid.count.within1/grid.count.all,2)
 
+
+##########################################################
+# This should produce counts in each cell for all participants
+
+grid.resp.participant <- list()
+
+for (current.row in 1:nrow(dat.grid)){
+  grid.resp.participant[[current.row]] <- matrix(0,nrow=5,ncol=5)
+  for (i in 1:length(all.grid.item.names)){
+    grid.column <- which(!is.na(dat.grid[current.row,((i-1)*25+1):(i*25)])) # should only be one value
+    grid.xy <- col2xy(grid.column)
+    grid.resp.participant[[current.row]][grid.xy] <- grid.resp.participant[[current.row]][grid.xy] + 1
+  }
+}
+
+# Account for people who did not respond to the items (i.e. those who do not consent)
+delete.empty.mat(grid.resp.participant)
 
 ##################################
 # Next: for each of the respondents, get 22 converted 9-point scales so we can check (spearman) correlations

@@ -29,6 +29,7 @@ grid2nine <- function(gc,b = -0.5){
   return((b+2)*i+b*j-1-6*b)
 }
 
+# Essentially just creating an empty data.frame with the appropriate column names
 make.grid9s <- function(grid.items.names){
   grid9s <- t(data.frame(rep(NA,length(grid.items.names))))
   colnames(grid9s) <- grid.items.names
@@ -36,13 +37,29 @@ make.grid9s <- function(grid.items.names){
   return(grid9s)
 }
 
-# This is wrong! Need to write grid.tr() because diagonal is (1,5) through (5,1)
-# trace + trace of two submatrices
-library(psych)
+grid.tr <- function(mat, col = NULL){
+  if (is.null(col)) col <- ncol(mat)
+  val <- 0
+  for (i in 1:col){
+    val <- val + mat[i,col+1-i]
+  }
+  return(val)
+}
+
+# In the future make number of off-diagonal diagonals selected (i.e. more than 1)
 within1diag <- function(mat,col=5){
   count <- 0
-  count <- count + psych::tr(mat)
-  count <- count + psych::tr(mat[1:(col-1),2:col])
-  count <- count + psych::tr(mat[2:col,1:(col-1)])
+  count <- count + grid.tr(mat)
+  count <- count + grid.tr(mat[1:(col-1),1:(col-1)])
+  count <- count + grid.tr(mat[2:col,2:col])
   return(count)
+}
+
+delete.empty.mat <- function(resp.list){
+  for (i in 1:length(resp.list)){
+    if (sum(resp.list[[i]])==0){
+      resp.list[[i]] <- NA
+    }
+  }
+  return(resp.list)
 }
