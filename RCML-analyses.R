@@ -57,5 +57,37 @@ for (current.row in 1:nrow(dat.grid)){
 # Account for people who did not respond to the items (i.e. those who do not consent)
 delete.empty.mat(grid.resp.participant)
 
+
+#################
+# Making graphs
+library(ggplot2)
+library(gridExtra)
+
+heat.list <- list()
+for (i in 1:length(grid.resp.items)){
+  heat.list[[i]] <- ggplot(data=mat2df(grid.resp.items[[i]]),
+                         mapping=aes(x=x,y=y,fill=count)) +
+    geom_tile() + scale_fill_gradient(name = "Count",
+                                      low = "#FFFFFF",
+                                      high = "#012345") +
+    labs(x="Positive",y="Negative") + 
+    ggtitle(paste(names(grid.resp.items[i]),": Heat Map - Grid Pilot March 2020",sep=""))
+}
+
+grid.arrange(grobs=heat.list[1:9],nrow=3)
+grid.arrange(grobs=heat.list[10:19],nrow=4)
+grid.arrange(grobs=heat.list[20:22],nrow=3)
+
+
+
+# testing.heat <- ggplot(data=mat2df(grid.resp.items[[1]]),
+#                        mapping=aes(x=x,y=y,fill=count)) +
+#   geom_tile() + scale_fill_gradient(name = "Count",
+#                                     low = "#FFFFFF",
+#                                     high = "#012345") +
+#   ggtitle(paste(names(grid.resp.items[1]),"Heat Map - Grid Pilot March 2020"))
+# 
+# testing.heat
+
 ##################################
 # Next: for each of the respondents, get 22 converted 9-point scales so we can check (spearman) correlations

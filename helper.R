@@ -63,3 +63,7 @@ delete.empty.mat <- function(resp.list){
   }
   return(resp.list)
 }
+
+mat2df <- function(mat,col=5){
+  return(data.frame(x=rep(1:col,each=col),y=rep(1:col,col),count=as.vector(mat)))
+}
