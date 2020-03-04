@@ -94,3 +94,49 @@ grid.arrange(grobs=heat.list[20:22],nrow=2) # Page 5 = Group C (3 items)
 
 ##################################
 # Next: for each of the respondents, get 22 converted 9-point scales so we can check (spearman) correlations
+
+
+
+grid9s <- make.grid9s(all.grid.item.names)
+for (current.row in 1:nrow(dat.grid)){
+  vals <- c()
+  for (i in 1:length(all.grid.item.names)){
+    grid.column <- which(!is.na(dat.grid[current.row,((i-1)*25+1):(i*25)])) # should only be one value
+    vals[i] <- grid2nine(grid.column)
+  }
+  grid9s <- rbind(grid9s,current.row=vals)
+}
+
+dat.nogrid9 <- cbind(dat.raw[,which(!all.grid.item.cols)],grid9s)
+
+names(dat.nogrid9)
+# Columns 13-21 match with 107-115
+# Columns 25-34 match with 97-106
+
+# Check correlations within people and within items
+
+####
+### We need to be careful here - it looks like NA's are getting changed to vectors of 1's - not good!
+###
+
+# These are correlations within items
+for (i in 13:21){
+  print(round(cor(as.numeric(substr(dat.nogrid9[,i],1,1)),dat.nogrid9[,i+94],method="spearman",use="pairwise.complete.obs"),3))
+}
+
+for (i in 25:34){
+  print(round(cor(as.numeric(substr(dat.nogrid9[,i],1,1)),dat.nogrid9[,i+72],method="spearman",use="pairwise.complete.obs"),3))
+}
+
+
+
+# These are correlations within people
+for (j in 1:nrow(dat.nogrid9)){
+  print(round(cor(as.numeric(substr(dat.nogrid9[j,c(13:21,25:34)],1,1)),as.numeric(dat.nogrid9[j,c(107:115,97:106)]),method="spearman",use="pairwise.complete.obs"),3))
+}
+
+# Warning messages:
+#   1: In cor(as.numeric(substr(dat.nogrid9[j, c(13:21, 25:34)], 1, 1)),  :
+#               the standard deviation is zero
+
+# Need to 
