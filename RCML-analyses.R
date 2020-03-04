@@ -1,6 +1,6 @@
 
 # read data
-dat.raw <- read.csv("data/real/results-survey945827-202003030207-code.csv")
+dat.raw <- read.csv("data/real/results-survey945827-202003030207-code.csv",stringsAsFactors = FALSE)
 
 # To do: build in a better consent checking mechanism. Right now we ONLY have item data from people who did consent 
 # The ONLY columns that we need to deal with are:
