@@ -36,8 +36,8 @@ display.grid2nine <- function(gcvals=c(1:25),b=-0.5,match.lit = FALSE){
     j <- col2xy(gc)[1] # the Y value, the row in our format
     mat[j,i] <- grid2nine(gc,b)
   }
-  colnames(mat) <- paste("Pos",1:5,sep="")
-  rownames(mat) <- paste("Neg",1:5,sep="")
+  colnames(mat) <- paste("Agree",1:5,sep="")
+  rownames(mat) <- paste("Disagree",1:5,sep="")
   if (!match.lit){
     mat <- as.table(mat)
     return(mat)
@@ -97,6 +97,12 @@ sum.resp.mats <- function(mat.list,items=NULL){
   return(tmp)
 }
 
-make4cats <- function(){
-  
+# to do: give option to return as table for easy use of chi-sq
+# and/or build testing into this function
+make4cats <- function(grid,poscut=3,negcut=3){
+  neg <- sum(grid[negcut:5,1:(poscut-1)])
+  pos <- sum(grid[1:(negcut-1),poscut:5])
+  ind <- sum(grid[1:(negcut-1),1:(poscut-1)])
+  amb <- sum(grid[negcut:5,poscut:5])
+  return(list(pos=pos,neg=neg,ind=ind,amb=amb))
 }

@@ -70,7 +70,7 @@ for (i in 1:length(grid.resp.items)){
     geom_tile() + scale_fill_gradient(name = "Count",
                                       low = "#FFFFFF",
                                       high = "#012345") +
-    labs(x="Positive",y="Negative") + 
+    labs(x="Agreement",y="Disagreement") + 
     ggtitle(paste(names(grid.resp.items[i]),": Heat Map - Grid Pilot March 2020",sep=""))
 }
 
@@ -130,6 +130,7 @@ fixLimeSurveyLikert <- function(dat, cols, ...){
 
 dat.nogrid9 <- fixLimeSurveyLikert(dat.nogrid9,cols=c(13:21,25:34))
 
+# Try these again with b=-1
 # These are correlations within items
 for (i in 13:21){
   print(round(cor(dat.nogrid9[,i],dat.nogrid9[,i+94],method="spearman",use="pairwise.complete.obs"),3))
@@ -170,7 +171,7 @@ page2.heat <- ggplot(data=mat2df(sum.resp.mats(grid.resp.items,1:10)),
   geom_tile() + scale_fill_gradient(name = "Count",
                                     low = "#FFFFFF",
                                     high = "#012345") +
-  labs(x="Positive",y="Negative") + 
+  labs(x="Agreement",y="Disagreement") + 
   ggtitle(paste(names(grid.resp.items[i]),": Heat Map - Page 2 Items 1-10 Summed",sep=""))
 
 page2.heat
@@ -182,7 +183,7 @@ page4.heat <- ggplot(data=mat2df(sum.resp.mats(grid.resp.items,11:19)),
   geom_tile() + scale_fill_gradient(name = "Count",
                                     low = "#FFFFFF",
                                     high = "#012345") +
-  labs(x="Positive",y="Negative") + 
+  labs(x="Agreement",y="Disagreement") + 
   ggtitle(paste(names(grid.resp.items[i]),": Heat Map - Page 4 Items 1-9 Summed",sep=""))
 
 page4.heat
