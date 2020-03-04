@@ -119,24 +119,70 @@ names(dat.nogrid9)
 ### We need to be careful here - it looks like NA's are getting changed to vectors of 1's - not good!
 ###
 
+dat.nogrid9[which((dat.nogrid9==""))] <- NA
+
+fixLimeSurveyLikert <- function(dat, cols, ...){
+  for (i in cols){
+    dat[,i] <- as.numeric(substr(dat[,i],1,1)) # as ong as there are 9 or fewer scale points "1,1" should work
+  }
+  return(dat)
+}
+
+dat.nogrid9 <- fixLimeSurveyLikert(dat.nogrid9,cols=c(13:21,25:34))
+
 # These are correlations within items
 for (i in 13:21){
-  print(round(cor(as.numeric(substr(dat.nogrid9[,i],1,1)),dat.nogrid9[,i+94],method="spearman",use="pairwise.complete.obs"),3))
+  print(round(cor(dat.nogrid9[,i],dat.nogrid9[,i+94],method="spearman",use="pairwise.complete.obs"),3))
 }
 
 for (i in 25:34){
-  print(round(cor(as.numeric(substr(dat.nogrid9[,i],1,1)),dat.nogrid9[,i+72],method="spearman",use="pairwise.complete.obs"),3))
+  print(round(cor(dat.nogrid9[,i],dat.nogrid9[,i+72],method="spearman",use="pairwise.complete.obs"),3))
 }
+
 
 
 
 # These are correlations within people
+cor.within.participants <- c()
 for (j in 1:nrow(dat.nogrid9)){
-  print(round(cor(as.numeric(substr(dat.nogrid9[j,c(13:21,25:34)],1,1)),as.numeric(dat.nogrid9[j,c(107:115,97:106)]),method="spearman",use="pairwise.complete.obs"),3))
+  tmpcor <- cor(as.numeric(dat.nogrid9[j,c(13:21,25:34)]),
+                as.numeric(dat.nogrid9[j,c(107:115,97:106)]),
+                method="spearman",use="pairwise.complete.obs")
+  cor.within.participants[j] <- tmpcor
+  if (!is.na(tmpcor)){
+    print(round(tmpcor,3))
+  }
 }
+
+
+library(corrplot)
+all.items.cor <- cor(dat.nogrid9[,c(13:21,107:115,25:34,97:106)],method="spearman",use="pairwise.complete.obs")
+corrplot(all.items.cor)
 
 # Warning messages:
 #   1: In cor(as.numeric(substr(dat.nogrid9[j, c(13:21, 25:34)], 1, 1)),  :
 #               the standard deviation is zero
 
 # Need to 
+
+page2.heat <- ggplot(data=mat2df(sum.resp.mats(grid.resp.items,1:10)),
+                                 mapping=aes(x=x,y=y,fill=count)) +
+  geom_tile() + scale_fill_gradient(name = "Count",
+                                    low = "#FFFFFF",
+                                    high = "#012345") +
+  labs(x="Positive",y="Negative") + 
+  ggtitle(paste(names(grid.resp.items[i]),": Heat Map - Page 2 Items 1-10 Summed",sep=""))
+
+page2.heat
+
+
+
+page4.heat <- ggplot(data=mat2df(sum.resp.mats(grid.resp.items,11:19)),
+                     mapping=aes(x=x,y=y,fill=count)) +
+  geom_tile() + scale_fill_gradient(name = "Count",
+                                    low = "#FFFFFF",
+                                    high = "#012345") +
+  labs(x="Positive",y="Negative") + 
+  ggtitle(paste(names(grid.resp.items[i]),": Heat Map - Page 4 Items 1-9 Summed",sep=""))
+
+page4.heat

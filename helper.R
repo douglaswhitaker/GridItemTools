@@ -29,6 +29,24 @@ grid2nine <- function(gc,b = -0.5){
   return((b+2)*i+b*j-1-6*b)
 }
 
+display.grid2nine <- function(gcvals=c(1:25),b=-0.5,match.lit = FALSE){
+  mat <- matrix(NA,nrow=5,ncol=5)
+  for (gc in gcvals){
+    i <- col2xy(gc)[2] # this is the X value (positive axis), so the column in our format
+    j <- col2xy(gc)[1] # the Y value, the row in our format
+    mat[j,i] <- grid2nine(gc,b)
+  }
+  colnames(mat) <- paste("Pos",1:5,sep="")
+  rownames(mat) <- paste("Neg",1:5,sep="")
+  if (!match.lit){
+    mat <- as.table(mat)
+    return(mat)
+  }
+  else{
+    return(mat[5:1,])
+  }
+}
+
 # Essentially just creating an empty data.frame with the appropriate column names
 make.grid9s <- function(grid.items.names){
   grid9s <- t(data.frame(rep(NA,length(grid.items.names))))
@@ -66,4 +84,19 @@ delete.empty.mat <- function(resp.list){
 
 mat2df <- function(mat,col=5){
   return(data.frame(x=rep(1:col,each=col),y=rep(1:col,col),count=as.vector(mat)))
+}
+
+sum.resp.mats <- function(mat.list,items=NULL){
+  tmp <- matrix(0,nrow=dim(mat.list[[1]])[1],ncol=dim(mat.list[[1]])[2])
+  if (is.null(items)){
+    items <- 1:length(mat.list)
+  }
+  for (i in items){
+    tmp <- tmp + mat.list[[i]]
+  }
+  return(tmp)
+}
+
+make4cats <- function(){
+  
 }
