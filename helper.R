@@ -99,6 +99,12 @@ sum.resp.mats <- function(mat.list,items=NULL){
 
 # to do: give option to return as table for easy use of chi-sq
 # and/or build testing into this function
+# Note that this is a crude classifier
+# See Figure A2 (p. 47; pdf p. 19)
+#     Negative gets a triangular region of 6 cells
+#     Positive gets a triangular region of 6 cells
+#     Indifferent is half of the middle region
+#     Ambivalent is half of the middle region and includes (3,3)
 make4cats <- function(grid,poscut=3,negcut=3){
   neg <- sum(grid[negcut:5,1:(poscut-1)])
   pos <- sum(grid[1:(negcut-1),poscut:5])
