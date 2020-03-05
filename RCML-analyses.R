@@ -115,6 +115,40 @@ names(dat.nogrid9)
 
 # Check correlations within people and within items
 
+######## Histograms
+# At this point, the sample size is just too small to be interesting
+# Want: find two histograms whose (probably roughly bell-shaped) whose grid items look very different
+par(mfrow=c(3,3))
+for (i in 13:21){
+  hist(dat.nogrid9[which(!is.na(dat.nogrid9[,i+94])),i],main=names(dat.nogrid9[i]),col="gray",xlab="response",breaks=1:9)
+}
+par(mfrow=c(1,1))
+
+par(mfrow=c(3,4))
+for (i in 25:34){
+  hist(dat.nogrid9[which(!is.na(dat.nogrid9[,i+72])),i],main=names(dat.nogrid9[i]),col="gray",xlab="response",breaks=1:9)
+}
+par(mfrow=c(1,1))
+
+hist(dat.nogrid9[which(!is.na(dat.nogrid9[,109])),15],main=names(dat.nogrid9[15]),col="gray",xlab="response",breaks=1:9)
+hist(dat.nogrid9[which(!is.na(dat.nogrid9[,113])),19],main=names(dat.nogrid9[19]),col="gray",xlab="response")
+
+
+
+par(mfrow=c(3,3))
+for (i in 107:115){
+  hist(dat.nogrid9[,i],main=names(dat.nogrid9[i]),col="gray",xlab="response",breaks=1:9)
+}
+par(mfrow=c(1,1))
+
+par(mfrow=c(3,4))
+for (i in 97:106){
+  hist(dat.nogrid9[,i],main=names(dat.nogrid9[i]),col="gray",xlab="response",breaks=1:9)
+}
+par(mfrow=c(1,1))
+
+
+
 ####
 ### We need to be careful here - it looks like NA's are getting changed to vectors of 1's - not good!
 ###
