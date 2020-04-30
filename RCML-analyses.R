@@ -155,12 +155,6 @@ par(mfrow=c(1,1))
 
 dat.nogrid9[which((dat.nogrid9==""))] <- NA
 
-fixLimeSurveyLikert <- function(dat, cols, ...){
-  for (i in cols){
-    dat[,i] <- as.numeric(substr(dat[,i],1,1)) # as ong as there are 9 or fewer scale points "1,1" should work
-  }
-  return(dat)
-}
 
 dat.nogrid9 <- fixLimeSurveyLikert(dat.nogrid9,cols=c(13:21,25:34))
 

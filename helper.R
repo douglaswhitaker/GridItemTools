@@ -112,3 +112,11 @@ make4cats <- function(grid,poscut=3,negcut=3){
   amb <- sum(grid[negcut:5,poscut:5])
   return(list(pos=pos,neg=neg,ind=ind,amb=amb))
 }
+
+
+fixLimeSurveyLikert <- function(dat, cols, ...){
+  for (i in cols){
+    dat[,i] <- as.numeric(substr(dat[,i],1,1)) # as ong as there are 9 or fewer scale points "1,1" should work
+  }
+  return(dat)
+}
