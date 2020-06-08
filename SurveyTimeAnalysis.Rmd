@@ -1,0 +1,237 @@
+---
+title: "Survey Time Analysis"
+author: "Bailey Drew"
+date: "08/06/2020"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Likert-type pages tend to be be completed quicker than grid-item pages. For this analysis, pages 1 and 3 will refer to the first likert-type page and second likert-type page, respectively. Pages 2 and 4 will refer to the first grid-item page and second grid-item page, respectively. Finally, page 5 will refer to the grid-item only page.
+
+## Univariate Graphs
+
+```{r, include=FALSE}
+library("tidyverse")
+library("ggpubr")
+library("rstatix")
+library("nortest")
+library("MASS")
+library("pander")
+
+#Read csv file
+surveytime <-  read.csv("data/real/results-survey945827-202004302207.csv",
+                     stringsAsFactors = FALSE)
+
+#Only display columns of time completion data
+surveytime <- surveytime[,c(604,607,620,623,635)]
+
+#Rename columns to meaningful names
+colnames(surveytime) <- c("pg1","pg2","pg3","pg4","pg5")
+```
+
+```{r, echo=FALSE}
+boxplot(surveytime, xlab="pages", ylab="time")
+```
+
+There is one *unusually* large outlier: `r surveytime[9,3]` seconds on page 3. It is *very* unlikely for a participant to take over an hour to complete a page of the survey. This outlier gives virtually no meaningful information as to the time it takes to finish a page of the survey, so that observation will be removed for the remainder of the analysis.
+
+The new boxplots are:
+
+```{r, echo=FALSE}
+#Remove outlier
+surveytime[9,3] <- NA
+
+boxplot(surveytime, xlab="pages", ylab="time")
+```
+
+There appears to be right skews in each of the groups, which suggests a transformation to the data will be needed.
+
+## Descriptive Statistics
+
+The summary of the data is:
+```{r results = 'asis', echo=FALSE}
+knitr::kable(summary(surveytime))
+``` 
+
+The means of the grid-item pages are generally greater than the likert-type pages, with exception to the grid-item-only page.
+
+## One-Way ANOVA
+
+```{r, echo=FALSE}
+#Create 5 vectors of each page times
+vec1 <- surveytime[,1]
+vec2 <- surveytime[,2]
+vec3 <- surveytime[,3]
+vec4 <- surveytime[,4]
+vec5 <- surveytime[,5]
+
+#Combine vectors for 1st column
+total <- c(vec1,vec2,vec3,vec4,vec5)
+
+#Create a data frame with the vectors
+total <- data.frame(total)
+
+#Loop to create 2nd column assigning each time to the page it came from
+for (j in 1:5){
+  for (i in (1+(65*(j-1))):(65+(65*(j-1)))){
+    total[i,2] <- colnames(surveytime[j])
+  }
+}
+
+#Removes rows with NA
+total <- total[complete.cases(total),]
+
+#Rename data frame columns (response: time, factor: pages)
+colnames(total) <- c("time", "pages")
+
+```
+
+```{r results = 'asis', echo=FALSE}
+#Do One-Way ANOVA
+res.aov <- aov(time ~ pages, data = total)
+pander(res.aov)
+``` 
+
+First, the assumptions and conditions of one-way ANOVA must be checked and satisfied. To do so, the diagnostic plots will be examined.
+
+### Normal Population Assumption
+
+```{r, echo=FALSE}
+#Normal probability plot
+plot(res.aov, 2)
+```
+
+The qq plot appears to be curved at the ends, which suggests the data to be non-normal. Also there is a significantly large outlier (observation 36), which might be influential.
+
+### Cook's Distance
+
+To determine the influence of the outlier, its Cook's Distance will be calculated:
+
+```{r, echo=FALSE}
+#Cook's D - remember: cutoff rule-of-thumb is 4/n
+plot(res.aov,4)
+```
+
+Observation 36's Cook's Distance value is `r cooks.distance(res.aov)[22]`. A general rule-of-thumb to determine a large value of Cook's Distance is 4/n, where n is the number of observations. Here, the cutoff is 4/156 = `r 4/156`. Since `r 4/156` << `r cooks.distance(res.aov)[22]`, observation 36 will be removed from the analysis and a new ANOVA model will be run (it is too unusual of an observation).
+
+The new Cook's Distance values are:
+
+```{r, echo=FALSE}
+
+total[22,1] <- NA
+total <- total[complete.cases(total),]
+res.aov <- aov(time ~ pages, data = total)
+
+#Cook's D - remember: cutoff rule-of-thumb is 4/n
+plot(res.aov,4)
+```
+
+There still are some observations that exceed the cutoff point, however, but none are as nearly influential as observation 36.
+
+### Equal Variance Assumption
+
+To assess equal variance, the residuals vs. fits plot must be a constant width:
+
+```{r, echo=FALSE}
+#Residual versus fits plot
+plot(res.aov, 1)
+```
+
+The above plot appears to show a megaphone shape where the plot thickens as fitted values increase. To address this concern, a Box-Cox transformation will be used.
+
+### Box-Cox Transformation
+
+```{r, echo=FALSE}
+boxcox(res.aov)
+bc <- boxcox(res.aov)$x[42]
+#Box-Cox Transformation
+total[,1] <- log((total[,1]))
+```
+
+The value of lambda to maximize the likelihood function is `r boxcox(res.aov)$x[42]`. However, a log transformation seems to not lower the log-likelihood too much, so for simplicity of interpreting results, a log transformation will be used.
+
+## ANOVA 2
+
+The new ANOVA model is:
+
+```{r results = 'asis', echo=FALSE}
+#Do One-Way ANOVA
+res.aov <- aov(time ~ pages, data = total)
+pander(res.aov)
+``` 
+
+Now the assumptions and conditions need to be re-checked.
+
+## Assumptions and Conditions
+
+### Normal Population Assumption
+
+```{r, echo=FALSE}
+#Normal probability plot
+plot(res.aov, 2)
+```
+
+The line on the qq plot looks somewhat linear (some curvature at the ends) and perhaps has two outliers (observations 29 and 52). To test normality, an Anderson-Darling test will be conducted.
+
+### Anderson-Darling Test
+
+```{r, echo=FALSE}
+#Anderson-Darling Test
+pander(ad.test(resid(res.aov)))
+```
+
+Because the p-palue is moderately small (p-value = `r ad.test(resid(res.aov))[2]`), there is good evidence that the data is not normal.
+
+The normal population assumption is somewhat satisfied.
+
+### Equal Variance Assumption
+
+```{r, echo=FALSE}
+#Residual versus fits plot
+plot(res.aov, 1)
+```
+
+```{r, echo=FALSE}
+ggboxplot(total, x="pages", y="time")
+```
+
+The residual vs. fits plot appears to have a constant spread throughout each group (i.e. no thickening). Also, the boxplots for each group have very similar spreads; page 2 and page 5 have slightly smaller spreads than the rest, but not by much, so it's okay.
+
+The equal variance assumption is satisfied.
+
+### Independence Assumption
+
+It's reasonable to assume the participants didn't discuss answers of this survey to one another. However, some participants may be friends and might discuss their feelings of statistics classes to each other.
+
+Each page has randomized questions, so the pages are somewhat independent (though they do share the same questions).
+
+The independence assumption is somewhat satisfied, so we should proceed with caution.
+
+## F-Test
+
+Since the test assumptions hold, and since the p-value is very small (p-value = `r summary(res.aov)[[1]][["Pr(>F)"]]` < 0.001), we have very strong evidence that there are differences between the mean completion times (in log seconds) of the 5 survey pages for the population of all MATH 2209 students at MSVU in 2020.
+
+Because we concluded there being differences amongst the mean completion times, comparisons can be made to see what pages differ in completion times.
+
+## TukeyHSD
+
+Tukey's Honest Significant Difference will be calculated for each pair of pages:
+
+```{r, echo=FALSE, warning=FALSE}
+#TukeyHSD - Note: First grid item takes longest to finish and corresponding grid pages are longer to finish than their respected likert-type pages
+pander(TukeyHSD(res.aov))
+```
+
+The 95% confidence intervals for the difference between the mean time (in log seconds) to complete page 5 (grid-items only) and pages 1 (likert-type 1), 2 (grid-items 1) & 4 (grid-items 2) do not contain zero, so there are significant differences; the differences are all negative for **pg5-pg1, pg5-pg2 & pg5-pg4**, so that suggests page 5 takes a shorter time to complete than pages 1, 2 & 4. However, the 95% confidence interval for the difference between page 5 and page 3 (likert-type 2) do contain zero, so there may not be difference in mean completion times.
+
+The 95% confidence interval for the difference between the mean time (in log seconds) to complete page 1 and page 2 do not contain zero, so there is a significant difference; the difference is positive for **pg2-pg1**, so that suggests page 1 takes shorter to complete than page 2. However, the 95% confidence interval for the difference between page 1 and page 4 do contain zero, so there may not be a difference in mean completion times.
+
+The 95% confidence interval for the difference between the mean time (in log seconds) to complete page 3 and pages 2 & 4 do not contain zero, so there is a significant difference; the intervals are positive for **pg4-pg3** and negative for **pg3-pg2**, so that suggests page 3 takes shorter to complete than pages 2 & 4.
+
+## Conclusion
+
+Overall, the grid-items only page (page 5) takes the shortest amount of time to complete than all other pages - except for the second likert-type page (page 3) (since zero lies in the confidence interval). Also, generally the likert-type pages (pages 1 & 3) are shorter to complete than the first two grid-item pages (pages 2 & 4), with exception to page 1 and page 4 (since zero lies in the confidence interval).
