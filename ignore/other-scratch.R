@@ -19,6 +19,9 @@ alternative <- "greater"
 
 col1 <- row1; col2 <- row2
 
+
+col1 <- col2 <- 1:5
+
 columns <- cbind(col1, col2) #Merge the two columns
 dat <- data.frame(columns) #Create data frame with the columns
 numrow1 <- nrow(dat) #Find the length of the data frame to see number of observations
