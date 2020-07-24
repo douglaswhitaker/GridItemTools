@@ -1,8 +1,4 @@
-###Example Data
-row1 <- c(30,15,35,12,35,8,21,8,29,17)
-row2 <- c(23,13,31,15,35,8,18,7,22,13)
-frame <- cbind(row1,row2)
-frame <- data.frame(frame)
+
 
 ###Trinomial Test Function 
 trinomial.test <- function(col1, col2, alternative=c("two.sided", "greater", "less")){
@@ -62,6 +58,3 @@ trinomial.test <- function(col1, col2, alternative=c("two.sided", "greater", "le
   
   return(p_value) #Return p-value to user
 }
-
-###Example Data
-trinomial.test(frame[,1],frame[,2],alternative="greater")
