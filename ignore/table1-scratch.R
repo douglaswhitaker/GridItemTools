@@ -52,13 +52,45 @@ for (i in 1:length(RR)){
   tmp.sum <- tmp.sum + calc.ca(vec=RR[[i]],alpha=0.05,p0=p0)
 }
 
-tmp.sum <- c()
-p0 <- .4
+
 xs <- 0:10
-for (i in 1:length(xs)){
-  tmp.sum[i] <- prob.nd2(n=10,nd=xs[i],p_tie=p0)
+
+gen.table1 <- function(n,alpha=0.05){
+  tmp.sum <- c()
+  probs.table <- c()
+  xs <- 0:n
+  P0s <- seq(from=0,to=.9,by=.1)
+  for (p0 in P0s){
+    for (i in 1:length(xs)){
+      tmp.sum[i] <- prob.nd2(n=10,nd=xs[i],p_tie=p0)
+    }
+    probs.table <- rbind(probs.table,tmp.sum[(n+1):1])
+  }
+  rownames(probs.table) <- paste("p0=",P0s,sep="")
+  colnames(probs.table) <- paste("nd=",n:0,sep="")
+  
+  for (i in 1:nrow(probs.table)){
+    print(paste(rownames(probs.table)[i],"Critical Value:",colnames(probs.table)[which((probs.table[i,] > alpha) == TRUE)[1] - 1]))
+  }
+  return(probs.table)
 }
-cumsum(tmp.sum[10:1])
+tab1 <- gen.table1(10)
+
+
+for (i in 1:nrow(tab1)){
+  print(rownames(tab1)[i])
+  print(cumsum(tab1[i,]) > alpha)
+  print(round(cumsum(tab1[i,]),3))
+  print("###########################################################")
+}
+
+
+find.cutpoint <- function(alpha){
+  
+}
+
+
+#cumsum(tmp.sum[10:1])
 
 # Note that  0.031824568 0.076242052 are the (rounded) table entries for the .4 column of Table 1 of Bian (2011)
 
