@@ -1,0 +1,11 @@
+Package: GridItemTools
+Type: Package
+Title: Grid Item Tools
+Version: 0.0.1
+Author: Douglas Whitaker
+Maintainer: Douglas Whitaker <douglas.whitaker@msvu.ca>
+Description: Functions used for analyzing grid-type items.
+License: GPL-2 | GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
