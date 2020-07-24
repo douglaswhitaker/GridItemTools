@@ -84,9 +84,3 @@ if(alternative=="two.sided"){
 }
 
 
-calculate.ns <- function(col1,col2){
-  n_pos <- sum((col1-col2) > 0)
-  n_neg <- sum((col1-col2) < 0)
-  n_tie <- sum((col1-col2) == 0)
-  return(list(n_pos=n_pos,n_neg=n_neg,n_tie=n_tie))
-}

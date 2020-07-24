@@ -12,3 +12,17 @@ trinomial.test(frame[,1],frame[,2],alternative="greater")
 trinomial.test(frame[,2],frame[,1],alternative="less")
 
 trinomial.test(frame[,1],frame[,2],alternative="less")
+
+trinomial.test(frame[,2],frame[,1],alternative="two.sided")
+
+trinomial.test(frame[,1],frame[,2],alternative="two.sided")
+
+
+trinomial.test(col1=c(1,2,3,4,5),
+               col2=c(1,2,3,4,5),
+               alternative = "two.sided")
+
+library(BSDA)
+SIGN.test(x=row1,y=row2)
+
+
