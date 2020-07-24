@@ -79,10 +79,10 @@ tab1 <- gen.table1(10)
 
 for (i in 1:nrow(tab1)){
   print(rownames(tab1)[i])
-  print(cumsum(tab1[i,]) > alpha)
-  print(colnames(tab1)[which(tab1[i,] > alpha)[1]-1])
-  print(round(cumsum(tab1[i,]),3))
-  print("###########################################################")
+  #print(cumsum(tab1[i,]) > alpha)
+  print(colnames(tab1)[which(cumsum(tab1[i,]) > alpha)[1]])
+  #print(round(cumsum(tab1[i,]),3))
+  #print("###########################################################")
 }
 
 
