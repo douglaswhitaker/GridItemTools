@@ -55,26 +55,36 @@ for (i in 1:length(RR)){
 
 xs <- 0:10
 
-gen.table1 <- function(n,alpha=0.05){
+gen.probs.table <- function(n,alpha=0.05,include.one=FALSE){
   tmp.sum <- c()
   probs.table <- c()
   xs <- 0:n
-  P0s <- seq(from=0,to=.9,by=.1)
+  #P0s <- seq(from=0,to=.9,by=.1)
+  if (include.one){
+    P0s <- (0:(n))/n
+  }
+  else {
+    P0s <- (0:(n-1))/n
+  }
   for (p0 in P0s){
     for (i in 1:length(xs)){
-      tmp.sum[i] <- prob.nd2(n=10,nd=xs[i],p_tie=p0)
+      tmp.sum[i] <- prob.nd2(n=n,nd=xs[i],p_tie=p0)
     }
     probs.table <- rbind(probs.table,tmp.sum[(n+1):1])
   }
   rownames(probs.table) <- paste("p0=",P0s,sep="")
   colnames(probs.table) <- paste("nd=",n:0,sep="")
   
-  for (i in 1:nrow(probs.table)){
-    print(paste(rownames(probs.table)[i],"Critical Value:",colnames(probs.table)[which((probs.table[i,] > alpha) == TRUE)[1] - 1]))
-  }
-  return(probs.table)
+  # for (i in 1:nrow(probs.table)){
+  #   print(paste(rownames(probs.table)[i],"Critical Value:",colnames(probs.table)[which((probs.table[i,] > alpha) == TRUE)[1] - 1]))
+  # }
+  return(list(probs.table=probs.table,nd=n:0,P0s=P0s))
 }
-tab1 <- gen.table1(10)
+
+
+
+#tab1 <- gen.table1(10)
+myprobobj <- gen.probs.table(10)
 
 
 for (i in 1:nrow(tab1)){
@@ -86,10 +96,37 @@ for (i in 1:nrow(tab1)){
 }
 
 
-find.cutpoint <- function(alpha){
-  
+find.critical.values <- function(probs.obj,alpha=0.05,verbose=FALSE){
+  critvals <- c()
+  for (i in 1:nrow(probs.obj$probs.table)){
+    if (verbose){
+      print(rownames(probs.obj$probs.table)[i])
+      #print(cumsum(probs.table[i,]) > alpha)
+      print(colnames(probs.obj$probs.table)[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]])
+    }
+    critvals[i] <- probs.obj$nd[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]]
+    #print(round(cumsum(probs.table[i,]),3))
+    #print("###########################################################")
+  }
+  probs.obj$critvals <- critvals 
+  return(probs.obj)
 }
 
+myprobobj2 <- find.critical.values(myprobobj)
+
+find.rejection.region <- function(probs.obj){
+  n <- probs.obj$nd[1]
+  grid <- expand.grid(0:n,0:n,0:n)
+  colnames(grid) <- c("Pos","Zero","Neg")
+  grid <- grid[which(rowSums(grid)<=10),]
+  nd <- grid$Pos - grid$Neg
+  p0 <- grid$Zero
+  inRR <- c()
+  for (i in 1:nrow(grid)){
+    inRR[i] <- nd[i] >= probs.obj$critvals[which(probs.obj$P0s == p0[i])]
+  }
+  return(grid[inRR])
+}
 
 #cumsum(tmp.sum[10:1])
 

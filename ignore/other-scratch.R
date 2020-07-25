@@ -87,3 +87,27 @@ if(alternative=="two.sided"){
 }
 
 
+
+
+
+
+###############################################################################
+# identifying rejection region
+
+probs.obj <- gen.probs.table(10,include.one = TRUE)
+probs.obj <- find.critical.values(mpo)
+
+n <- probs.obj$nd[1]
+grid <- expand.grid(0:n,0:n,0:n)
+colnames(grid) <- c("Pos","Zero","Neg")
+grid <- grid[which(rowSums(grid)==10),]
+nd <- grid$Pos - grid$Neg
+p0 <- grid$Zero/n
+inRR <- c()
+for (i in 1:nrow(grid)){
+  inRR[i] <- nd[i] > probs.obj$critvals[which(probs.obj$P0s == p0[i])]
+}
+#return(grid[inRR,])
+grid[inRR,]
+
+
