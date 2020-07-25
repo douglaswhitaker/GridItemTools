@@ -55,7 +55,7 @@ for (i in 1:length(RR)){
 
 xs <- 0:10
 
-gen.probs.table <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE){
+gen.probs.table <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE,digits=NULL){
   tmp.sum <- c()
   probs.table <- c()
   xs <- 0:n
@@ -78,6 +78,13 @@ gen.probs.table <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE){
   # for (i in 1:nrow(probs.table)){
   #   print(paste(rownames(probs.table)[i],"Critical Value:",colnames(probs.table)[which((probs.table[i,] > alpha) == TRUE)[1] - 1]))
   # }
+  
+  #probs.table <- ifelse(is.null(digits),probs.table,round(probs.table,digits))
+  if (!is.null(digits)){
+    probs.table <- round(probs.table,digits)
+  }
+  
+  
   probs.obj <- list(probs.table=probs.table,nd=n:0,P0s=P0s)
   probs.obj <- find.critical.values(probs.obj)
   
@@ -135,6 +142,26 @@ find.rejection.region <- function(probs.obj){
   return(grid[inRR,])
 }
 
+find.cutpoints <- function(probs.obj){
+  for (i in 1:nrow(probs.obj$probs.table)){
+    print(probs.obj$P0s[i])
+    cv.match <- which(probs.obj$critvals[i]==probs.obj$nd)
+                      
+    print(
+      paste("P0=",probs.obj$P0s[i],
+        ", P(nd > Ca) for nd=",probs.obj$nd[cv.match],
+        ": ",
+        round(cumsum(probs.obj$probs.table[i,])[c(cv.match-1)],3),
+        ", P(nd >= Ca) for nd=",probs.obj$nd[cv.match],
+        ": ",
+        round(cumsum(probs.obj$probs.table[i,])[c(cv.match)],3),
+        sep=""))
+  }
+}
+# Maybe make the output like this:
+# P0=value, Ca=value, P(nd > Ca)=value, P(nd >= Ca)=value
+
+find.cutpoints(mbo)
 #cumsum(tmp.sum[10:1])
 
 # Note that  0.031824568 0.076242052 are the (rounded) table entries for the .4 column of Table 1 of Bian (2011)
