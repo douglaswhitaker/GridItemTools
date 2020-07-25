@@ -55,7 +55,7 @@ for (i in 1:length(RR)){
 
 xs <- 0:10
 
-gen.probs.table <- function(n,alpha=0.05,include.one=FALSE){
+gen.probs.table <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE){
   tmp.sum <- c()
   probs.table <- c()
   xs <- 0:n
@@ -78,7 +78,14 @@ gen.probs.table <- function(n,alpha=0.05,include.one=FALSE){
   # for (i in 1:nrow(probs.table)){
   #   print(paste(rownames(probs.table)[i],"Critical Value:",colnames(probs.table)[which((probs.table[i,] > alpha) == TRUE)[1] - 1]))
   # }
-  return(list(probs.table=probs.table,nd=n:0,P0s=P0s))
+  probs.obj <- list(probs.table=probs.table,nd=n:0,P0s=P0s)
+  probs.obj <- find.critical.values(probs.obj)
+  
+  if (find.RR){
+    probs.obj$RejectionRegion <- find.rejection.region(probs.obj)
+  }
+  
+  return(probs.obj)
 }
 
 
@@ -118,14 +125,14 @@ find.rejection.region <- function(probs.obj){
   n <- probs.obj$nd[1]
   grid <- expand.grid(0:n,0:n,0:n)
   colnames(grid) <- c("Pos","Zero","Neg")
-  grid <- grid[which(rowSums(grid)<=10),]
+  grid <- grid[which(rowSums(grid)==10),]
   nd <- grid$Pos - grid$Neg
-  p0 <- grid$Zero
+  p0 <- grid$Zero/n
   inRR <- c()
   for (i in 1:nrow(grid)){
-    inRR[i] <- nd[i] >= probs.obj$critvals[which(probs.obj$P0s == p0[i])]
+    inRR[i] <- nd[i] > probs.obj$critvals[which(probs.obj$P0s == p0[i])]
   }
-  return(grid[inRR])
+  return(grid[inRR,])
 }
 
 #cumsum(tmp.sum[10:1])
