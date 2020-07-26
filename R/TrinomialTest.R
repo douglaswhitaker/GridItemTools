@@ -86,6 +86,14 @@ prob.nd <- function(n,nd,k,p_tie){
     p_tie^(n-nd-2*k)
 }
 
+prob.nd.cumsum <- function(n,nd,p_tie){
+  tmp.prob <- 0
+  for (k in 0:((n-nd)/2)){
+    tmp.prob <- tmp.prob + prob.nd(n=n,nd=nd,k=k,p_tie=p_tie)
+  }
+  return(tmp.prob)
+}
+
 # Helper function for trinomial.test
 # This calculates the number of positive, negative, and tied observations
 calculate.ns <- function(col1,col2){
@@ -110,7 +118,7 @@ gen.probs.obj <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE,digits=NULL
   }
   for (p0 in P0s){
     for (i in 1:length(xs)){
-      tmp.sum[i] <- prob.nd2(n=n,nd=xs[i],p_tie=p0)
+      tmp.sum[i] <- prob.nd.cumsum(n=n,nd=xs[i],p_tie=p0)
     }
     probs.table <- rbind(probs.table,tmp.sum[(n+1):1])
   }
