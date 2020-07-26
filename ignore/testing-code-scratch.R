@@ -25,4 +25,32 @@ trinomial.test(col1=c(1,2,3,4,5),
 library(BSDA)
 SIGN.test(x=row1,y=row2)
 
+a <- rep(0,10)
+p4nd2 <- c(0,0,0,0,1,1,1,1,-1,-1)
+p4nd4 <- c(0,0,0,0,1,1,1,1,1,-1)
+p4nd6 <- c(0,0,0,0,1,1,1,1,1,1)
 
+trinomial.test(p4nd2,a,alternative="greater")
+trinomial.test(p4nd4,a,alternative="greater")
+trinomial.test(p4nd6,a,alternative="greater")
+
+p3nd3 <- c(0,0,0,1,1,1,1,1,-1,-1)
+p3nd5 <- c(0,0,0,1,1,1,1,1,1,-1)
+p3nd7 <- c(0,0,0,1,1,1,1,1,1,1)
+
+trinomial.test(p3nd3,a,alternative="greater")
+trinomial.test(p3nd5,a,alternative="greater")
+trinomial.test(p3nd7,a,alternative="greater")
+
+
+trinomial.test(p3nd3,a,alternative="less")
+trinomial.test(p3nd5,a,alternative="less")
+trinomial.test(p3nd7,a,alternative="less")
+
+trinomial.test(a,p3nd3,alternative="less")
+trinomial.test(a,p3nd5,alternative="less")
+trinomial.test(a,p3nd7,alternative="less")
+
+trinomial.test(a,p3nd3,alternative="greater")
+trinomial.test(a,p3nd5,alternative="greater")
+trinomial.test(a,p3nd7,alternative="greater")

@@ -55,7 +55,7 @@ for (i in 1:length(RR)){
 
 xs <- 0:10
 
-gen.probs.table <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE,digits=NULL){
+gen.probs.obj <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE,digits=NULL){
   tmp.sum <- c()
   probs.table <- c()
   xs <- 0:n
@@ -142,6 +142,7 @@ find.rejection.region <- function(probs.obj){
   return(grid[inRR,])
 }
 
+# Helper function for gen.probs.obj
 find.cutpoints <- function(probs.obj){
   for (i in 1:nrow(probs.obj$probs.table)){
     print(probs.obj$P0s[i])

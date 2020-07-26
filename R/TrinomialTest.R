@@ -8,7 +8,9 @@
 #' @return the p-value from the hypothesis test
 
 ###Trinomial Test Function 
-trinomial.test <- function(col1, col2, alternative=c("two.sided", "greater", "less"), p_tie=NULL){
+trinomial.test <- function(col1, col2, 
+                           alternative=c("two.sided", "greater", "less"), 
+                           p_tie=NULL){
   columns <- cbind(col1, col2) #Merge the two columns
   dat <- data.frame(columns) #Create data frame with the columns
   numrow1 <- nrow(dat) #Find the length of the data frame to see number of observations
@@ -84,9 +86,100 @@ prob.nd <- function(n,nd,k,p_tie){
     p_tie^(n-nd-2*k)
 }
 
+# Helper function for trinomial.test
+# This calculates the number of positive, negative, and tied observations
 calculate.ns <- function(col1,col2){
   n_pos <- sum((col1-col2) > 0)
   n_neg <- sum((col1-col2) < 0)
   n_tie <- sum((col1-col2) == 0)
   return(list(n_pos=n_pos,n_neg=n_neg,n_tie=n_tie))
 }
+
+################################################################################
+
+# Generate information about the trinomial test under various settings
+gen.probs.obj <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE,digits=NULL){
+  tmp.sum <- c()
+  probs.table <- c()
+  xs <- 0:n
+  if (include.one){
+    P0s <- (0:(n))/n
+  }
+  else {
+    P0s <- (0:(n-1))/n
+  }
+  for (p0 in P0s){
+    for (i in 1:length(xs)){
+      tmp.sum[i] <- prob.nd2(n=n,nd=xs[i],p_tie=p0)
+    }
+    probs.table <- rbind(probs.table,tmp.sum[(n+1):1])
+  }
+  rownames(probs.table) <- paste("p0=",P0s,sep="")
+  colnames(probs.table) <- paste("nd=",n:0,sep="")
+  
+  if (!is.null(digits)){
+    probs.table <- round(probs.table,digits)
+  }
+  
+  
+  probs.obj <- list(probs.table=probs.table,nd=n:0,P0s=P0s)
+  probs.obj <- find.critical.values(probs.obj)
+  
+  if (find.RR){
+    probs.obj$RejectionRegion <- find.rejection.region(probs.obj)
+  }
+  
+  return(probs.obj)
+}
+
+# Helper function for gen.probs.obj
+# Identifies which values are on either side of alpha for each value of P0
+find.critical.values <- function(probs.obj,alpha=0.05,verbose=FALSE){
+  critvals <- c()
+  for (i in 1:nrow(probs.obj$probs.table)){
+    if (verbose){
+      print(rownames(probs.obj$probs.table)[i])
+      print(colnames(probs.obj$probs.table)[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]])
+    }
+    critvals[i] <- probs.obj$nd[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]]
+  }
+  probs.obj$critvals <- critvals 
+  return(probs.obj)
+}
+
+# Helper function for gen.probs.obj
+# Identifies the rejection region for various settings
+find.rejection.region <- function(probs.obj){
+  n <- probs.obj$nd[1]
+  grid <- expand.grid(0:n,0:n,0:n)
+  colnames(grid) <- c("Pos","Zero","Neg")
+  grid <- grid[which(rowSums(grid)==10),]
+  nd <- grid$Pos - grid$Neg
+  p0 <- grid$Zero/n
+  inRR <- c()
+  for (i in 1:nrow(grid)){
+    inRR[i] <- nd[i] > probs.obj$critvals[which(probs.obj$P0s == p0[i])]
+  }
+  return(grid[inRR,])
+}
+
+# Helper function for gen.probs.obj
+# Prints the information from Table 1 (Bian et al., 2011)
+# No return value
+find.cutpoints <- function(probs.obj){
+  for (i in 1:nrow(probs.obj$probs.table)){
+    print(probs.obj$P0s[i])
+    cv.match <- which(probs.obj$critvals[i]==probs.obj$nd)
+    
+    print(
+      paste("P0=",probs.obj$P0s[i],
+            ", P(nd > Ca) for nd=",probs.obj$nd[cv.match],
+            ": ",
+            round(cumsum(probs.obj$probs.table[i,])[c(cv.match-1)],3),
+            ", P(nd >= Ca) for nd=",probs.obj$nd[cv.match],
+            ": ",
+            round(cumsum(probs.obj$probs.table[i,])[c(cv.match)],3),
+            sep=""))
+  }
+}
+
