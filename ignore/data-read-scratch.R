@@ -62,3 +62,11 @@ person.tester <- grid.cell.counts(x=dat.grid,gridinfo=mygridinfo,type="responden
 
 
 rawgrid2uni(x=dat.grid,gridinfo=mygridinfo)
+
+
+# Examining the proportion of responses to each item that are ON the diagonal or NEAR the diagonal
+grid.count.all <- sapply(item.tester,sum,simplify=TRUE)
+grid.count.diag <- sapply(item.tester,grid.tr,simplify=TRUE)
+grid.count.within1 <- sapply(item.tester,within1diag,simplify = TRUE)
+round(grid.count.diag/grid.count.all,2)
+round(grid.count.within1/grid.count.all,2)

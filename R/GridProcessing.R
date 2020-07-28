@@ -69,3 +69,26 @@ rawgrid2uni <- function(x,gridinfo){
   rownames(grid9s) <- rownames(x)
   return(grid9s)
 }
+
+# In the future make number of off-diagonal diagonals selected (i.e. more than 1)
+# To-do: Make this an internal function, and create a function that does more summary statistic processing than this
+# (This requires sapply to work)
+within1diag <- function(mat,col=5){
+  count <- 0
+  count <- count + grid.tr(mat)
+  count <- count + grid.tr(mat[1:(col-1),1:(col-1)])
+  count <- count + grid.tr(mat[2:col,2:col])
+  return(count)
+}
+
+# This function does the correct trace for grid items. 
+# It is used by within1diag()
+# To-do: Make this internal as with above
+grid.tr <- function(mat, col = NULL){
+  if (is.null(col)) col <- ncol(mat)
+  val <- 0
+  for (i in 1:col){
+    val <- val + mat[i,col+1-i]
+  }
+  return(val)
+}

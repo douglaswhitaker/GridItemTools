@@ -22,3 +22,5 @@ make.grid9s <- function(grid.items.names){
   grid9s <- grid9s[-1,]
   return(grid9s)
 }
+
+
