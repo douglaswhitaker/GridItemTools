@@ -1,5 +1,6 @@
 
 source("R/helper.R")
+source("R/Grid-Internal.R")
 
 # read data
 dat.raw <- read.csv("data/all-data-code.csv",stringsAsFactors = FALSE)
@@ -27,35 +28,23 @@ for (i in 1:length(all.grid.item.names)){
   }
 }
 
-# This function produces a list that contains information about the grid items
-# Either raw data or grid-only data may be used
-# This presupposes LimeSurvey formatted data
-# In the future, develop a way to algorithmically determine rows and cols
-grid.item.info.ls <- function(x,rows=5,cols=5){
-  gridinfo <- list()
-  gridinfo$cols <- sapply(names(x),grepl,pattern="_",simplify=TRUE) # the columns that contain grid items
-  gridinfo$names <- grid.item.names(names(x)[which(gridinfo$cols)]) # vector of names
-  gridinfo$dim <- c(rows,cols)
-}
 
-# This generates a list of matrices where each cell is the count of the number of responses
-grid.cell.counts <- function(x,gridinfo,type="items"){
-  grid.resp.list <- list()
-  
-  rows <- gridinfo$dim[1]
-  cols <- gridinfo$dim[2]
-  
-  for (i in 1:length(gridinfo$names)){
-    
-    grid.resp.list[[gridinfo$names[i]]] <- matrix(0,nrow=rows,ncol=cols)
-    
-    for (current.row in 1:nrow(x)){
-      
-      grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-      grid.xy <- col2xy(grid.column)
-      grid.resp.list[[gridinfo$names[i]]][grid.xy] <- grid.resp.list[[gridinfo$names[i]]][grid.xy] + 1
-    
-    }
-  }
-  return(grid.resp.list)
-}
+
+
+mygridinfo <- grid.item.info.ls(x=dat.grid)
+item.tester <- grid.cell.counts(x=dat.grid,gridinfo=mygridinfo,type="items")
+person.tester <- grid.cell.counts(x=dat.grid,gridinfo=mygridinfo,type="respondents")
+
+
+# 
+# 
+# grid.resp.participant <- list()
+# 
+# for (current.row in 1:nrow(dat.grid)){
+#   grid.resp.participant[[current.row]] <- matrix(0,nrow=5,ncol=5)
+#   for (i in 1:length(all.grid.item.names)){
+#     grid.column <- which(!is.na(dat.grid[current.row,((i-1)*25+1):(i*25)])) # should only be one value
+#     grid.xy <- col2xy(grid.column)
+#     grid.resp.participant[[current.row]][grid.xy] <- grid.resp.participant[[current.row]][grid.xy] + 1
+#   }
+# }

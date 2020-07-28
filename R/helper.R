@@ -9,20 +9,8 @@ rename.cols <- function(grid.items){
   return(new.names)
 }
 
-# This function processes the LimeSurvey column names. 
-# For example, there are 25 variables of the format Page4Grid1.Y1_X1. for the one item Page4Grid1.
-# This function will identify that Page4Grid1 is an item name. 
-grid.item.names <- function(names.vec){
-  new.names <- c()
-  for (i in 1:length(names.vec)){
-    new.names[i] <- paste(strsplit(names.vec[i],"[.]")[[1]][1],collapse=".")
-  }
-  return(unique(new.names))
-}
 
-col2xy <- function(gc){
-  return(which(matrix(1:25,nrow=5,byrow = TRUE)==gc,arr.ind = TRUE))
-}
+
 
 # This function implements the model proposed in Audrezet, Olsen, and Tudoran (2016)'s Appendix 2
 # Convert grid value to 1 to 9 value
