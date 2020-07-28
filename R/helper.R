@@ -9,6 +9,9 @@ rename.cols <- function(grid.items){
   return(new.names)
 }
 
+# This function processes the LimeSurvey column names. 
+# For example, there are 25 variables of the format Page4Grid1.Y1_X1. for the one item Page4Grid1.
+# This function will identify that Page4Grid1 is an item name. 
 grid.item.names <- function(names.vec){
   new.names <- c()
   for (i in 1:length(names.vec)){
