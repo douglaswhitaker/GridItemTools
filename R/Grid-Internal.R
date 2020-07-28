@@ -14,3 +14,11 @@ grid.item.names <- function(names.vec){
 col2xy <- function(gc){
   return(which(matrix(1:25,nrow=5,byrow = TRUE)==gc,arr.ind = TRUE))
 }
+
+# Essentially just creating an empty data.frame with the appropriate column names
+make.grid9s <- function(grid.items.names){
+  grid9s <- t(data.frame(rep(NA,length(grid.items.names))))
+  colnames(grid9s) <- paste("c9",grid.items.names,sep="")
+  grid9s <- grid9s[-1,]
+  return(grid9s)
+}
