@@ -1,8 +1,11 @@
 Package: GridItemTools
 Type: Package
 Title: Grid Item Tools
-Version: 0.0.2
-Author: Douglas Whitaker
+Version: 0.0.3
+Authors@R: c(
+  person("Douglas", "Whitaker", email = "douglas.whitaker@msvu.ca", 
+    role = c("cre", "aut")),
+  person("Bailey", "Drew", email = "bailey.drew@msvu.ca", role = "aut"))
 Maintainer: Douglas Whitaker <douglas.whitaker@msvu.ca>
 Description: Functions used for analyzing grid-type items.
 License: GPL-2 | GPL-3
