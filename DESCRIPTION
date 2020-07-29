@@ -1,7 +1,7 @@
 Package: GridItemTools
 Type: Package
 Title: Grid Item Tools
-Version: 0.0.1
+Version: 0.0.2
 Author: Douglas Whitaker
 Maintainer: Douglas Whitaker <douglas.whitaker@msvu.ca>
 Description: Functions used for analyzing grid-type items.

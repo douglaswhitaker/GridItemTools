@@ -1,4 +1,16 @@
+
+
 # This generates a list of matrices where each cell is the count of the number of responses
+#' Title
+#'
+#' @param x 
+#' @param gridinfo 
+#' @param type 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 grid.cell.counts <- function(x,gridinfo,type="items"){
   grid.resp.list <- list()
   
@@ -42,6 +54,16 @@ grid.cell.counts <- function(x,gridinfo,type="items"){
 # Either raw data or grid-only data may be used
 # This presupposes LimeSurvey formatted data
 # In the future, develop a way to algorithmically determine rows and cols
+#' Title
+#'
+#' @param x 
+#' @param rows 
+#' @param cols 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 grid.item.info.ls <- function(x,rows=5,cols=5){
   gridinfo <- list()
   gridinfo$cols <- sapply(names(x),grepl,pattern="_",simplify=TRUE) # the columns that contain grid items
@@ -53,6 +75,15 @@ grid.item.info.ls <- function(x,rows=5,cols=5){
 
 
 # This function processes raw grid data into approximate scores from a Likert-type scale
+#' Title
+#'
+#' @param x 
+#' @param gridinfo 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 rawgrid2uni <- function(x,gridinfo){
   grid9s <- make.grid9s(gridinfo$names)
   rows <- gridinfo$dim[1]
@@ -73,6 +104,15 @@ rawgrid2uni <- function(x,gridinfo){
 # In the future make number of off-diagonal diagonals selected (i.e. more than 1)
 # To-do: Make this an internal function, and create a function that does more summary statistic processing than this
 # (This requires sapply to work)
+#' Title
+#'
+#' @param mat 
+#' @param col 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 within1diag <- function(mat,col=5){
   count <- 0
   count <- count + grid.tr(mat)
@@ -84,6 +124,15 @@ within1diag <- function(mat,col=5){
 # This function does the correct trace for grid items. 
 # It is used by within1diag()
 # To-do: Make this internal as with above
+#' Title
+#'
+#' @param mat 
+#' @param col 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 grid.tr <- function(mat, col = NULL){
   if (is.null(col)) col <- ncol(mat)
   val <- 0
