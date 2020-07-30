@@ -8,7 +8,7 @@
 #' @return the p-value from the hypothesis test
 
 ###Trinomial Test Function 
-trinomial.test <- function(col1, col2, 
+trinomial.test <- function(col1, col2=NULL, 
                            alternative=c("two.sided", "greater", "less"), 
                            p_tie=NULL){
   columns <- cbind(col1, col2) #Merge the two columns

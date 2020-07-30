@@ -154,6 +154,14 @@ grid.tr <- function(mat, col = NULL){
   return(val)
 }
 
-grid.tri.summary <- function(mat, rows = 5, cols = 5){
-  
+
+# This will be a simple version at first. We'll account for within1diag later
+grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0){
+  if (offdiag == 0){
+    mat <- mat[,ncol(mat):1]
+    tie <- sum(diag(mat))
+    upper <- sum(mat[upper.tri(mat,diag=FALSE)])
+    lower <- sum(mat[lower.tri(mat,diag=FALSE)])
+  }
+  return(list(upper=upper,tie=tie,lower=lower))
 }
