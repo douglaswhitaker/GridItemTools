@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-grid.cell.counts <- function(x,gridinfo,type="items"){
+grid.cell.counts <- function(x,gridinfo,type="items",return.table = FALSE){
   grid.resp.list <- list()
   
   rows <- gridinfo$dim[1]
@@ -28,6 +28,16 @@ grid.cell.counts <- function(x,gridinfo,type="items"){
         grid.xy <- col2xy(grid.column)
         grid.resp.list[[gridinfo$names[i]]][grid.xy] <- grid.resp.list[[gridinfo$names[i]]][grid.xy] + 1
         
+      }
+      
+      if (return.table){
+        grid.resp.list[[gridinfo$names[i]]] <- as.table(grid.resp.list[[gridinfo$names[i]]])
+        rownames(grid.resp.list[[gridinfo$names[i]]]) <- c("LowNeg",
+                                                          rep("",nrow(grid.resp.list[[gridinfo$names[i]]])-2),
+                                                          "HighNeg")
+        colnames(grid.resp.list[[gridinfo$names[i]]]) <- c("LowPos",
+                                                          rep("",ncol(grid.resp.list[[gridinfo$names[i]]])-2),
+                                                          "HighPos")
       }
     }
   }
@@ -123,6 +133,8 @@ within1diag <- function(mat,col=5){
 
 # This function does the correct trace for grid items. 
 # It is used by within1diag()
+# Note that this sums along the other diagonal tht tr() does not do, 
+# i.e. this function sums the bottom-left to top-right diagonal.
 # To-do: Make this internal as with above
 #' Title
 #'
@@ -140,4 +152,8 @@ grid.tr <- function(mat, col = NULL){
     val <- val + mat[i,col+1-i]
   }
   return(val)
+}
+
+grid.tri.summary <- function(mat, rows = 5, cols = 5){
+  
 }
