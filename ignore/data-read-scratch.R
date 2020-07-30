@@ -15,7 +15,9 @@ dat.grid <- dat.raw[,mygridinfo$cols]
 item.tester <- grid.cell.counts(x=dat.grid,gridinfo=mygridinfo,type="items",return.table = TRUE)
 person.tester <- grid.cell.counts(x=dat.grid,gridinfo=mygridinfo,type="respondents",return.table = TRUE)
 
+mytrisummary <- lapply(item.tester,grid.tri.summary)
 
+lapply(mytrisummary,trinomial.test, alternative="greater")
 
 # 
 # 
