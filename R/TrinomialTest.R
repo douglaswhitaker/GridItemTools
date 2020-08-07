@@ -127,3 +127,35 @@ gen.probs.obj <- function(n,alpha=0.05,include.one=TRUE,find.RR=TRUE,digits=NULL
   return(probs.obj)
 }
 
+################
+#Power function of trinomial test
+#NOTE: The power of the trinomial test SHOULD be 0.079, but cannot replicate result (Table 2: p0=0.5, p+=0.300)
+
+tripdf <- function(n, x, y){
+  num <- factorial(n)/(factorial(x)*factorial(y)*factorial(n-x-y))
+  return(num)
+}
+
+n <- 10
+ppos <- 0.3
+p0 <- 0.5
+critval <- 4 #Critical value from Table 1 for p0=0.5, n=10, alpha=0.05
+power <- 0
+breakcheck <- 0
+
+for (n0 in 0:n){
+  for(npos in (critval+1):(n-n0)){
+    holder <- tripdf(n, n0, npos)*(ppos^npos)*(p0^n0)*((1-ppos-p0)^(n-npos-n0))
+    if (is.nan(holder)){
+      breakcheck <- 1
+      break
+    }
+    power <- power + holder
+    print(power)
+  }
+  if (breakcheck==1){
+    break
+  }
+}
+
+#Power obtained is 0.150, so error in code
