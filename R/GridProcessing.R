@@ -163,5 +163,5 @@ grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0){
     upper <- sum(mat[upper.tri(mat,diag=FALSE)])
     lower <- sum(mat[lower.tri(mat,diag=FALSE)])
   }
-  return(list(upper=upper,tie=tie,lower=lower))
+  return(list(upper=upper,lower=lower,tie=tie))
 }
