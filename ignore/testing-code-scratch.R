@@ -5,7 +5,7 @@ frame <- cbind(row1,row2)
 frame <- data.frame(frame)
 
 source("R/TrinomialTest.R")
-
+# Do we need to source("R/Trinomial-Internal.R") as well?--JB
 ###Example Data
 trinomial.test(frame[,1],frame[,2],alternative="greater")
 
@@ -24,7 +24,7 @@ trinomial.test(col1=c(1,2,3,4,5),
 
 library(BSDA)
 SIGN.test(x=row1,y=row2)
-
+# How does binom.test in the stats package relate to SIGN.test?--JB
 a <- rep(0,10)
 p4nd2 <- c(0,0,0,0,1,1,1,1,-1,-1)
 p4nd4 <- c(0,0,0,0,1,1,1,1,1,-1)
