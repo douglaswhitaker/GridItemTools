@@ -14,17 +14,17 @@ rename.cols <- function(grid.items){
 
 # This function implements the model proposed in Audrezet, Olsen, and Tudoran (2016)'s Appendix 2
 # Convert grid value to 1 to 9 value
-grid2nine <- function(gc,b = -0.5){
-  i <- col2xy(gc)[2] # this is the X value (positive axis), so the column in our format
-  j <- col2xy(gc)[1] # the Y value, the row in our format
+grid2nine <- function(gc, rows=5, cols=5, b = -0.5){
+  i <- col2xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
+  j <- col2xy(gc, rows, cols)[1] # the Y value, the row in our format
   return((b+2)*i+b*j-1-6*b)
 }
 
-display.grid2nine <- function(gcvals=c(1:25),b=-0.5,match.lit = FALSE){
+display.grid2nine <- function(gcvals=c(1:25), rows=5, cols=5, b=-0.5,match.lit = FALSE){
   mat <- matrix(NA,nrow=5,ncol=5)
   for (gc in gcvals){
-    i <- col2xy(gc)[2] # this is the X value (positive axis), so the column in our format
-    j <- col2xy(gc)[1] # the Y value, the row in our format
+    i <- col2xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
+    j <- col2xy(gc, rows, cols)[1] # the Y value, the row in our format
     mat[j,i] <- grid2nine(gc,b)
   }
   colnames(mat) <- paste("Agree",1:5,sep="")
