@@ -23,7 +23,7 @@ trinomial.test <- function(col1, col2=NULL,
                            alternative=c("two.sided", "greater", "less"), 
                            p_tie=NULL){
   if (is.null(col2)){
-    ns <- list(n_pos=col1[[1]],n_tie=col1[[2]],n_neg=col1[[3]])
+    ns <- list(n_pos=col1[[1]],n_neg=col1[[2]],n_tie=col1[[3]])
     n <- col1[[1]] + col1[[2]] + col1[[3]]
   }
   else{
@@ -33,10 +33,11 @@ trinomial.test <- function(col1, col2=NULL,
     dat <- dat[stats::complete.cases(dat),] #Remove empty/NA columns
     numrow2 <- nrow(dat) #Find the length of the data frame after clearing any rows with missing data values
     
-    #If-statement to tell user if any rows were removed due to empty cells - not working
-    # if(numrow1 > numrow2){
-    #  print((numrow1 - numrow2), " observations have been removed due to missing values.")
-    #}
+    if(numrow1 > numrow2){
+      print(paste((numrow1 - numrow2), " observations have been removed due to missing values."))
+      col1 <- dat$col1 #Makes new versions of col1 and col2 without NA values,
+      col2 <- dat$col2 # but the observations are still paired properly.
+    }
     
     #Create variables
     n <- numrow2
