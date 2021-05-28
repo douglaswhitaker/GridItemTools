@@ -25,7 +25,7 @@ grid.cell.counts <- function(x,gridinfo,type="items",return.table = FALSE){
       for (current.row in 1:nrow(x)){
         
         grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-        grid.xy <- col2xy(grid.column)
+        grid.xy <- col2xy(grid.column, rows, cols)
         grid.resp.list[[gridinfo$names[i]]][grid.xy] <- grid.resp.list[[gridinfo$names[i]]][grid.xy] + 1
         
       }
@@ -50,7 +50,7 @@ grid.cell.counts <- function(x,gridinfo,type="items",return.table = FALSE){
       for (i in 1:length(gridinfo$names)){
         
         grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-        grid.xy <- col2xy(grid.column)
+        grid.xy <- col2xy(grid.column, rows, cols)
         grid.resp.list[[current.row]][grid.xy] <- grid.resp.list[[current.row]][grid.xy] + 1
         
       }
