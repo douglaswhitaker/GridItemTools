@@ -46,7 +46,7 @@ find.rejection.region <- function(probs.obj){
   n <- probs.obj$nd[1]
   grid <- expand.grid(0:n,0:n,0:n)
   colnames(grid) <- c("Pos","Zero","Neg")
-  grid <- grid[which(rowSums(grid)==10),]
+  grid <- grid[which(rowSums(grid)==10),] # Adapt for values other than 10?
   nd <- grid$Pos - grid$Neg
   p0 <- grid$Zero/n
   inRR <- c()
