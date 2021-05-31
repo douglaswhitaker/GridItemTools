@@ -18,14 +18,14 @@ grid2nine <- function(gc, rows=5, cols=5, b = -0.5){
   i <- col2xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
   j <- col2xy(gc, rows, cols)[1] # the Y value, the row in our format
   return((b+2)*i+b*j-1-6*b)
-}
+} # This function can only be used to transform a 5-by-5 grid to a 9 point scale. 
 
 display.grid2nine <- function(gcvals=c(1:25), rows=5, cols=5, b=-0.5,match.lit = FALSE){
   mat <- matrix(NA,nrow=5,ncol=5)
   for (gc in gcvals){
     i <- col2xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
     j <- col2xy(gc, rows, cols)[1] # the Y value, the row in our format
-    mat[j,i] <- grid2nine(gc,b)
+    mat[j,i] <- grid2nine(gc, rows, cols, b)
   }
   colnames(mat) <- paste("Agree",1:5,sep="")
   rownames(mat) <- paste("Disagree",1:5,sep="")
@@ -36,7 +36,7 @@ display.grid2nine <- function(gcvals=c(1:25), rows=5, cols=5, b=-0.5,match.lit =
   else{
     return(mat[5:1,])
   }
-}
+} # This function can only be used to transform a 5-by-5 grid to a 9 point scale.
 
 
 
@@ -69,9 +69,9 @@ delete.empty.mat <- function(resp.list, remove = TRUE){
   return(resp.list)
 }
 
-mat2df <- function(mat,col=5){
-  return(data.frame(x=rep(1:col,each=col),y=rep(1:col,col),count=as.vector(mat)))
-}
+mat2df <- function(mat, col=5){
+  return(data.frame(x=rep(1:col,each=col),y=rep(1:col, col),count=as.vector(mat)))
+} # Could be adapted for non-5x5 grids.
 
 # This function accepts a list (the output from grid.cell.counts) and sums across the list.
 # It returns a single matrix that is the sum of the individual matrices.
@@ -112,12 +112,12 @@ make4cats <- function(grid,poscut=3,negcut=3,table=FALSE){
     rownames(tmp.tab) <- c("LowNeg","HighNeg")
     return(tmp.tab)
   }
-}
+} # This function can only be used on a 5-by-5 grid.
 
 
 fixLimeSurveyLikert <- function(dat, cols, ...){
   for (i in cols){
-    dat[,i] <- as.numeric(substr(dat[,i],1,1)) # as ong as there are 9 or fewer scale points "1,1" should work
+    dat[,i] <- as.numeric(substr(dat[,i],1,1)) # as long as there are 9 or fewer scale points "1,1" should work
   }
   return(dat)
 }
