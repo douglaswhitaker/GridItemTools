@@ -81,7 +81,7 @@ grid.item.info.ls <- function(x,rows=5,cols=5){
   gridinfo$dim <- c(rows,cols)
   
   return(gridinfo)
-}
+} # Could be adapted for non-5x5 grids.
 
 
 # This function processes raw grid data into approximate scores from a Likert-type scale
@@ -109,7 +109,7 @@ rawgrid2uni <- function(x,gridinfo){
   }
   rownames(grid9s) <- rownames(x)
   return(grid9s)
-}
+} # This function can only be used to transform a 5-by-5 grid to a 9 point scale.
 
 # In the future make number of off-diagonal diagonals selected (i.e. more than 1)
 # To-do: Make this an internal function, and create a function that does more summary statistic processing than this
@@ -129,11 +129,11 @@ within1diag <- function(mat,col=5){
   count <- count + grid.tr(mat[1:(col-1),1:(col-1)])
   count <- count + grid.tr(mat[2:col,2:col])
   return(count)
-}
+} # Could be adapted for non-5x5 grids.
 
 # This function does the correct trace for grid items. 
 # It is used by within1diag()
-# Note that this sums along the other diagonal tht tr() does not do, 
+# Note that this sums along the other diagonal that tr() does not do, 
 # i.e. this function sums the bottom-left to top-right diagonal.
 # To-do: Make this internal as with above
 #' Title
@@ -164,4 +164,4 @@ grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0){
     lower <- sum(mat[lower.tri(mat,diag=FALSE)])
   }
   return(list(upper=upper,lower=lower,tie=tie))
-}
+} # Could be adapted for non-5x5 grids.
