@@ -48,7 +48,7 @@ trinomial.test <- function(col1, col2=NULL,
   reverse.flag <- FALSE
   if (n_diff < 0){
     print("Calculated test statistic is negative.")
-    print("Continuing with the roles of col1 and col2 switched.")
+    print("Continuing with the roles of col1 and col2 switched.") #Different statement for when col2=NULL?
     reverse.flag <- TRUE
     n_diff <- ns$n_neg - ns$n_pos
   }
