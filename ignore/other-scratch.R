@@ -95,10 +95,6 @@ if(alternative=="two.sided"){
 }
 
 
-
-
-
-
 ###############################################################################
 # identifying rejection region
 
@@ -118,4 +114,37 @@ for (i in 1:nrow(grid)){
 #return(grid[inRR,])
 grid[inRR,]
 
+##########
+# draft of possible output for the trinomial test
+output <- list("statistic" = n_diff, "p-value" = add_p_value_variable)
+return(output)
 
+#######
+# alternative version of mat2df
+# works for matrices in which byrow = TRUE
+
+mat2df <- function(mat){
+  return(data.frame(x=rep(1:nrow(mat),each=ncol(mat)),y=rep(1:ncol(mat), nrow(mat)),count=as.vector(t(mat))))
+}
+
+#######
+# possible adaptation of witnin1diag (works on any square matrix)
+withinxdiag <- function(mat, x, col){
+  count <- 0
+  count <- count + grid.tr(mat)
+  for (i in 1:x) {
+    count <- count + grid.tr(mat[1:(col-i), 1:(col-i)])
+    count <- count + grid.tr(mat[(i+1):col, (i+1):col])
+  }
+  return(count)
+}  
+
+#######
+# An alternate version of grid2nine, which allows more than just 5x5 grids.
+# Transforms a dimxdim square grid into a 2dim-1 linear scale.
+# The validity of non-5x5 grids is untested, and the transformation may not be accurate.
+grid2likert <- function(gc, dim = 5, b = -0.5){
+  i <- col2xy(gc, dim, dim)[2] # this is the X value (positive axis), so the column in our format
+  j <- col2xy(gc, dim, dim)[1] # the Y value, the row in our format
+  return((b+2)*i+b*j-1-(dim+1)*b)
+}
