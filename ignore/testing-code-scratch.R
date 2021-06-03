@@ -5,6 +5,8 @@ frame <- cbind(row1,row2)
 frame <- data.frame(frame)
 
 source("R/TrinomialTest.R")
+source("R/Trinomial-Internal.R")
+
 
 ###Example Data
 trinomial.test(frame[,1],frame[,2],alternative="greater")
