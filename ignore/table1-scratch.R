@@ -12,9 +12,26 @@ prob.nd2 <- function(n,nd,p_tie){
   return(tmp.prob)
 }
 
-# ttpower <- function(p_pos,p_tie,alpha,n){
-#   
-# }
+# A helper function for ttpower
+inner <- function(n, n_pos, n_tie, p_pos, p_tie){
+  coeff <- factorial(n)/(factorial(n_pos)*factorial(n_tie)*factorial(n-n_pos-n_tie))
+  result <- coeff*(p_pos^n_pos)*(p_tie^n_tie)*((1-p_pos-p_tie)^(n-n_pos-n_tie))
+  return(result)
+} 
+# This power function is a DRAFT, and does not work as intended.
+ttpower <- function(p_pos,p_tie,alpha=0.05,n){
+  Middleterm <- c()
+  for (n_tie in 0:n) {
+    critval <- probs.obj.test$critvals[which(probs.obj.test$P0s==(n_tie/n))]
+    Innerterm <- c()
+    for (n_pos in (critval+1):(n-n_tie)){
+      Innerterm[n_pos-critval] <- inner(n, n_pos, n_tie, p_pos, p_tie)
+    }
+    Middleterm[n_tie+1] <- sum(Innerterm)
+  }
+  Outerterm <- sum(Middleterm)
+  print(Outerterm)
+}
 
 n <- 10
 alpha <- 0.05
