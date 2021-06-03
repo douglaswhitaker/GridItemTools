@@ -29,9 +29,17 @@ dat <- dat[stats::complete.cases(dat),] #Remove empty/NA columns
 numrow2 <- nrow(dat) #Find the length of the data frame after clearing any rows with missing data values
 
 #If-statement to tell user if any rows were removed due to empty cells - not working
-# if(numrow1 > numrow2){
-#  print((numrow1 - numrow2), " observations have been removed due to missing values.")
+#if(numrow1 > numrow2){
+# print((numrow1 - numrow2), " observations have been removed due to missing values.")
 #}
+
+# I believe this will fix the if-statement so long as the vectors have NA values in the missing positions.--JB
+if(numrow1 > numrow2){
+ print(paste((numrow1 - numrow2), "observations have been removed due to missing values."))
+  # Here is a fix to remove any NAs from col1 and col2:--JB
+  col1 <- dat$col1
+  col2 <- dat$col2
+}
 
 #Create variables
 n <- numrow2
