@@ -19,15 +19,21 @@ inner <- function(n, n_pos, n_tie, p_pos, p_tie){
   return(result)
 } 
 # This power function is a DRAFT, and does not work as intended.
-ttpower <- function(p_pos,p_tie,alpha=0.05,n){
+# I have inserted print statements at most of the steps to see what might be wrong.
+ttpower <- function(p_pos, p_tie, alpha=0.05, n=10){
   Middleterm <- c()
   for (n_tie in 0:n) {
-    critval <- probs.obj.test$critvals[which(probs.obj.test$P0s==(n_tie/n))]
+    critval <- probs.obj$critvals[which(probs.obj$P0s==(n_tie/n))]
+    print(critval)
     Innerterm <- c()
-    for (n_pos in (critval+1):(n-n_tie)){
-      Innerterm[n_pos-critval] <- inner(n, n_pos, n_tie, p_pos, p_tie)
+    if (critval+1 <= n-n_tie) {
+      for (n_pos in (critval+1):(n-n_tie)){
+        Innerterm[n_pos-critval] <- inner(n, n_pos, n_tie, p_pos, p_tie)
+        print(Innerterm[n_pos-critval])
+      }
     }
     Middleterm[n_tie+1] <- sum(Innerterm)
+    print(Middleterm[n_tie+1])
   }
   Outerterm <- sum(Middleterm)
   print(Outerterm)
