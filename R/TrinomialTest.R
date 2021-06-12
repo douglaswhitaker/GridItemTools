@@ -23,8 +23,7 @@ trinomial.test <- function(col1,
                            col2=NULL, 
                            alternative=c("two.sided", "greater", "less"), 
                            p_tie=NULL,
-                           print.info=TRUE,
-                           override.sanity.check=FALSE){
+                           print.info=TRUE){
   
   if (length(alternative) > 1) {
     alternative <- alternative[1]
@@ -35,8 +34,9 @@ trinomial.test <- function(col1,
   
   if (is.null(col2)){ # user has entered a vector of counts; the sum of the values is n
     ns <- list(n_pos=col1[1],
-               n_neg=col1[3],
-               n_tie=col1[2]) # order determined by the Bian et al. (2011) article
+               n_tie=col1[2],
+               n_neg=col1[3])
+               # order determined by the Bian et al. (2011) article
     n <- sum(col1)
   }
   else{ # user has entered two vectors of raw data to be subtracted; the length of the vectors is n
@@ -65,6 +65,7 @@ trinomial.test <- function(col1,
   if (n_diff < 0){
     print("Calculated test statistic is negative.")
     print("Continuing with the roles of col1 and col2 switched.") #Different statement for when col2=NULL?
+    print("Test statistic must be positive; provided data had negative differences count exceeding positive differences count")
     reverse.flag <- TRUE
     n_diff <- ns$n_neg - ns$n_pos
   }
@@ -96,12 +97,6 @@ trinomial.test <- function(col1,
   
   ##############################################################################
   #### Section 4: Make adjustments based on the sidedness of the test and sanity checks, return the result
-  
-  if (override.sanity.check & reverse.flag){
-    if (print.info){
-      print("Sanity check flag reset.")
-    }
-  }
   
   if(alternative=="greater"){ #One-sided test
     if (reverse.flag){
@@ -142,12 +137,11 @@ trinomial.test <- function(col1,
       print("Alternative hypothesis: prob_pos != prob_neg")
     }
     
-    if (reverse.flag){
-      print("")
-      print("NOTE: Sanity check of data and alternative triggered.")
-      print("reported p-value is for the OTHER sided test")
-      # For example, user asked for p_pos > p_neg when data suggests p_neg > p_pos
-    }
+    # if (reverse.flag){
+    #   print("")
+    #   print("NOTE: Sanity check of data and alternative triggered.")
+    #   print("reported p-value is for the OTHER sided test")
+    # }
     print("")
     print(paste("p-value:",true_p_val))
   }
@@ -162,7 +156,7 @@ trinomial.test <- function(col1,
               reverse.flag=reverse.flag))
 }
 
-
+# We can probably move this to internal for now.
 ################################################################################
 
 # Generate information about the trinomial test under various settings

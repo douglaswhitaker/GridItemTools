@@ -35,3 +35,78 @@ nue.s <- function(col1, verbose = TRUE, checkRR = TRUE, alpha = 0.05){
 # [1] "S is 8"
 # [1] "critval is 8"
 # [1] "Fail to reject"
+
+
+
+#### Testing trinomial function
+# Data: 6 pos, 4 tie, 0 neg
+# HA: greater
+
+# > trinomial.test(col1=c(6,4,0),alternative = "greater")
+# [1] "p0=0.4"
+# [1] "nd=4"
+# [1] "***   ***   ***   ***   ***   ***   ***"
+# [1] "Trinomial Test (Bian et al., 2011)"
+# [1] ""
+# [1] "Null hypothesis:        prob_pos = prob_neg"
+# [1] "Alternative hypothesis: prob_pos > prob_neg"
+# [1] ""
+# [1] "p-value: 0.0109682424"
+
+#### Testing trinomial function
+# Data: 6 pos, 4 tie, 0 neg
+# HA: not equal
+
+# > trinomial.test(col1=c(6,4,0),alternative = "two.sided")
+# [1] "p0=0.4"
+# [1] "nd=4"
+# [1] "***   ***   ***   ***   ***   ***   ***"
+# [1] "Trinomial Test (Bian et al., 2011)"
+# [1] ""
+# [1] "Null hypothesis:        prob_pos = prob_neg"
+# [1] "Alternative hypothesis: prob_pos != prob_neg"
+# [1] ""
+# [1] "p-value: 0.0219364848"
+
+#### Testing trinomial function
+# Data: 6 pos, 3 tie, 1 neg
+# HA: not equal
+
+# > trinomial.test(col1=c(6,3,1),alternative = "two.sided")
+# 1] "***   ***   ***   ***   ***   ***   ***"
+# [1] "Trinomial Test (Bian et al., 2011)"
+# [1] ""
+# [1] "Null hypothesis:        prob_pos = prob_neg"
+# [1] "Alternative hypothesis: prob_pos != prob_neg"
+# [1] ""
+# [1] "p-value: 0.0872985911382812"
+
+#### Testing trinomial function
+# Data: 6 pos, 3 tie, 1 neg
+# HA: greater
+
+# > trinomial.test(col1=c(6,3,1),alternative = "greater")
+# [1] "***   ***   ***   ***   ***   ***   ***"
+# [1] "Trinomial Test (Bian et al., 2011)"
+# [1] ""
+# [1] "Null hypothesis:        prob_pos = prob_neg"
+# [1] "Alternative hypothesis: prob_pos > prob_neg"
+# [1] ""
+# [1] "p-value: 0.0436492955691406"
+
+#### Testing trinomial function
+# Data: 1 pos, 3 tie, 6 neg
+# HA: greater [p_pos > p_neg]
+# test statistic is 1-6 = -5, so this triggers the reverse flag
+
+# > trinomial.test(col1=c(1,3,6),alternative = "greater")
+# [1] "Calculated test statistic is negative."
+# [1] "Continuing with the roles of col1 and col2 switched."
+# [1] "Test statistic must be positive; provided data had negative differences count exceeding positive differences count"
+# [1] "***   ***   ***   ***   ***   ***   ***"
+# [1] "Trinomial Test (Bian et al., 2011)"
+# [1] ""
+# [1] "Null hypothesis:        prob_pos = prob_neg"
+# [1] "Alternative hypothesis: prob_pos > prob_neg"
+# [1] ""
+# [1] "p-value: 0.982671175476172"
