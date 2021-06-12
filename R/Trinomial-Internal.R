@@ -15,6 +15,12 @@ prob.nd.cumsum <- function(n,nd,p_tie){
   return(tmp.prob)
 }
 
+## This might correspond with (4,6,0) [Reject at alpha = 0.05]
+# > prob.nd.cumsum(10,nd=4,p_tie=0.50)
+# [1] 0.03696442
+## This might correspond with (3,7,0) [Fail to reject at alpha = 0.05]
+# > prob.nd.cumsum(10,nd=3,p_tie=0.50)
+# [1] 0.07392883
 
 # Helper function for trinomial.test
 # This calculates the number of positive, negative, and tied observations
@@ -34,10 +40,14 @@ find.critical.values <- function(probs.obj,alpha=0.05,verbose=FALSE){
       print(rownames(probs.obj$probs.table)[i])
       print(colnames(probs.obj$probs.table)[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]])
     }
+    # The key thing in this is checking the cumulative sum to see at which point it exceeds the alpha level
+    # The which, $nd, and [1] are all just to account for the order of the columns in correctly identifying the correct nd that is the critical value
+    # The column NAMES would easily work, but algorithmically storing the value requires cross-referencing the which value against the vector of nds
     critvals[i] <- probs.obj$nd[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]]
   }
-  probs.obj$critvals <- critvals 
-  return(probs.obj)
+  #probs.obj$critvals <- critvals 
+  #return(probs.obj)
+  return(critvals)
 }
 
 # Helper function for gen.probs.obj
