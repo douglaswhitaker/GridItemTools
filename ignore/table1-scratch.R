@@ -13,8 +13,6 @@ prob.nd2 <- function(n,nd,p_tie){
 }
 
 
-
-
 gentable2 <- function(p_tie, alpha, inc=0.05){
   for (j in p_tie){
     vec.p_pos <- seq(from=(1-j)/2,to=(1-j-inc),by=inc)
@@ -30,6 +28,7 @@ gentable2 <- function(p_tie, alpha, inc=0.05){
 }
 gentable2(p_tie = c(.1,.2,.3), alpha = 0.05)
 
+# older version output
 ### Results are pretty close
 # > gentable2(p_tie = 0.10, alpha = 0.05)
 # [1] 0.02193922 0.04442000 0.08327637 0.14581788 0.23974291 0.37090360 0.53915514 0.73140224 0.91070260

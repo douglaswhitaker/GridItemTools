@@ -6,13 +6,14 @@
 \usage{
 trinomial.test(
   col1,
-  col2,
+  col2 = NULL,
   alternative = c("two.sided", "greater", "less"),
-  p_tie = NULL
+  p_tie = NULL,
+  print.info = TRUE
 )
 }
 \arguments{
-\item{col1}{first data vector}
+\item{col1}{first data vector or a vector of (positive, tie, negative) counts of differences}
 
 \item{col2}{second data vector}
 
