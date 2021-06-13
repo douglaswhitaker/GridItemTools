@@ -16,13 +16,19 @@ prob.nd2 <- function(n,nd,p_tie){
 
 
 gentable2 <- function(p_tie, alpha, inc=0.05){
-  pows <- c()
-  vec.p_pos <- seq(from=(1-p_tie)/2,to=(1-p_tie-inc),by=inc)
-  for (i in 1:length(vec.p_pos)){
-    pows[i] <- ttpow(n = 10, p_pos = vec.p_pos[i], p_tie = p_tie, alpha = alpha)
+  for (j in p_tie){
+    vec.p_pos <- seq(from=(1-j)/2,to=(1-j-inc),by=inc)
+    pows <- c()
+    for (i in 1:length(vec.p_pos)){
+      pows[i] <- ttpow(n = 10, p_pos = vec.p_pos[i], p_tie = j, alpha = alpha)
+    }
+    print("#####################################")
+    print(paste("p_tie =",j))
+    print(paste("p_pos =",vec.p_pos))
+    print(paste("power =",pows))
   }
-  return(pows)
 }
+gentable2(p_tie = c(.1,.2,.3), alpha = 0.05)
 
 ### Results are pretty close
 # > gentable2(p_tie = 0.10, alpha = 0.05)
