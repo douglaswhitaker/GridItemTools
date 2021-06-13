@@ -13,10 +13,7 @@ prob.nd2 <- function(n,nd,p_tie){
 }
 
 
-##########
-ttpow <- function(n = NULL, p_pos = NULL, p_tie = NULL, alpha = NULL){
-  sum(apply(gen.probs.obj(n = n, alpha = alpha)$RejectionRegion, MARGIN = 1, FUN = dmultinom, prob = c(p_pos, p_tie, 1 - p_pos - p_tie)))
-}
+
 
 gentable2 <- function(p_tie, alpha, inc=0.05){
   pows <- c()
