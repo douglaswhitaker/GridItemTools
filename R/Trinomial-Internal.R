@@ -55,10 +55,10 @@ find.critical.values <- function(probs.obj,alpha=0.05,verbose=FALSE){
 find.rejection.region <- function(probs.obj){
   n <- probs.obj$nd[1]
   grid <- expand.grid(0:n,0:n,0:n)
-  colnames(grid) <- c("Pos","Zero","Neg")
+  colnames(grid) <- c("Pos","Tie","Neg")
   grid <- grid[which(rowSums(grid)==n),]
   nd <- grid$Pos - grid$Neg
-  p0 <- grid$Zero/n
+  p0 <- grid$Tie/n
   inRR <- c()
   for (i in 1:nrow(grid)){
     inRR[i] <- nd[i] > probs.obj$critvals[which(probs.obj$P0s == p0[i])]

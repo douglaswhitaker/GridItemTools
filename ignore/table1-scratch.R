@@ -39,6 +39,89 @@ ttpower <- function(p_pos, p_tie, alpha=0.05, n=10){
   print(Outerterm)
 }
 
+ttpower2 <-function(n, p_pos){
+  pow <- 0
+  #col1 <- c(p_pos*n, p0*n, (1-p_pos-p0)*n)
+  #print(col1)
+  
+  for (n0 in 0:n){
+    critval <- gen.probs.obj(n = n, P0s = n0/n, find.RR = FALSE)$critvals
+    print("#############################")
+    #print(paste("critval",critval))
+    if (critval+1 <= (n-n0)){
+      for (n_pos in (critval+1):(n-n0)){
+        print(paste("n_pos",n_pos))
+        col1 <- c(n_pos,n0,n-n_pos-n0)
+        print(paste("col1",col1))
+        pow <- pow + inner2(x=col1,prob=c(p_pos, n0/n, 1-p_pos-n0/n))
+        print(inner2(x=col1,prob=col1/n))
+        print(paste("pow",pow))
+      }
+    }
+  }
+  return(pow)
+}
+
+ttpower3 <-function(N, p.tie, p.pos){
+  pow <- 0
+  p.neg <-  1 - p.pos - p.tie
+  #col1 <- c(p.pos*n, p.tie*n, (1-p.pos-p.tie)*n)
+  #print(col1)
+  
+  for (n.tie in 0:N){
+    critval <- gen.probs.obj(n = N, P0s = n.tie/N, find.RR = FALSE)$critvals
+    #print("#############################")
+    #print(paste("critval",critval))
+    if (critval+1 <= (N-n.tie)){
+      for (n.pos in (critval+1):(N-n.tie)){
+        
+        n.neg <- N - n.pos - n.tie
+        
+        print(paste("n.pos", n.pos))
+        #col1 <- c(n.pos, n.tie, n.neg)
+        #print(paste("col1",col1))
+        pow <- pow + inner3(x=c(n.pos, n.tie, n.neg),
+                            prob=c(p.pos, p.tie, p.neg))
+        #print(inner2(x=col1,prob=col1/n))
+        #print(paste("pow",pow))
+      }
+    }
+  }
+  return(pow)
+}
+
+inner3 <- function(x,prob){
+  factorial(sum(x))/prod(factorial(x))*prod(prob^x)
+}
+
+inner2 <- function(x,prob){
+  choose(sum(x),prod(x))*prod(prob^x)
+}
+
+##########
+ttpow <- function(n = NULL, p_pos = NULL, p_tie = NULL, alpha = NULL){
+  sum(apply(gen.probs.obj(n = n, alpha = alpha)$RejectionRegion, MARGIN = 1, FUN = dmultinom, prob = c(p_pos, p_tie, 1 - p_pos - p_tie)))
+}
+
+gentable2 <- function(p_tie, alpha, inc=0.05){
+  pows <- c()
+  vec.p_pos <- seq(from=(1-p_tie)/2,to=(1-p_tie-inc),by=inc)
+  for (i in 1:length(vec.p_pos)){
+    pows[i] <- ttpow(n = 10, p_pos = vec.p_pos[i], p_tie = p_tie, alpha = alpha)
+  }
+  return(pows)
+}
+
+### Results are pretty close
+# > gentable2(p_tie = 0.10, alpha = 0.05)
+# [1] 0.02193922 0.04442000 0.08327637 0.14581788 0.23974291 0.37090360 0.53915514 0.73140224 0.91070260
+# > gentable2(p_tie = 0.20, alpha = 0.05)
+# [1] 0.03214213 0.06490235 0.12022719 0.20652503 0.33094656 0.49541281 0.68986180 0.88157334
+# > gentable2(p_tie = 0.30, alpha = 0.05)
+# [1] 0.03619317 0.07590016 0.14382117 0.24975125 0.40048097 0.59376525 0.80846255
+# > gentable2(p_tie = 0.40, alpha = 0.05)
+# [1] 0.03569770 0.07944379 0.15707668 0.28116382 0.46032969 0.69118503
+
 n <- 10
 alpha <- 0.05
 
