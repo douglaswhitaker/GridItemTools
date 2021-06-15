@@ -1,15 +1,18 @@
 Package: GridItemTools
 Type: Package
 Title: Grid Item Tools
-Version: 0.0.4
+Version: 0.0.6
 Authors@R: c(
   person("Douglas", "Whitaker", email = "douglas.whitaker@msvu.ca", 
     role = c("cre", "aut")),
-  person("Bailey", "Drew", email = "bailey.drew@msvu.ca", role = "aut"))
+  person("Bailey", "Drew", email = "bailey.drew@msvu.ca", role = "aut"),
+  person("Joseph", "Barss", email = "joseph.barss@msvu.ca", role = "ctb"))
 Maintainer: Douglas Whitaker <douglas.whitaker@msvu.ca>
-Description: Functions used for analyzing grid-type items.
+Description: Functions used for analyzing grid-type items. This package includes
+    functions for processing raw data from grid-type items from LimeSurvey and 
+    implements a trinomial test when there are many ties (Ganesalingam, 1994).
 License: GPL-2 | GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

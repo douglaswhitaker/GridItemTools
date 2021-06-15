@@ -4,7 +4,7 @@
 \alias{grid.cell.counts}
 \title{Title}
 \usage{
-grid.cell.counts(x, gridinfo, type = "items")
+grid.cell.counts(x, gridinfo, type = "items", return.table = FALSE)
 }
 \arguments{
 \item{x}{}

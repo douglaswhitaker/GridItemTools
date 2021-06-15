@@ -9,7 +9,8 @@ gen.probs.obj(
   alpha = 0.05,
   include.one = TRUE,
   find.RR = TRUE,
-  digits = NULL
+  digits = NULL,
+  P0s = NULL
 )
 }
 \arguments{

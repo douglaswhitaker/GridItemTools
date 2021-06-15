@@ -12,9 +12,32 @@ prob.nd2 <- function(n,nd,p_tie){
   return(tmp.prob)
 }
 
-# ttpower <- function(p_pos,p_tie,alpha,n){
-#   
-# }
+
+gentable2 <- function(p_tie, alpha, inc=0.05){
+  for (j in p_tie){
+    vec.p_pos <- seq(from=(1-j)/2,to=(1-j-inc),by=inc)
+    pows <- c()
+    for (i in 1:length(vec.p_pos)){
+      pows[i] <- ttpow(n = 10, p_pos = vec.p_pos[i], p_tie = j, alpha = alpha)
+    }
+    print("#####################################")
+    print(paste("p_tie =",j))
+    print(paste("p_pos =",vec.p_pos))
+    print(paste("power =",pows))
+  }
+}
+gentable2(p_tie = c(.1,.2,.3), alpha = 0.05)
+
+# older version output
+### Results are pretty close
+# > gentable2(p_tie = 0.10, alpha = 0.05)
+# [1] 0.02193922 0.04442000 0.08327637 0.14581788 0.23974291 0.37090360 0.53915514 0.73140224 0.91070260
+# > gentable2(p_tie = 0.20, alpha = 0.05)
+# [1] 0.03214213 0.06490235 0.12022719 0.20652503 0.33094656 0.49541281 0.68986180 0.88157334
+# > gentable2(p_tie = 0.30, alpha = 0.05)
+# [1] 0.03619317 0.07590016 0.14382117 0.24975125 0.40048097 0.59376525 0.80846255
+# > gentable2(p_tie = 0.40, alpha = 0.05)
+# [1] 0.03569770 0.07944379 0.15707668 0.28116382 0.46032969 0.69118503
 
 n <- 10
 alpha <- 0.05
