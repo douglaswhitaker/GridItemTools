@@ -11,7 +11,7 @@ grid.item.names <- function(names.vec){
 
 # This function returns the row and column indices that correspond to the selected response based on the LimeSurvey columns
 col2xy <- function(gc, mat.rows, mat.cols, diag.info.warning = FALSE){
-  if (diag.info.message){
+  if (diag.info.warning){
     warning("Diagonal associated with a reciprocal relationship is bottom left to top right.")
     warning(paste("Focus on the diagonal from (", mat.rows, ",1) to (1,", mat.cols, "). (row,col)", sep=""))
   }

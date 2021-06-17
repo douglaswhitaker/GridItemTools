@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-grid.cell.counts <- function(x,gridinfo,type="items",return.table = FALSE){
+grid.cell.counts <- function(x, gridinfo, type = "items", return.table = FALSE){
   grid.resp.list <- list()
   
   rows <- gridinfo$dim[1]
@@ -169,11 +169,11 @@ grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0,
   }
   
   if (return.table){
-    tmp.tab <- as.table(c(upper,diag,lower))
-    names(tmp.tab) <- c("upper","diag","lower")
+    tmp.tab <- as.table(c(upper,tie,lower))
+    names(tmp.tab) <- c("upper","diagonal","lower")
     return(tmp.tab)
   }
   else { #if we don't return a table, we return a lit
-    return(list(upper=upper,diag=tie,lower=lower))
+    return(list(upper=upper,diagonal=tie,lower=lower))
   }
 } # Could be adapted for non-5x5 grids.
