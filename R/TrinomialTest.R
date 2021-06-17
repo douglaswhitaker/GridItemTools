@@ -122,9 +122,10 @@ trinomial.test <- function(col1,
   
   critval <- gen.probs.obj(n = n, P0s = p_tie, find.RR = FALSE)$critvals
   
+  # TO DO: make this look nicer (i.e., mimic the output of, say, t.test)
   if (print.info){
     print("***   ***   ***   ***   ***   ***   ***")
-    print("Trinomial Test (Bian et al., 2011)")
+    print("Trinomial Test (Ganesalingam, 1994; Bian et al., 2011)")
     print("")
     print("Null hypothesis:        prob_pos = prob_neg")
     if (alternative == "greater"){

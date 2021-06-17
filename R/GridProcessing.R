@@ -156,12 +156,24 @@ grid.tr <- function(mat, col = NULL){
 
 
 # This will be a simple version at first. We'll account for within1diag later
-grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0){
+grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0, 
+                             return.table = TRUE){
   if (offdiag == 0){
     mat <- mat[,ncol(mat):1]
     tie <- sum(diag(mat))
     upper <- sum(mat[upper.tri(mat,diag=FALSE)])
     lower <- sum(mat[lower.tri(mat,diag=FALSE)])
   }
-  return(list(upper=upper,lower=lower,tie=tie))
+  else {
+    stop("Not yet implemented.")
+  }
+  
+  if (return.table){
+    tmp.tab <- as.table(c(upper,diag,lower))
+    names(tmp.tab) <- c("upper","diag","lower")
+    return(tmp.tab)
+  }
+  else { #if we don't return a table, we return a lit
+    return(list(upper=upper,diag=tie,lower=lower))
+  }
 } # Could be adapted for non-5x5 grids.

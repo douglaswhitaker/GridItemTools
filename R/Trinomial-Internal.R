@@ -86,7 +86,8 @@ find.cutpoints <- function(probs.obj){
   }
 }
 
-
+# Compute the power of the trinomial test under given parameters
+# Note that the negative values are computed from the positive and tie values.
 ttpow <- function(n = NULL, p_pos = NULL, p_tie = NULL, alpha = NULL){
   sum(apply(gen.probs.obj(n = n, alpha = alpha)$RejectionRegion, 
             MARGIN = 1, 

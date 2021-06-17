@@ -10,8 +10,15 @@ grid.item.names <- function(names.vec){
 }
 
 # This function returns the row and column indices that correspond to the selected response based on the LimeSurvey columns
-col2xy <- function(gc, mat.rows, mat.cols){
-  return(which(matrix(1:(mat.rows*mat.cols),nrow=mat.rows,byrow = TRUE)==gc,arr.ind = TRUE))
+col2xy <- function(gc, mat.rows, mat.cols, diag.info.warning = FALSE){
+  if (diag.info.message){
+    warning("Diagonal associated with a reciprocal relationship is bottom left to top right.")
+    warning(paste("Focus on the diagonal from (", mat.rows, ",1) to (1,", mat.cols, "). (row,col)", sep=""))
+  }
+  return(which(matrix(1:(mat.rows*mat.cols), 
+                      nrow = mat.rows, 
+                      byrow = TRUE) == gc,
+               arr.ind = TRUE))
 }
 
 # Essentially just creating an empty data.frame with the appropriate column names
