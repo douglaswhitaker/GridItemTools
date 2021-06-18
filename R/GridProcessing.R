@@ -89,12 +89,13 @@ grid.item.info.ls <- function(x,rows=5,cols=5){
 #'
 #' @param x 
 #' @param gridinfo 
+#' @param b
 #'
 #' @return
 #' @export
 #'
 #' @examples
-rawgrid2uni <- function(x,gridinfo){
+rawgrid2uni <- function(x, gridinfo, b = -0.5){
   grid9s <- make.grid9s(gridinfo$names)
   rows <- gridinfo$dim[1]
   cols <- gridinfo$dim[2]
@@ -103,7 +104,7 @@ rawgrid2uni <- function(x,gridinfo){
     vals <- c()
     for (i in 1:length(gridinfo$names)){
       grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-      vals[i] <- grid2nine(grid.column)
+      vals[i] <- grid2nine(grid.column, b = b)
     }
     grid9s <- rbind(grid9s,current.row=vals)
   }
