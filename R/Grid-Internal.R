@@ -63,49 +63,4 @@ mat2df <- function(mat, col=5){
   return(data.frame(x=rep(1:col,each=col),y=rep(1:col, col),count=as.vector(mat)))
 } # Could be adapted for non-5x5 grids.
 
-# to do: give option to return as table for easy use of chi-sq
-# and/or build testing into this function
-# Note that this is a crude classifier
-# See Figure A2 (p. 47; pdf p. 19)
-#     Negative gets a triangular region of 6 cells
-#     Positive gets a triangular region of 6 cells
-#     Indifferent is half of the middle region
-#     Ambivalent is half of the middle region and includes (3,3)
-make4cats <- function(grid,poscut=3,negcut=3,table=FALSE){
-  neg <- sum(grid[negcut:5,1:(poscut-1)])
-  pos <- sum(grid[1:(negcut-1),poscut:5])
-  ind <- sum(grid[1:(negcut-1),1:(poscut-1)])
-  amb <- sum(grid[negcut:5,poscut:5])
-  if (!table){
-    return(list(pos=pos,neg=neg,ind=ind,amb=amb))
-  }
-  else if (table){
-    tmp.tab <- as.table(matrix(c(ind,pos,
-                                 neg,amb),nrow=2,byrow=TRUE))
-    colnames(tmp.tab) <- c("LowPos","HighPos")
-    rownames(tmp.tab) <- c("LowNeg","HighNeg")
-    return(tmp.tab)
-  }
-} # This function can only be used on a 5-by-5 grid.
 
-# This is hard-coded for 5x5 grid displayed in the manner this package uses
-classify_responses <- function(grid){
-  grid <- t(grid) # based the counts on the one in the appendix, but it's really the transpose
-  # These are based on Audrezet et al. (2016, p. 47) Figure A2
-  indifferent_cells <- c(1,2,6,7,8,12)
-  ambivalent_cells <- c(13,14,18,19,24,20,25)
-  negative_cells <- c(21,22,16,17,11,23)
-  positive_cells <- c(5,4,10,3,9,15)
-  
-  indifferent_counts <- sum(as.vector(grid)[indifferent_cells])
-  ambivalent_counts <- sum(as.vector(grid)[ambivalent_cells])
-  negative_counts <- sum(as.vector(grid)[negative_cells])
-  positive_counts <- sum(as.vector(grid)[positive_cells])
-  
-  tab <- as.table(matrix(c(indifferent_counts, positive_counts,
-                           negative_counts, ambivalent_counts), 
-                         nrow = 2, byrow = TRUE))
-  colnames(tab) <- c("LowPos","HighPos")
-  rownames(tab) <- c("LowNeg","HighNeg")
-  return(tab)
-}

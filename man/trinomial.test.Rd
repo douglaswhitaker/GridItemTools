@@ -2,7 +2,7 @@
 % Please edit documentation in R/TrinomialTest.R
 \name{trinomial.test}
 \alias{trinomial.test}
-\title{Perform the trinomial hypothesis test}
+\title{Title}
 \usage{
 trinomial.test(
   col1,
@@ -20,10 +20,12 @@ trinomial.test(
 \item{alternative}{the type of hypothesis test to be performed}
 
 \item{p_tie}{theoretical proportion of ties; calculated from the data by default}
+
+\item{print.info}{}
 }
 \value{
-the p-value from the hypothesis test
+
 }
 \description{
-Perform the trinomial hypothesis test
+Title
 }

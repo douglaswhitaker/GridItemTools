@@ -23,6 +23,8 @@ gen.probs.obj(
 \item{find.RR}{}
 
 \item{digits}{}
+
+\item{P0s}{}
 }
 \value{
 

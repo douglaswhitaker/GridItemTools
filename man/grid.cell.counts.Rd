@@ -12,6 +12,8 @@ grid.cell.counts(x, gridinfo, type = "items", return.table = FALSE)
 \item{gridinfo}{}
 
 \item{type}{}
+
+\item{return.table}{}
 }
 \value{
 
