@@ -1,24 +1,21 @@
-
-#' Perform the trinomial hypothesis test
-#' 
+#########
+# To-do #
+#########
+# Add a flag to also run the sign.test
+# Have nice output processing of the returned object
+###Trinomial Test Function 
+#' Title
+#'
 #' @param col1 first data vector or a vector of (positive, tie, negative) counts of differences
 #' @param col2 second data vector
 #' @param alternative the type of hypothesis test to be performed
 #' @param p_tie theoretical proportion of ties; calculated from the data by default
-#' @return the p-value from the hypothesis test
-
-#########
-# To-do #
-#########
-# Return an object containing the following: 
-#   p-value
-#   test statistic (n_diff)
-#   critical value
-#   n_pos, n_tie, n_neg
-#   reverse.flag
-# Add a flag to also run the sign.test
-# Have nice output processing of the returned object
-###Trinomial Test Function 
+#' @param print.info 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 trinomial.test <- function(col1, 
                            col2=NULL, 
                            alternative=c("two.sided", "greater", "less"), 
@@ -168,6 +165,7 @@ trinomial.test <- function(col1,
 #' @param include.one 
 #' @param find.RR 
 #' @param digits 
+#' @param P0s 
 #'
 #' @return
 #' @export

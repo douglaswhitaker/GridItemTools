@@ -6,6 +6,7 @@
 #' @param x 
 #' @param gridinfo 
 #' @param type 
+#' @param return.table 
 #'
 #' @return
 #' @export
