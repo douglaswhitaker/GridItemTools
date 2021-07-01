@@ -41,17 +41,6 @@ rename.cols <- function(grid.items){
   return(new.names)
 }
 
-
-
-
-# This function implements the model proposed in Audrezet, Olsen, and Tudoran (2016)'s Appendix 2
-# Convert grid value to 1 to 9 value
-grid2nine <- function(gc, rows=5, cols=5, b = -0.5){
-  i <- col2xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
-  j <- col2xy(gc, rows, cols)[1] # the Y value, the row in our format
-  return((b+2)*i+b*j-1-6*b)
-} # This function can only be used to transform a 5-by-5 grid to a 9 point scale. 
-
 display.grid2nine <- function(gcvals=c(1:25), rows=5, cols=5, b=-0.5,match.lit = FALSE){
   mat <- matrix(NA,nrow=5,ncol=5)
   for (gc in gcvals){
@@ -70,56 +59,9 @@ display.grid2nine <- function(gcvals=c(1:25), rows=5, cols=5, b=-0.5,match.lit =
   }
 } # This function can only be used to transform a 5-by-5 grid to a 9 point scale.
 
-
-
-
-
-# This function is intended to be applied to a list that is the output of 
-# grid.cell.counts with type = "respondents"
-# If remove = TRUE, respondent summary matrices with sum 0 (no responses) are removed from the list
-# If remove = FALSE, such matrices are replaced with NA
-delete.empty.mat <- function(resp.list, remove = TRUE){
-  if (remove){
-    tmp.list <- list()
-    for (i in length(resp.list):1){
-      if (sum(resp.list[[i]])==0){
-        resp.list[[i]] <- NULL # removes the index and closes the hole; must loop backward through the list
-      }
-    }
-    for (i in length(resp.list):1){
-      tmp.list[[(length(resp.list)+1)-i]] <- resp.list[[i]]
-    }
-    resp.list <- tmp.list
-  }
-  else{
-    for (i in 1:length(resp.list)){
-      if (sum(resp.list[[i]])==0){
-        resp.list[[i]] <- NA
-      }
-    }
-  }
-  return(resp.list)
-}
-
 mat2df <- function(mat, col=5){
   return(data.frame(x=rep(1:col,each=col),y=rep(1:col, col),count=as.vector(mat)))
 } # Could be adapted for non-5x5 grids.
-
-# This function accepts a list (the output from grid.cell.counts) and sums across the list.
-# It returns a single matrix that is the sum of the individual matrices.
-# Note that it uses the first matrix in the list to determine the dimensions:
-# if this matrix is missing (an NA), there will be an error.
-# It is best to use this after delete.empty.mat.
-sum.resp.mats <- function(mat.list,items=NULL){
-  tmp <- matrix(0,nrow=dim(mat.list[[1]])[1],ncol=dim(mat.list[[1]])[2])
-  if (is.null(items)){
-    items <- 1:length(mat.list)
-  }
-  for (i in items){
-    tmp <- tmp + mat.list[[i]]
-  }
-  return(tmp)
-}
 
 # to do: give option to return as table for easy use of chi-sq
 # and/or build testing into this function
@@ -146,10 +88,3 @@ make4cats <- function(grid,poscut=3,negcut=3,table=FALSE){
   }
 } # This function can only be used on a 5-by-5 grid.
 
-
-fixLimeSurveyLikert <- function(dat, lsvals = c("D4","D3","D2","D1","N0","A1","A2","A3","A4"), livals = 1:9){
-  for (i in 1:length(livals)){
-    dat[dat==lsvals[i]] <- livals[i]
-  }
-  return(dat)
-}
