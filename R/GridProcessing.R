@@ -293,3 +293,33 @@ fixLimeSurveyLikert <- function(dat,
   }
   return(as.data.frame(sapply(dat, as.numeric)))
 }
+
+# This is hard-coded for 5x5 grid displayed in the manner this package uses
+#' Title
+#'
+#' @param grid 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+classify_responses <- function(grid){
+  grid <- t(grid) # based the counts on the one in the appendix, but it's really the transpose
+  # These are based on Audrezet et al. (2016, p. 47) Figure A2
+  indifferent_cells <- c(1,2,6,7,8,12)
+  ambivalent_cells <- c(13,14,18,19,24,20,25)
+  negative_cells <- c(21,22,16,17,11,23)
+  positive_cells <- c(5,4,10,3,9,15)
+  
+  indifferent_counts <- sum(as.vector(grid)[indifferent_cells])
+  ambivalent_counts <- sum(as.vector(grid)[ambivalent_cells])
+  negative_counts <- sum(as.vector(grid)[negative_cells])
+  positive_counts <- sum(as.vector(grid)[positive_cells])
+  
+  tab <- as.table(matrix(c(indifferent_counts, positive_counts,
+                           negative_counts, ambivalent_counts), 
+                         nrow = 2, byrow = TRUE))
+  colnames(tab) <- c("LowPos","HighPos")
+  rownames(tab) <- c("LowNeg","HighNeg")
+  return(tab)
+}
