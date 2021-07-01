@@ -15,7 +15,7 @@
 
 Some options are:
 
-* sum.resp.mats -> sum_resp_mats
+* ~~sum.resp.mats -> sum_resp_mats~~
 * grid2nine -> grid_to_nine
 * grid.cell.counts -> grid_cell_counts
 * grid.item.info.ls -> grid_item_info

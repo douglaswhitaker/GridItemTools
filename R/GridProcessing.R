@@ -263,7 +263,7 @@ delete.empty.mat <- function(resp.list, remove = TRUE){
 #' @export
 #'
 #' @examples
-sum.resp.mats <- function(mat.list,items=NULL){
+sum_resp_mats <- function(mat.list,items=NULL){
   tmp <- matrix(0,nrow=dim(mat.list[[1]])[1],ncol=dim(mat.list[[1]])[2])
   if (is.null(items)){
     items <- 1:length(mat.list)
