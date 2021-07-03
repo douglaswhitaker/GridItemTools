@@ -77,7 +77,7 @@ trinomial.test <- function(col1,
   #### Section 3: Compute the initial p-value
   
   # Note that prob.nd.cumsum is not used to account for greater, less, or two.sided tests
-  
+
   #Loop to compute the p-value
   for (j in n_diff:n){
     for (k in 0:((n-j)/2)){
@@ -115,6 +115,9 @@ trinomial.test <- function(col1,
   }
   else if(alternative=="two.sided"){
     true_p_val <- p_value*2
+    if (n_diff == 0){
+      true_p_val <- true_p_val - pivot_p
+    }
   }
   
   critval <- gen.probs.obj(n = n, P0s = p_tie, find.RR = FALSE)$critvals
@@ -216,7 +219,9 @@ gen.probs.obj <- function(n,
   
   
   probs.obj <- list(probs.table=probs.table,nd=n:0,P0s=P0s)
-  probs.obj$critvals <- find.critical.values(probs.obj)
+  # try replacing with next line to get rid of $critvals$critvals in find.rejection.region
+  #probs.obj <- c(probs.obj, find.critical.values(probs.obj, alpha = alpha))
+  probs.obj$critvals <- find.critical.values(probs.obj,alpha = alpha)
   
   if (find.RR){
     probs.obj$RejectionRegion <- find.rejection.region(probs.obj)

@@ -1,16 +1,17 @@
 # The probability distribution of Nd, the test statistic.
 # Nd is the difference between N+ and N-
 # The formula is given by (Bian et al., 2011, p. 1156)
-prob.nd <- function(n,nd,k,p_tie){
-  factorial(n)/(factorial(nd+k)*factorial(k)*factorial(n-nd-2*k))*
-    ((1-p_tie)/2)^(nd+2*k)*
-    p_tie^(n-nd-2*k)
+prob.nd <- function(n, nd, k, p_tie){
+  factorial(n) / 
+    (factorial(nd + k) * factorial(k) * factorial(n - nd - 2*k)) *
+    ((1 - p_tie) / 2)^(nd + 2*k) *
+    p_tie^(n - nd - 2*k)
 }
 
 prob.nd.cumsum <- function(n,nd,p_tie){
   tmp.prob <- 0
   for (k in 0:((n-nd)/2)){
-    tmp.prob <- tmp.prob + prob.nd(n=n,nd=nd,k=k,p_tie=p_tie)
+    tmp.prob <- tmp.prob + prob.nd(n = n, nd = nd, k = k, p_tie = p_tie)
   }
   return(tmp.prob)
 }
@@ -33,7 +34,9 @@ calculate.ns <- function(col1,col2){
 
 # Helper function for gen.probs.obj
 # Identifies which values are on either side of alpha for each value of P0
-find.critical.values <- function(probs.obj,alpha=0.05,verbose=FALSE){
+find.critical.values <- function(probs.obj,
+                                 alpha,
+                                 verbose=FALSE){
   critvals <- c()
   for (i in 1:nrow(probs.obj$probs.table)){
     if (verbose){

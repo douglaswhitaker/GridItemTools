@@ -1,7 +1,7 @@
 Package: GridItemTools
 Type: Package
 Title: Grid Item Tools
-Version: 0.0.8
+Version: 0.0.9
 Authors@R: c(
   person("Douglas", "Whitaker", email = "douglas.whitaker@msvu.ca", 
     role = c("cre", "aut")),
