@@ -116,7 +116,7 @@ trinomial.test <- function(col1,
   else if(alternative=="two.sided"){
     true_p_val <- p_value*2
     if (n_diff == 0){
-      true_p_val <- true_p_val - pivot_p
+      true_p_val <- true_p_val - pivot_prob
     }
   }
   
