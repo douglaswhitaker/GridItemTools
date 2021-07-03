@@ -316,10 +316,6 @@ classify_responses <- function(grid){
   negative_counts <- sum(as.vector(grid)[negative_cells])
   positive_counts <- sum(as.vector(grid)[positive_cells])
   
-  tab <- as.table(matrix(c(indifferent_counts, positive_counts,
-                           negative_counts, ambivalent_counts), 
-                         nrow = 2, byrow = TRUE))
-  colnames(tab) <- c("LowPos","HighPos")
-  rownames(tab) <- c("LowNeg","HighNeg")
-  return(tab)
+  return(list(indifferent_counts, positive_counts,
+              negative_counts, ambivalent_counts))
 }
