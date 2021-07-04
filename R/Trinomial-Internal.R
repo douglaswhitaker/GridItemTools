@@ -49,21 +49,13 @@ calculate.ns <- function(col1,col2){
 # Helper function for gen.probs.obj
 # Identifies which values are on either side of alpha for each value of P0
 find.critical.values <- function(probs.obj,
-                                 alpha,
-                                 verbose = TRUE){
+                                 alpha){
   critvals <- c()
   for (i in 1:nrow(probs.obj$probs.table)){
-    if (verbose){
-      print(rownames(probs.obj$probs.table)[i])
-      print(colnames(probs.obj$probs.table)[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]])
-    }
     # The key thing in this is checking the cumulative sum to see at which point it exceeds the alpha level
     # The which, $nd, and [1] are all just to account for the order of the columns in correctly identifying the correct nd that is the critical value
     # The column NAMES would easily work, but algorithmically storing the value requires cross-referencing the which value against the vector of nds
-    tmp_critval <- probs.obj$nd[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]]
-    if (!is.na(tmp_critval)){
-      critvals[i] <- tmp_critval
-    }
+    critvals[i] <- probs.obj$nd[which(cumsum(probs.obj$probs.table[i,]) > alpha)[1]]
   }
   #probs.obj$critvals <- critvals 
   #return(probs.obj)
@@ -72,44 +64,17 @@ find.critical.values <- function(probs.obj,
 
 # Helper function for gen.probs.obj
 # Identifies the rejection region for various settings
-find.rejection.region <- function(probs.obj, verbose = TRUE){
+find.rejection.region <- function(probs.obj){
   n <- probs.obj$nd[1]
   grid <- expand.grid(0:n,0:n,0:n)
   colnames(grid) <- c("Pos","Tie","Neg")
   grid <- grid[which(rowSums(grid)==n),]
-  if (verbose) {print(grid)}
   nd <- grid$Pos - grid$Neg
   p0 <- grid$Tie/n
-  if (verbose) {print(nd)}
-  if (verbose) {print(p0)}
-  
-  
   inRR <- c()
-  # if (verbose) {
-  #   print(p0)
-  #   print(probs.obj$P0s)
-  #   print(probs.obj$critvals)
-  # }
   for (i in 1:nrow(grid)){
     inRR[i] <- nd[i] > probs.obj$critvals[which(probs.obj$P0s == p0[i])]
-    if (is.na(inRR[i])){
-      if (verbose){
-        print(paste("i = ", i, sep=""))
-        print(probs.obj$P0s)
-        print(probs.obj$critvals)
-        print(p0[i])
-        print(which(probs.obj$P0s == p0[i]))
-        print("#############")
-        print(grid[i,])
-        print(nd[i])
-        print(probs.obj$critvals[which(probs.obj$P0s == p0[i])])
-      }
-      if (nd[i] == 0){
-        inRR[i] <- FALSE
-      }
-    }
   }
-  if (verbose) print(inRR)
   return(grid[inRR,])
 }
 
@@ -136,7 +101,6 @@ find.cutpoints <- function(probs.obj){
 # Eventually move this to public
 # Compute the power of the trinomial test under given parameters
 # Note that the negative values are computed from the positive and tie values.
-# Should adjust the language so that it is just category names?
 ttpow <- function(n = NULL, p_pos = NULL, p_tie = NULL, alpha = NULL){
   sum(apply(gen.probs.obj(n = n, alpha = alpha)$RejectionRegion, 
             MARGIN = 1, 
