@@ -229,3 +229,24 @@ gen.probs.obj <- function(n,
   
   return(probs.obj)
 }
+
+## This seems to only work for n <= 170
+#
+# If n > 170, then the following error occurs:
+# Error in if (any(x < 0)) stop("'x' must be non-negative") : 
+#   missing value where TRUE/FALSE needed
+# Called from: FUN(newX[, i], ...)
+#
+## The problem seems to be due to prob.nd.cumsum
+#
+# > GridItemTools:::prob.nd.cumsum(n=171,nd=0,p_tie=0)
+# [1] NaN
+#
+## Which in turn is because of factorial(n)
+#
+# > factorial(170)
+# [1] 7.257416e+306
+# > factorial(171)
+# [1] Inf
+#
+## The answer might be to cleverly re-write that code using the choose function (multiplied by a value to make it work right)
