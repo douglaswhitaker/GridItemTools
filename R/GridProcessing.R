@@ -316,6 +316,8 @@ classify_responses <- function(grid){
   negative_counts <- sum(as.vector(grid)[negative_cells])
   positive_counts <- sum(as.vector(grid)[positive_cells])
   
-  return(list(indifferent_counts, positive_counts,
-              negative_counts, ambivalent_counts))
+  return(list(indifferent_counts = indifferent_counts, 
+              ambivalent_counts = ambivalent_counts,
+              positive_counts = positive_counts,
+              negative_counts = negative_counts))
 }
