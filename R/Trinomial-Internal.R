@@ -13,7 +13,11 @@ prob.nd <- function(n, nd, k, p_tie){
   #############################################################
   # New code that supports larger values of n by using choose #
   #############################################################
-  choose(n, nd + 2*k) * prod((nd + k + 1):(nd + 2*k)) / factorial(k) *
+  choose(n, nd + 2*k) * 
+    ifelse(k == 0, 
+           yes = 1, 
+           no = prod((nd + k + 1):(nd + 2*k))) / 
+    factorial(k) *
     ((1 - p_tie) / 2)^(nd + 2*k) *
     p_tie^(n - nd - 2*k)
 }
