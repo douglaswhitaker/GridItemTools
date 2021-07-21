@@ -166,7 +166,7 @@ trinomial.test <- function(col1,
 #' @param n 
 #' @param alpha 
 #' @param include.one 
-#' @param find.RR 
+#' @param find.RR Logical; determines if the Rejection Region should be found.
 #' @param digits 
 #' @param P0s 
 #'
