@@ -9,7 +9,7 @@ prob.nd <- function(n, nd, k, p_tie){
   #   (factorial(nd + k) * factorial(k) * factorial(n - nd - 2*k)) *
   #   ((1 - p_tie) / 2)^(nd + 2*k) *
   #   p_tie^(n - nd - 2*k)
-  
+
   #############################################################
   # New code that supports larger values of n by using choose #
   #############################################################
@@ -22,7 +22,7 @@ prob.nd <- function(n, nd, k, p_tie){
     p_tie^(n - nd - 2*k)
 }
 
-prob.nd.cumsum <- function(n,nd,p_tie){
+prob.nd.cumsum <- function(n,nd,p_tie, version2 = TRUE, verbose = FALSE){
   tmp.prob <- 0
   for (k in 0:((n-nd)/2)){
     tmp.prob <- tmp.prob + prob.nd(n = n, nd = nd, k = k, p_tie = p_tie)
