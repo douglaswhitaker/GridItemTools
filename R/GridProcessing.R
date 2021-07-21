@@ -7,26 +7,37 @@
 #' @param gridinfo 
 #' @param type 
 #' @param return.table 
+#' @param chosen Vector giving the indices of the desired items in gridinfo$names
+#' @param reverse_code 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-grid.cell.counts <- function(x, gridinfo, type = "items", return.table = FALSE){
+grid.cell.counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
+                             return.table = FALSE, chosen_items = NULL){
   grid.resp.list <- list()
   
   rows <- gridinfo$dim[1]
   cols <- gridinfo$dim[2]
   
   if (type=="items"){
-    for (i in 1:length(gridinfo$names)){
-      
+    if (is.null(chosen_items)){
+      chosen_items <- 1:length(gridinfo$names)
+    }
+    for (i in chosen_items){      
       grid.resp.list[[gridinfo$names[i]]] <- matrix(0,nrow=rows,ncol=cols)
       
       for (current.row in 1:nrow(x)){
         
         grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-        grid.xy <- col2xy(grid.column, rows, cols)
+        xy_tmp <- col2xy(grid.column, rows, cols)
+        if (!is.null(reverse_code)){
+          if (reverse_code == 1){
+            xy_tmp <- xy_tmp[2:1]
+          }
+        }
+        grid.xy <- xy_tmp
         grid.resp.list[[gridinfo$names[i]]][grid.xy] <- grid.resp.list[[gridinfo$names[i]]][grid.xy] + 1
         
       }
@@ -34,11 +45,11 @@ grid.cell.counts <- function(x, gridinfo, type = "items", return.table = FALSE){
       if (return.table){
         grid.resp.list[[gridinfo$names[i]]] <- as.table(grid.resp.list[[gridinfo$names[i]]])
         rownames(grid.resp.list[[gridinfo$names[i]]]) <- c("LowNeg",
-                                                          rep("",nrow(grid.resp.list[[gridinfo$names[i]]])-2),
-                                                          "HighNeg")
+                                                           rep("",nrow(grid.resp.list[[gridinfo$names[i]]])-2),
+                                                           "HighNeg")
         colnames(grid.resp.list[[gridinfo$names[i]]]) <- c("LowPos",
-                                                          rep("",ncol(grid.resp.list[[gridinfo$names[i]]])-2),
-                                                          "HighPos")
+                                                           rep("",ncol(grid.resp.list[[gridinfo$names[i]]])-2),
+                                                           "HighPos")
       }
     }
   }
@@ -48,10 +59,19 @@ grid.cell.counts <- function(x, gridinfo, type = "items", return.table = FALSE){
       
       grid.resp.list[[current.row]] <- matrix(0,nrow=rows,ncol=cols)
       
-      for (i in 1:length(gridinfo$names)){
+      if (is.null(chosen_items)){
+        chosen_items <- 1:length(gridinfo$names)
+      }
+      for (i in chosen_items){
         
         grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-        grid.xy <- col2xy(grid.column, rows, cols)
+        xy_tmp <- col2xy(grid.column, rows, cols)
+        if (!is.null(reverse_code)){
+          if (reverse_code == 1){
+            xy_tmp <- xy_tmp[2:1]
+          }
+        }
+        grid.xy <- xy_tmp        
         grid.resp.list[[current.row]][grid.xy] <- grid.resp.list[[current.row]][grid.xy] + 1
         
       }
@@ -91,21 +111,26 @@ grid.item.info.ls <- function(x,rows=5,cols=5){
 #' @param x 
 #' @param gridinfo 
 #' @param b
+#' @param reverse_code 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-rawgrid2uni <- function(x, gridinfo, b = -0.5){
+rawgrid2uni <- function(x, gridinfo, b = -0.5, reverse_code = NULL){
   grid9s <- make.grid9s(gridinfo$names)
   rows <- gridinfo$dim[1]
   cols <- gridinfo$dim[2]
   
+  if (is.null(reverse_code)){
+    reverse_code <- rep(0, length(gridinfo$names))
+  }
+  
   for (current.row in 1:nrow(x)){
     vals <- c()
     for (i in 1:length(gridinfo$names)){
-      grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-      vals[i] <- grid2nine(grid.column, b = b)
+      grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value, the indicator of which of 25 columns the repsonse is in
+      vals[i] <- grid2nine(grid.column, b = b, rc = reverse_code[i])
     }
     grid9s <- rbind(grid9s,current.row=vals)
   }
@@ -147,13 +172,18 @@ within1diag <- function(mat,col=5){
 #' @export
 #'
 #' @examples
-grid.tr <- function(mat, col = NULL){
+grid.tr <- function(mat, col = NULL, limesurvey = TRUE){
   if (is.null(col)) col <- ncol(mat)
-  val <- 0
-  for (i in 1:col){
-    val <- val + mat[i,col+1-i]
+  if (limesurvey){
+    return(sum(diag(mat)))
   }
-  return(val)
+  else{
+    val <- 0
+    for (i in 1:col){
+      val <- val + mat[i,col+1-i]
+    }
+    return(val)
+  }
 }
 
 
@@ -172,9 +202,12 @@ grid.tr <- function(mat, col = NULL){
 #'
 #' @examples
 grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0, 
-                             return.table = TRUE){
+                             return.table = TRUE,
+                             limesurvey = TRUE){
   if (offdiag == 0){
-    mat <- mat[,ncol(mat):1]
+    if (!limesurvey){
+      mat <- mat[,ncol(mat):1]
+    }
     tie <- sum(diag(mat))
     upper <- sum(mat[upper.tri(mat,diag=FALSE)])
     lower <- sum(mat[lower.tri(mat,diag=FALSE)])
@@ -207,9 +240,15 @@ grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0,
 #' @export
 #'
 #' @examples
-grid2nine <- function(gc, rows=5, cols=5, b = -0.5){
-  i <- col2xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
-  j <- col2xy(gc, rows, cols)[1] # the Y value, the row in our format
+grid2nine <- function(gc, rows=5, cols=5, b = -0.5, rc = FALSE){
+  if (rc){ # reverse-coded
+    i <- col2xy(gc, rows, cols)[1] 
+    j <- col2xy(gc, rows, cols)[2]
+  }
+  else{ # not reverse-coded
+    i <- col2xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
+    j <- col2xy(gc, rows, cols)[1] # the Y value, the row in our format
+  }
   return((b+2)*i+b*j-1-6*b)
 } # This function can only be used to transform a 5-by-5 grid to a 9 point scale. 
 
