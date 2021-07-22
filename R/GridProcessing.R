@@ -7,33 +7,33 @@
 #' @param gridinfo 
 #' @param type 
 #' @param return.table 
-#' @param chosen Vector giving the indices of the desired items in gridinfo$names
 #' @param reverse_code 
+#' @param chosen_items 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-grid.cell.counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
-                             return.table = FALSE, chosen_items = NULL){
+grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
+                             return.table = FALSE, chosen_items = NULL) {
   grid.resp.list <- list()
   
   rows <- gridinfo$dim[1]
   cols <- gridinfo$dim[2]
   
-  if (type=="items"){
-    if (is.null(chosen_items)){
+  if (type == "items") {
+    if (is.null(chosen_items)) {
       chosen_items <- 1:length(gridinfo$names)
     }
-    for (i in chosen_items){      
-      grid.resp.list[[gridinfo$names[i]]] <- matrix(0,nrow=rows,ncol=cols)
+    for (i in chosen_items) {      
+      grid.resp.list[[gridinfo$names[i]]] <- matrix(0, nrow = rows, ncol = cols)
       
-      for (current.row in 1:nrow(x)){
+      for (current.row in 1:nrow(x)) {
         
-        grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-        xy_tmp <- col2xy(grid.column, rows, cols)
-        if (!is.null(reverse_code)){
-          if (reverse_code == 1){
+        grid.column <- which(!is.na(x[current.row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value
+        xy_tmp <- col_to_xy(grid.column, rows, cols)
+        if (!is.null(reverse_code)) {
+          if (reverse_code == 1) {
             xy_tmp <- xy_tmp[2:1]
           }
         }
@@ -42,32 +42,30 @@ grid.cell.counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
         
       }
       
-      if (return.table){
+      if (return.table) {
         grid.resp.list[[gridinfo$names[i]]] <- as.table(grid.resp.list[[gridinfo$names[i]]])
         rownames(grid.resp.list[[gridinfo$names[i]]]) <- c("LowNeg",
-                                                           rep("",nrow(grid.resp.list[[gridinfo$names[i]]])-2),
+                                                           rep("", nrow(grid.resp.list[[gridinfo$names[i]]]) - 2),
                                                            "HighNeg")
         colnames(grid.resp.list[[gridinfo$names[i]]]) <- c("LowPos",
-                                                           rep("",ncol(grid.resp.list[[gridinfo$names[i]]])-2),
+                                                           rep("", ncol(grid.resp.list[[gridinfo$names[i]]]) - 2),
                                                            "HighPos")
       }
     }
-  }
-  
-  else if (type=="respondents"){
-    for (current.row in 1:nrow(x)){
+  } else if (type == "respondents") {
+    for (current.row in 1:nrow(x)) {
       
-      grid.resp.list[[current.row]] <- matrix(0,nrow=rows,ncol=cols)
+      grid.resp.list[[current.row]] <- matrix(0, nrow = rows, ncol = cols)
       
-      if (is.null(chosen_items)){
+      if (is.null(chosen_items)) {
         chosen_items <- 1:length(gridinfo$names)
       }
-      for (i in chosen_items){
+      for (i in chosen_items) {
         
-        grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value
-        xy_tmp <- col2xy(grid.column, rows, cols)
-        if (!is.null(reverse_code)){
-          if (reverse_code == 1){
+        grid.column <- which(!is.na(x[current.row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value
+        xy_tmp <- col_to_xy(grid.column, rows, cols)
+        if (!is.null(reverse_code)) {
+          if (reverse_code == 1) {
             xy_tmp <- xy_tmp[2:1]
           }
         }
@@ -95,11 +93,11 @@ grid.cell.counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
 #' @export
 #'
 #' @examples
-grid.item.info.ls <- function(x,rows=5,cols=5){
+grid_item_info <- function(x, rows = 5, cols = 5) {
   gridinfo <- list()
-  gridinfo$cols <- sapply(names(x),grepl,pattern="_",simplify=TRUE) # the columns that contain grid items
-  gridinfo$names <- grid.item.names(names(x)[which(gridinfo$cols)]) # vector of names
-  gridinfo$dim <- c(rows,cols)
+  gridinfo$cols <- sapply(names(x), grepl, pattern = "_", simplify = TRUE) # the columns that contain grid items
+  gridinfo$names <- grid_item_names(names(x)[which(gridinfo$cols)]) # vector of names
+  gridinfo$dim <- c(rows, cols)
   
   return(gridinfo)
 } # Could be adapted for non-5x5 grids.
@@ -117,22 +115,22 @@ grid.item.info.ls <- function(x,rows=5,cols=5){
 #' @export
 #'
 #' @examples
-rawgrid2uni <- function(x, gridinfo, b = -0.5, reverse_code = NULL){
-  grid9s <- make.grid9s(gridinfo$names)
+create_grid_score <- function(x, gridinfo, b = -0.5, reverse_code = NULL) {
+  grid9s <- make_grid9s(gridinfo$names)
   rows <- gridinfo$dim[1]
   cols <- gridinfo$dim[2]
   
-  if (is.null(reverse_code)){
+  if (is.null(reverse_code)) {
     reverse_code <- rep(0, length(gridinfo$names))
   }
   
-  for (current.row in 1:nrow(x)){
+  for (current.row in 1:nrow(x)) {
     vals <- c()
-    for (i in 1:length(gridinfo$names)){
-      grid.column <- which(!is.na(x[current.row,((i-1)*(rows*cols)+1):(i*(rows*cols))])) # should only be one value, the indicator of which of 25 columns the repsonse is in
-      vals[i] <- grid2nine(grid.column, b = b, rc = reverse_code[i])
+    for (i in 1:length(gridinfo$names)) {
+      grid.column <- which(!is.na(x[current.row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value, the indicator of which of 25 columns the response is in
+      vals[i] <- grid_to_nine(grid.column, b = b, rc = reverse_code[i])
     }
-    grid9s <- rbind(grid9s,current.row=vals)
+    grid9s <- rbind(grid9s, current.row = vals)
   }
   rownames(grid9s) <- rownames(x)
   return(grid9s)
@@ -150,16 +148,16 @@ rawgrid2uni <- function(x, gridinfo, b = -0.5, reverse_code = NULL){
 #' @export
 #'
 #' @examples
-within1diag <- function(mat,col=5){
+within_diag <- function(mat, col = 5) {
   count <- 0
-  count <- count + grid.tr(mat)
-  count <- count + grid.tr(mat[1:(col-1),1:(col-1)])
-  count <- count + grid.tr(mat[2:col,2:col])
+  count <- count + grid_trace(mat)
+  count <- count + grid_trace(mat[1:(col - 1), 1:(col - 1)])
+  count <- count + grid_trace(mat[2:col, 2:col])
   return(count)
 } # Could be adapted for non-5x5 grids.
 
 # This function does the correct trace for grid items. 
-# It is used by within1diag()
+# It is used by within_diag()
 # Note that this sums along the other diagonal that tr() does not do, 
 # i.e. this function sums the bottom-left to top-right diagonal.
 # To-do: Make this internal as with above
@@ -167,27 +165,27 @@ within1diag <- function(mat,col=5){
 #'
 #' @param mat 
 #' @param col 
+#' @param limesurvey 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-grid.tr <- function(mat, col = NULL, limesurvey = TRUE){
+grid_trace <- function(mat, col = NULL, limesurvey = TRUE) {
   if (is.null(col)) col <- ncol(mat)
-  if (limesurvey){
+  if (limesurvey) {
     return(sum(diag(mat)))
-  }
-  else{
+  } else {
     val <- 0
-    for (i in 1:col){
-      val <- val + mat[i,col+1-i]
+    for (i in 1:col) {
+      val <- val + mat[i, col + 1 - i]
     }
     return(val)
   }
 }
 
 
-# This will be a simple version at first. We'll account for within1diag later
+# This will be a simple version at first. We'll account for within_diag later
 
 #' Title
 #'
@@ -196,33 +194,32 @@ grid.tr <- function(mat, col = NULL, limesurvey = TRUE){
 #' @param cols 
 #' @param offdiag 
 #' @param return.table 
+#' @param limesurvey 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0, 
+grid_summary_tri <- function(mat, rows = 5, cols = 5, offdiag = 0, 
                              return.table = TRUE,
-                             limesurvey = TRUE){
-  if (offdiag == 0){
-    if (!limesurvey){
-      mat <- mat[,ncol(mat):1]
+                             limesurvey = TRUE) {
+  if (offdiag == 0) {
+    if (!limesurvey) {
+      mat <- mat[, ncol(mat):1]
     }
     tie <- sum(diag(mat))
-    upper <- sum(mat[upper.tri(mat,diag=FALSE)])
-    lower <- sum(mat[lower.tri(mat,diag=FALSE)])
-  }
-  else {
+    upper <- sum(mat[upper.tri(mat, diag = FALSE)])
+    lower <- sum(mat[lower.tri(mat, diag = FALSE)])
+  } else {
     stop("Not yet implemented.")
   }
   
-  if (return.table){
-    tmp.tab <- as.table(c(upper,tie,lower))
-    names(tmp.tab) <- c("upper","diagonal","lower")
+  if (return.table) {
+    tmp.tab <- as.table(c(upper, tie, lower))
+    names(tmp.tab) <- c("upper", "diagonal", "lower")
     return(tmp.tab)
-  }
-  else { #if we don't return a table, we return a lit
-    return(list(upper=upper,diagonal=tie,lower=lower))
+  } else { #if we don't return a table, we return a list
+    return(list(upper = upper, diagonal = tie, lower = lower))
   }
 } # Could be adapted for non-5x5 grids.
 
@@ -235,25 +232,25 @@ grid.tri.summary <- function(mat, rows = 5, cols = 5, offdiag = 0,
 #' @param rows 
 #' @param cols 
 #' @param b 
+#' @param rc 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-grid2nine <- function(gc, rows=5, cols=5, b = -0.5, rc = FALSE){
-  if (rc){ # reverse-coded
-    i <- col2xy(gc, rows, cols)[1] 
-    j <- col2xy(gc, rows, cols)[2]
+grid_to_nine <- function(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE) {
+  if (rc) { # reverse-coded
+    i <- col_to_xy(gc, rows, cols)[1] 
+    j <- col_to_xy(gc, rows, cols)[2]
+  } else { # not reverse-coded
+    i <- col_to_xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
+    j <- col_to_xy(gc, rows, cols)[1] # the Y value, the row in our format
   }
-  else{ # not reverse-coded
-    i <- col2xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
-    j <- col2xy(gc, rows, cols)[1] # the Y value, the row in our format
-  }
-  return((b+2)*i+b*j-1-6*b)
+  return((b + 2) * i + (b * j) - 1 - (6 * b))
 } # This function can only be used to transform a 5-by-5 grid to a 9 point scale. 
 
 # This function is intended to be applied to a list that is the output of 
-# grid.cell.counts with type = "respondents"
+# grid_cell_counts with type = "respondents"
 # If remove = TRUE, respondent summary matrices with sum 0 (no responses) are removed from the list
 # If remove = FALSE, such matrices are replaced with NA
 #' Title
@@ -265,22 +262,21 @@ grid2nine <- function(gc, rows=5, cols=5, b = -0.5, rc = FALSE){
 #' @export
 #'
 #' @examples
-delete.empty.mat <- function(resp.list, remove = TRUE){
-  if (remove){
+delete_empty_grid <- function(resp.list, remove = TRUE) {
+  if (remove) {
     tmp.list <- list()
-    for (i in length(resp.list):1){
-      if (sum(resp.list[[i]])==0){
+    for (i in length(resp.list):1) {
+      if (sum(resp.list[[i]]) == 0) {
         resp.list[[i]] <- NULL # removes the index and closes the hole; must loop backward through the list
       }
     }
-    for (i in length(resp.list):1){
-      tmp.list[[(length(resp.list)+1)-i]] <- resp.list[[i]]
+    for (i in length(resp.list):1) {
+      tmp.list[[(length(resp.list) + 1) - i]] <- resp.list[[i]]
     }
     resp.list <- tmp.list
-  }
-  else{
-    for (i in 1:length(resp.list)){
-      if (sum(resp.list[[i]])==0){
+  } else {
+    for (i in 1:length(resp.list)) {
+      if (sum(resp.list[[i]]) == 0) {
         resp.list[[i]] <- NA
       }
     }
@@ -288,11 +284,11 @@ delete.empty.mat <- function(resp.list, remove = TRUE){
   return(resp.list)
 }
 
-# This function accepts a list (the output from grid.cell.counts) and sums across the list.
+# This function accepts a list (the output from grid_cell_counts) and sums across the list.
 # It returns a single matrix that is the sum of the individual matrices.
 # Note that it uses the first matrix in the list to determine the dimensions:
 # if this matrix is missing (an NA), there will be an error.
-# It is best to use this after delete.empty.mat.
+# It is best to use this after delete_empty_grid.
 #' Title
 #'
 #' @param mat.list 
@@ -302,12 +298,12 @@ delete.empty.mat <- function(resp.list, remove = TRUE){
 #' @export
 #'
 #' @examples
-sum_resp_mats <- function(mat.list,items=NULL){
-  tmp <- matrix(0,nrow=dim(mat.list[[1]])[1],ncol=dim(mat.list[[1]])[2])
-  if (is.null(items)){
+sum_resp_mats <- function(mat.list, items = NULL) {
+  tmp <- matrix(0, nrow = dim(mat.list[[1]])[1], ncol = dim(mat.list[[1]])[2])
+  if (is.null(items)) {
     items <- 1:length(mat.list)
   }
-  for (i in items){
+  for (i in items) {
     tmp <- tmp + mat.list[[i]]
   }
   return(tmp)
@@ -323,12 +319,12 @@ sum_resp_mats <- function(mat.list,items=NULL){
 #' @export
 #'
 #' @examples
-fixLimeSurveyLikert <- function(dat, 
-                                lsvals = c("D4","D3","D2","D1",
-                                           "N0","A1","A2","A3","A4"), 
-                                livals = 1:9){
-  for (i in 1:length(livals)){
-    dat[dat==lsvals[i]] <- livals[i]
+fix_limesurvey_likert <- function(dat, 
+                                lsvals = c("D4", "D3", "D2", "D1",
+                                           "N0", "A1", "A2", "A3", "A4"), 
+                                livals = 1:9) {
+  for (i in 1:length(livals)) {
+    dat[dat == lsvals[i]] <- livals[i]
   }
   return(as.data.frame(sapply(dat, as.numeric)))
 }
@@ -342,13 +338,13 @@ fixLimeSurveyLikert <- function(dat,
 #' @export
 #'
 #' @examples
-classify_responses <- function(grid){
+classify_responses <- function(grid) {
   grid <- t(grid) # based the counts on the one in the appendix, but it's really the transpose
   # These are based on Audrezet et al. (2016, p. 47) Figure A2
-  indifferent_cells <- c(1,2,6,7,8,12)
-  ambivalent_cells <- c(13,14,18,19,24,20,25)
-  negative_cells <- c(21,22,16,17,11,23)
-  positive_cells <- c(5,4,10,3,9,15)
+  indifferent_cells <- c(1, 2, 6, 7, 8, 12)
+  ambivalent_cells <- c(13, 14, 18, 19, 24, 20, 25)
+  negative_cells <- c(21, 22, 16, 17, 11, 23)
+  positive_cells <- c(5, 4, 10, 3, 9, 15)
   
   indifferent_counts <- sum(as.vector(grid)[indifferent_cells])
   ambivalent_counts <- sum(as.vector(grid)[ambivalent_cells])
