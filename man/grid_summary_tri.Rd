@@ -9,7 +9,7 @@ grid_summary_tri(
   rows = 5,
   cols = 5,
   offdiag = 0,
-  return.table = TRUE,
+  return_table = TRUE,
   limesurvey = TRUE
 )
 }
@@ -22,7 +22,7 @@ grid_summary_tri(
 
 \item{offdiag}{}
 
-\item{return.table}{}
+\item{return_table}{}
 
 \item{limesurvey}{}
 }

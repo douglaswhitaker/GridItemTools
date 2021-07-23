@@ -9,8 +9,8 @@
 #' @param col1 first data vector or a vector of (positive, tie, negative) counts of differences
 #' @param col2 second data vector
 #' @param alternative the type of hypothesis test to be performed
+#' @param print_info 
 #' @param p_tie theoretical proportion of ties; calculated from the data by default
-#' @param print.info 
 #'
 #' @return
 #' @export
@@ -20,7 +20,7 @@ trinomial_test <- function(col1,
                            col2 = NULL, 
                            alternative = c("two.sided", "greater", "less"), 
                            p_tie = NULL,
-                           print.info = TRUE) {
+                           print_info = TRUE) {
   
   if (length(alternative) > 1) {
     alternative <- alternative[1]
@@ -57,12 +57,12 @@ trinomial_test <- function(col1,
   #### Section 2: Compute summary statistic n_diff and do sanity checks
   
   n_diff <- ns$n_pos - ns$n_neg #This is n_d in the paper
-  reverse.flag <- FALSE
+  reverse_flag <- FALSE
   if (n_diff < 0) {
     print("Calculated test statistic is negative.")
     print("Continuing with the roles of col1 and col2 switched.") #Different statement for when col2=NULL?
     print("Test statistic must be positive; provided data had negative differences count exceeding positive differences count")
-    reverse.flag <- TRUE
+    reverse_flag <- TRUE
     n_diff <- ns$n_neg - ns$n_pos
   }
   
@@ -75,7 +75,7 @@ trinomial_test <- function(col1,
   ##############################################################################
   #### Section 3: Compute the initial p-value
   
-  # Note that prob.nd.cumsum is not used to account for greater, less, or two.sided tests
+  # Note that prob_nd_cumsum is not used to account for greater, less, or two.sided tests
 
   #Loop to compute the p-value
   for (j in n_diff:n) {
@@ -95,14 +95,14 @@ trinomial_test <- function(col1,
   #### Section 4: Make adjustments based on the sidedness of the test and sanity checks, return the result
   
   if (alternative == "greater") { #One-sided test
-    if (reverse.flag) {
+    if (reverse_flag) {
       true_p_val <- 1 - p_value + pivot_prob
       
     } else {
       true_p_val <- p_value
     }
   } else if (alternative == "less") {
-    if (reverse.flag) {
+    if (reverse_flag) {
       true_p_val <- p_value
       
     } else {
@@ -115,10 +115,10 @@ trinomial_test <- function(col1,
     }
   }
   
-  critval <- generate_trinomial_info(n = n, P0s = p_tie, find.RR = FALSE)$critvals
+  critval <- generate_trinomial_info(n = n, P0s = p_tie, find_RR = FALSE)$critvals
   
   # TO DO: make this look nicer (i.e., mimic the output of, say, t.test)
-  if (print.info) {
+  if (print_info) {
     print("***   ***   ***   ***   ***   ***   ***")
     print("Trinomial Test (Ganesalingam, 1994; Bian et al., 2011)")
     print("")
@@ -131,7 +131,7 @@ trinomial_test <- function(col1,
       print("Alternative hypothesis: prob_pos != prob_neg")
     }
     
-    # if (reverse.flag){
+    # if (reverse_flag){
     #   print("")
     #   print("NOTE: Sanity check of data and alternative triggered.")
     #   print("reported p-value is for the OTHER sided test")
@@ -143,11 +143,11 @@ trinomial_test <- function(col1,
   # Work on a better return value
   return(list(N = n,
               statistic = n_diff,
-              p.value = true_p_val,
+              p_value = true_p_val,
               alternative = alternative,
               Ns = ns,
               critval = critval,
-              reverse.flag = reverse.flag))
+              reverse_flag = reverse_flag))
 }
 
 # We can probably move this to internal for now.
@@ -158,10 +158,10 @@ trinomial_test <- function(col1,
 #'
 #' @param n 
 #' @param alpha 
-#' @param include.one 
-#' @param find.RR Logical; determines if the Rejection Region should be found.
 #' @param digits 
 #' @param P0s 
+#' @param include_one 
+#' @param find_RR 
 #'
 #' @return
 #' @export
@@ -169,15 +169,15 @@ trinomial_test <- function(col1,
 #' @examples
 generate_trinomial_info <- function(n,
                           alpha = 0.05,
-                          include.one = TRUE,
-                          find.RR = TRUE,
+                          include_one = TRUE,
+                          find_RR = TRUE,
                           digits = NULL,
                           P0s = NULL) {
   
   # Set up basic storage vectors
   
-  tmp.sum <- c()
-  probs.table <- c()
+  tmp_sum <- c()
+  probs_table <- c()
   xs <- 0:n
   
   # set up possible probabilities of a tie
@@ -186,7 +186,7 @@ generate_trinomial_info <- function(n,
   # This currently makes no provision for the user to specify the P0s
   
   if (is.null(P0s)) {
-    if (include.one) {
+    if (include_one) {
       P0s <- (0:(n)) / n 
     } else {
       P0s <- (0:(n - 1)) / n
@@ -198,28 +198,28 @@ generate_trinomial_info <- function(n,
   
   for (p0 in P0s) {
     for (i in 1:length(xs)) {
-      tmp.sum[i] <- prob_nd_cumsum(n = n, nd = xs[i], p_tie = p0)
+      tmp_sum[i] <- prob_nd_cumsum(n = n, nd = xs[i], p_tie = p0)
     }
-    probs.table <- rbind(probs.table, tmp.sum[(n + 1):1])
+    probs_table <- rbind(probs_table, tmp_sum[(n + 1):1])
   }
-  rownames(probs.table) <- paste("p0=", P0s, sep = "")
-  colnames(probs.table) <- paste("nd=", n:0, sep = "")
+  rownames(probs_table) <- paste("p0=", P0s, sep = "")
+  colnames(probs_table) <- paste("nd=", n:0, sep = "")
   
   if (!is.null(digits)) {
-    probs.table <- round(probs.table, digits)
+    probs_table <- round(probs_table, digits)
   }
   
   
-  probs.obj <- list(probs.table = probs.table, nd = n:0, P0s = P0s)
-  # try replacing with next line to get rid of $critvals$critvals in find.rejection.region
-  #probs.obj <- c(probs.obj, find_critical_values(probs.obj, alpha = alpha))
-  probs.obj$critvals <- find_critical_values(probs.obj, alpha = alpha)
+  probs_obj <- list(probs_table = probs_table, nd = n:0, P0s = P0s)
+  # try replacing with next line to get rid of $critvals$critvals in find_rejection_region
+  #probs_obj <- c(probs_obj, find_critical_values(probs_obj, alpha = alpha))
+  probs_obj$critvals <- find_critical_values(probs_obj, alpha = alpha)
   
-  if (find.RR) {
-    probs.obj$RejectionRegion <- find_rejection_region(probs.obj)
+  if (find_RR) {
+    probs_obj$RejectionRegion <- find_rejection_region(probs_obj)
   }
   
-  return(probs.obj)
+  return(probs_obj)
 }
 
 ## This seems to only work for n <= 170

@@ -7,8 +7,8 @@
 generate_trinomial_info(
   n,
   alpha = 0.05,
-  include.one = TRUE,
-  find.RR = TRUE,
+  include_one = TRUE,
+  find_RR = TRUE,
   digits = NULL,
   P0s = NULL
 )
@@ -18,9 +18,9 @@ generate_trinomial_info(
 
 \item{alpha}{}
 
-\item{include.one}{}
+\item{include_one}{}
 
-\item{find.RR}{Logical; determines if the Rejection Region should be found.}
+\item{find_RR}{}
 
 \item{digits}{}
 

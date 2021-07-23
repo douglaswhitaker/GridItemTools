@@ -9,7 +9,7 @@ trinomial_test(
   col2 = NULL,
   alternative = c("two.sided", "greater", "less"),
   p_tie = NULL,
-  print.info = TRUE
+  print_info = TRUE
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ trinomial_test(
 
 \item{p_tie}{theoretical proportion of ties; calculated from the data by default}
 
-\item{print.info}{}
+\item{print_info}{}
 }
 \value{
 

@@ -4,10 +4,10 @@
 \alias{delete_empty_grid}
 \title{Title}
 \usage{
-delete_empty_grid(resp.list, remove = TRUE)
+delete_empty_grid(resp_list, remove = TRUE)
 }
 \arguments{
-\item{resp.list}{}
+\item{resp_list}{}
 
 \item{remove}{}
 }

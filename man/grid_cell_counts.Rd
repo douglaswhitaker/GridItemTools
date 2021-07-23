@@ -9,7 +9,7 @@ grid_cell_counts(
   gridinfo,
   type = "items",
   reverse_code = NULL,
-  return.table = FALSE,
+  return_table = FALSE,
   chosen_items = NULL
 )
 }
@@ -22,7 +22,7 @@ grid_cell_counts(
 
 \item{reverse_code}{}
 
-\item{return.table}{}
+\item{return_table}{}
 
 \item{chosen_items}{}
 }

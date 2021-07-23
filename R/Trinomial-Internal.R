@@ -23,18 +23,18 @@ prob_nd <- function(n, nd, k, p_tie) {
 }
 
 prob_nd_cumsum <- function(n, nd, p_tie, version2 = TRUE, verbose = FALSE) {
-  tmp.prob <- 0
+  tmp_prob <- 0
   for (k in 0:((n - nd) / 2)) {
-    tmp.prob <- tmp.prob + prob_nd(n = n, nd = nd, k = k, p_tie = p_tie)
+    tmp_prob <- tmp_prob + prob_nd(n = n, nd = nd, k = k, p_tie = p_tie)
   }
-  return(tmp.prob)
+  return(tmp_prob)
 }
 
 ## This might correspond with (4,6,0) [Reject at alpha = 0.05]
-# > prob.nd.cumsum(10,nd=4,p_tie=0.50)
+# > prob_nd_cumsum(10,nd=4,p_tie=0.50)
 # [1] 0.03696442
 ## This might correspond with (3,7,0) [Fail to reject at alpha = 0.05]
-# > prob.nd.cumsum(10,nd=3,p_tie=0.50)
+# > prob_nd_cumsum(10,nd=3,p_tie=0.50)
 # [1] 0.07392883
 
 # Helper function for trinomial_test
@@ -48,24 +48,24 @@ calculate_ns <- function(col1, col2) {
 
 # Helper function for generate_trinomial_info
 # Identifies which values are on either side of alpha for each value of P0
-find_critical_values <- function(probs.obj,
+find_critical_values <- function(probs_obj,
                                  alpha) {
   critvals <- c()
-  for (i in 1:nrow(probs.obj$probs.table)) {
+  for (i in 1:nrow(probs_obj$probs_table)) {
     # The key thing in this is checking the cumulative sum to see at which point it exceeds the alpha level
     # The which, $nd, and [1] are all just to account for the order of the columns in correctly identifying the correct nd that is the critical value
     # The column NAMES would easily work, but algorithmically storing the value requires cross-referencing the which value against the vector of nds
-    critvals[i] <- probs.obj$nd[which(cumsum(probs.obj$probs.table[i, ]) > alpha)[1]]
+    critvals[i] <- probs_obj$nd[which(cumsum(probs_obj$probs_table[i, ]) > alpha)[1]]
   }
-  #probs.obj$critvals <- critvals 
-  #return(probs.obj)
+  #probs_obj$critvals <- critvals 
+  #return(probs_obj)
   return(critvals)
 }
 
 # Helper function for generate_trinomial_info
 # Identifies the rejection region for various settings
-find_rejection_region <- function(probs.obj) {
-  n <- probs.obj$nd[1]
+find_rejection_region <- function(probs_obj) {
+  n <- probs_obj$nd[1]
   grid <- expand.grid(0:n, 0:n, 0:n)
   colnames(grid) <- c("Pos", "Tie", "Neg")
   grid <- grid[which(rowSums(grid) == n), ]
@@ -73,7 +73,7 @@ find_rejection_region <- function(probs.obj) {
   p0 <- grid$Tie / n
   inRR <- c()
   for (i in 1:nrow(grid)) {
-    inRR[i] <- nd[i] > probs.obj$critvals[which(probs.obj$P0s == p0[i])]
+    inRR[i] <- nd[i] > probs_obj$critvals[which(probs_obj$P0s == p0[i])]
   }
   return(grid[inRR, ])
 }
@@ -81,19 +81,19 @@ find_rejection_region <- function(probs.obj) {
 # Helper function for generate_trinomial_info
 # Prints the information from Table 1 (Bian et al., 2011)
 # No return value
-find_cutpoints <- function(probs.obj) {
-  for (i in 1:nrow(probs.obj$probs.table)) {
-    print(probs.obj$P0s[i])
-    cv.match <- which(probs.obj$critvals[i] == probs.obj$nd)
+find_cutpoints <- function(probs_obj) {
+  for (i in 1:nrow(probs_obj$probs_table)) {
+    print(probs_obj$P0s[i])
+    cv_match <- which(probs_obj$critvals[i] == probs_obj$nd)
     
     print(
-      paste("P0=", probs.obj$P0s[i],
-            ", P(nd > Ca) for nd=", probs.obj$nd[cv.match],
+      paste("P0=", probs_obj$P0s[i],
+            ", P(nd > Ca) for nd=", probs_obj$nd[cv_match],
             ": ",
-            round(cumsum(probs.obj$probs.table[i, ])[c(cv.match - 1)], 3),
-            ", P(nd >= Ca) for nd=", probs.obj$nd[cv.match],
+            round(cumsum(probs_obj$probs_table[i, ])[c(cv_match - 1)], 3),
+            ", P(nd >= Ca) for nd=", probs_obj$nd[cv_match],
             ": ",
-            round(cumsum(probs.obj$probs.table[i, ])[c(cv.match)], 3),
+            round(cumsum(probs_obj$probs_table[i, ])[c(cv_match)], 3),
             sep = ""))
   }
 }

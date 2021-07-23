@@ -4,10 +4,10 @@
 \alias{sum_resp_mats}
 \title{Title}
 \usage{
-sum_resp_mats(mat.list, items = NULL)
+sum_resp_mats(mat_list, items = NULL)
 }
 \arguments{
-\item{mat.list}{}
+\item{mat_list}{}
 
 \item{items}{}
 }
