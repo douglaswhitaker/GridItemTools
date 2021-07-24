@@ -3,12 +3,12 @@
 # This generates a list of matrices where each cell is the count of the number of responses
 #' Title
 #'
-#' @param x 
-#' @param gridinfo 
-#' @param type 
-#' @param reverse_code 
-#' @param chosen_items 
-#' @param return_table 
+#' @param x data frame of grid-only LimeSurvey formatted data.
+#' @param gridinfo list. The output of \code{grid_item_info}.
+#' @param type character. Indicates whether to create cell counts for \code{"items"} or \code{"respondents"}.
+#' @param reverse_code a value of 1 indicates that the grid items are reverse coded, and will correct for it.
+#' @param return_table logical. If \code{TRUE} a list of tables rather than matrices is returned.
+#' @param chosen_items integer vector indicating which grid items to include.
 #'
 #' @return
 #' @export
@@ -85,9 +85,8 @@ grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
 # In the future, develop a way to algorithmically determine rows and cols
 #' Title
 #'
-#' @param x 
-#' @param rows 
-#' @param cols 
+#' @param x data frame of raw LimeSurvey formatted data.
+#' @param rows,cols the dimensions of the grid items.
 #'
 #' @return
 #' @export
@@ -106,10 +105,11 @@ grid_item_info <- function(x, rows = 5, cols = 5) {
 # This function processes raw grid data into approximate scores from a Likert-type scale
 #' Title
 #'
-#' @param x 
-#' @param gridinfo 
-#' @param b
-#' @param reverse_code 
+#' @param x data frame of grid-only LimeSurvey formatted data.
+#' @param gridinfo list. The output of \code{grid_item_info}.
+#' @param b a parameter between -1 and 0.
+#' @param reverse_code a vector indicating which grids are reverse-coded. 
+#'   a value of 0 means not reverse coded; a value of 1 means reverse coded.
 #'
 #' @return
 #' @export
@@ -141,8 +141,8 @@ create_grid_score <- function(x, gridinfo, b = -0.5, reverse_code = NULL) {
 # (This requires sapply to work)
 #' Title
 #'
-#' @param mat 
-#' @param col 
+#' @param mat a square matrix.
+#' @param col the number of columns of the matrix.
 #'
 #' @return
 #' @export
@@ -163,9 +163,9 @@ within_diag <- function(mat, col = 5) {
 # To-do: Make this internal as with above
 #' Title
 #'
-#' @param mat 
-#' @param col 
-#' @param limesurvey 
+#' @param mat a square matrix.
+#' @param col the number of columns of the matrix.
+#' @param limesurvey logical. If \code{FALSE} the function calculates the sum of the diagonal from bottom-left to top-right.
 #'
 #' @return
 #' @export
@@ -189,12 +189,11 @@ grid_trace <- function(mat, col = NULL, limesurvey = TRUE) {
 
 #' Title
 #'
-#' @param mat 
-#' @param rows 
-#' @param cols 
-#' @param offdiag 
-#' @param limesurvey 
-#' @param return_table 
+#' @param mat a matrix.
+#' @param rows,cols the dimensions of the matrix.
+#' @param offdiag integer. the number of off-diagonals to treat as part of the diagonal.
+#' @param return_table logical. If \code{TRUE} the function returns a table rather than a list.
+#' @param limesurvey logical. If \code{FALSE} the function uses the sum of the diagonal from bottom-left to top-right.
 #'
 #' @return
 #' @export
@@ -228,11 +227,10 @@ grid_summary_tri <- function(mat, rows = 5, cols = 5, offdiag = 0,
 # Convert grid value to 1 to 9 value
 #' Title
 #'
-#' @param gc 
-#' @param rows 
-#' @param cols 
-#' @param b 
-#' @param rc 
+#' @param gc integer indicating a grid cell as formatted by LimeSurvey.
+#' @param rows,cols the dimensions of the grid item.
+#' @param b a parameter between -1 and 0.
+#' @param rc logical. If \code{TRUE} the function will correct for a reverse-coded grid item.
 #'
 #' @return
 #' @export
@@ -254,10 +252,10 @@ grid_to_nine <- function(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE) {
 # If remove = TRUE, respondent summary matrices with sum 0 (no responses) are removed from the list
 # If remove = FALSE, such matrices are replaced with NA
 #' Title
-#'
-#' @param remove 
-#' @param resp_list 
-#'
+#' 
+#' @param resp_list list of matrices.
+#' @param remove logical. If \code{TRUE} empty matrices are removed from the list.
+#' 
 #' @return
 #' @export
 #'
@@ -290,9 +288,9 @@ delete_empty_grid <- function(resp_list, remove = TRUE) {
 # if this matrix is missing (an NA), there will be an error.
 # It is best to use this after delete_empty_grid.
 #' Title
-#'
-#' @param items 
-#' @param mat_list 
+#' 
+#' @param mat_list list of matrices.
+#' @param items indicates which matrices to sum.
 #'
 #' @return
 #' @export
@@ -311,9 +309,9 @@ sum_resp_mats <- function(mat_list, items = NULL) {
 
 #' Title
 #'
-#' @param dat 
-#' @param lsvals 
-#' @param livals 
+#' @param dat data frame of LimeSurvey formatted Likert-type data.
+#' @param lsvals character vector of LimeSurvey's notation for Likert-type scale points.
+#' @param livals integer vector of Likert-type scale points.
 #'
 #' @return
 #' @export
@@ -332,7 +330,7 @@ fix_limesurvey_likert <- function(dat,
 # This is hard-coded for 5x5 grid displayed in the manner this package uses
 #' Title
 #'
-#' @param grid 
+#' @param grid a matrix.
 #'
 #' @return
 #' @export

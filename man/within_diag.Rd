@@ -7,9 +7,9 @@
 within_diag(mat, col = 5)
 }
 \arguments{
-\item{mat}{}
+\item{mat}{a square matrix.}
 
-\item{col}{}
+\item{col}{the number of columns of the matrix.}
 }
 \value{
 

@@ -11,11 +11,11 @@ fix_limesurvey_likert(
 )
 }
 \arguments{
-\item{dat}{}
+\item{dat}{data frame of LimeSurvey formatted Likert-type data.}
 
-\item{lsvals}{}
+\item{lsvals}{character vector of LimeSurvey's notation for Likert-type scale points.}
 
-\item{livals}{}
+\item{livals}{integer vector of Likert-type scale points.}
 }
 \value{
 

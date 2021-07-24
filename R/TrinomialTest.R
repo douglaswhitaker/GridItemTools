@@ -6,11 +6,11 @@
 ###Trinomial Test Function 
 #' Title
 #'
-#' @param col1 first data vector or a vector of (positive, tie, negative) counts of differences
-#' @param col2 second data vector
-#' @param alternative the type of hypothesis test to be performed
-#' @param print_info 
-#' @param p_tie theoretical proportion of ties; calculated from the data by default
+#' @param col1 first data vector or a vector of (positive, tie, negative) counts of differences.
+#' @param col2 second data vector.
+#' @param alternative the type of hypothesis test to be performed.
+#' @param p_tie theoretical proportion of ties; calculated from the data by default.
+#' @param print_info logical. If \code{TRUE} the hypotheses and p-value of the test are returned.
 #'
 #' @return
 #' @export
@@ -156,12 +156,12 @@ trinomial_test <- function(col1,
 # Generate information about the trinomial test under various settings
 #' Title
 #'
-#' @param n 
-#' @param alpha 
-#' @param digits 
-#' @param P0s 
-#' @param include_one 
-#' @param find_RR 
+#' @param n number of paired observations.
+#' @param alpha significance level.
+#' @param include_one logical. If \code{FALSE} the probability that all pairs are tied is excluded from \code{P0s}.
+#' @param find_RR logical. If \code{TRUE} the output will include the rejection region.
+#' @param digits number of significant digits to be returned.
+#' @param P0s numeric vector of all possible probabilities of a tie.
 #'
 #' @return
 #' @export

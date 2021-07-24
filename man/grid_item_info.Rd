@@ -7,11 +7,9 @@
 grid_item_info(x, rows = 5, cols = 5)
 }
 \arguments{
-\item{x}{}
+\item{x}{data frame of raw LimeSurvey formatted data.}
 
-\item{rows}{}
-
-\item{cols}{}
+\item{rows, cols}{the dimensions of the grid items.}
 }
 \value{
 

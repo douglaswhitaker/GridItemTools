@@ -13,15 +13,15 @@ trinomial_test(
 )
 }
 \arguments{
-\item{col1}{first data vector or a vector of (positive, tie, negative) counts of differences}
+\item{col1}{first data vector or a vector of (positive, tie, negative) counts of differences.}
 
-\item{col2}{second data vector}
+\item{col2}{second data vector.}
 
-\item{alternative}{the type of hypothesis test to be performed}
+\item{alternative}{the type of hypothesis test to be performed.}
 
-\item{p_tie}{theoretical proportion of ties; calculated from the data by default}
+\item{p_tie}{theoretical proportion of ties; calculated from the data by default.}
 
-\item{print_info}{}
+\item{print_info}{logical. If \code{TRUE} the hypotheses and p-value of the test are returned.}
 }
 \value{
 

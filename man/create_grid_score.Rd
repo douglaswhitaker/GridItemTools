@@ -7,11 +7,14 @@
 create_grid_score(x, gridinfo, b = -0.5, reverse_code = NULL)
 }
 \arguments{
-\item{x}{}
+\item{x}{data frame of grid-only LimeSurvey formatted data.}
 
-\item{gridinfo}{}
+\item{gridinfo}{list. The output of \code{grid_item_info}.}
 
-\item{reverse_code}{}
+\item{b}{a parameter between -1 and 0.}
+
+\item{reverse_code}{a vector indicating which grids are reverse-coded. 
+a value of 0 means not reverse coded; a value of 1 means reverse coded.}
 }
 \value{
 

@@ -14,17 +14,15 @@ grid_summary_tri(
 )
 }
 \arguments{
-\item{mat}{}
+\item{mat}{a matrix.}
 
-\item{rows}{}
+\item{rows, cols}{the dimensions of the matrix.}
 
-\item{cols}{}
+\item{offdiag}{integer. the number of off-diagonals to treat as part of the diagonal.}
 
-\item{offdiag}{}
+\item{return_table}{logical. If \code{TRUE} the function returns a table rather than a list.}
 
-\item{return_table}{}
-
-\item{limesurvey}{}
+\item{limesurvey}{logical. If \code{FALSE} the function uses the sum of the diagonal from bottom-left to top-right.}
 }
 \value{
 

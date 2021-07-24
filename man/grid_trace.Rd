@@ -7,11 +7,11 @@
 grid_trace(mat, col = NULL, limesurvey = TRUE)
 }
 \arguments{
-\item{mat}{}
+\item{mat}{a square matrix.}
 
-\item{col}{}
+\item{col}{the number of columns of the matrix.}
 
-\item{limesurvey}{}
+\item{limesurvey}{logical. If \code{FALSE} the function calculates the sum of the diagonal from bottom-left to top-right.}
 }
 \value{
 

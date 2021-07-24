@@ -7,7 +7,7 @@
 classify_responses(grid)
 }
 \arguments{
-\item{grid}{}
+\item{grid}{a matrix.}
 }
 \value{
 

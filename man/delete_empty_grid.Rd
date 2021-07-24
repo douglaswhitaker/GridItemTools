@@ -7,9 +7,9 @@
 delete_empty_grid(resp_list, remove = TRUE)
 }
 \arguments{
-\item{resp_list}{}
+\item{resp_list}{list of matrices.}
 
-\item{remove}{}
+\item{remove}{logical. If \code{TRUE} empty matrices are removed from the list.}
 }
 \value{
 

@@ -7,9 +7,9 @@
 sum_resp_mats(mat_list, items = NULL)
 }
 \arguments{
-\item{mat_list}{}
+\item{mat_list}{list of matrices.}
 
-\item{items}{}
+\item{items}{indicates which matrices to sum.}
 }
 \value{
 

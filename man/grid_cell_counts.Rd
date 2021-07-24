@@ -14,17 +14,17 @@ grid_cell_counts(
 )
 }
 \arguments{
-\item{x}{}
+\item{x}{data frame of grid-only LimeSurvey formatted data.}
 
-\item{gridinfo}{}
+\item{gridinfo}{list. The output of \code{grid_item_info}.}
 
-\item{type}{}
+\item{type}{character. Indicates whether to create cell counts for \code{"items"} or \code{"respondents"}.}
 
-\item{reverse_code}{}
+\item{reverse_code}{a value of 1 indicates that the grid items are reverse coded, and will correct for it.}
 
-\item{return_table}{}
+\item{return_table}{logical. If \code{TRUE} a list of tables rather than matrices is returned.}
 
-\item{chosen_items}{}
+\item{chosen_items}{integer vector indicating which grid items to include.}
 }
 \value{
 

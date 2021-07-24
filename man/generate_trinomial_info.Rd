@@ -14,17 +14,17 @@ generate_trinomial_info(
 )
 }
 \arguments{
-\item{n}{}
+\item{n}{number of paired observations.}
 
-\item{alpha}{}
+\item{alpha}{significance level.}
 
-\item{include_one}{}
+\item{include_one}{logical. If \code{FALSE} the probability that all pairs are tied is excluded from \code{P0s}.}
 
-\item{find_RR}{}
+\item{find_RR}{logical. If \code{TRUE} the output will include the rejection region.}
 
-\item{digits}{}
+\item{digits}{number of significant digits to be returned.}
 
-\item{P0s}{}
+\item{P0s}{numeric vector of all possible probabilities of a tie.}
 }
 \value{
 

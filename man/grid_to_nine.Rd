@@ -7,15 +7,13 @@
 grid_to_nine(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE)
 }
 \arguments{
-\item{gc}{}
+\item{gc}{integer indicating a grid cell as formatted by LimeSurvey.}
 
-\item{rows}{}
+\item{rows, cols}{the dimensions of the grid item.}
 
-\item{cols}{}
+\item{b}{a parameter between -1 and 0.}
 
-\item{b}{}
-
-\item{rc}{}
+\item{rc}{logical. If \code{TRUE} the function will correct for a reverse-coded grid item.}
 }
 \value{
 
