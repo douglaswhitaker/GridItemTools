@@ -25,7 +25,8 @@ grid_summary_tri(
 \item{limesurvey}{logical. If \code{FALSE} the function uses the sum of the diagonal from bottom-left to top-right.}
 }
 \value{
-
+A list (or table) containing the grid cell counts for each of three categories:
+  above the diagonal, on the diagonal, and below the diagonal.
 }
 \description{
 Title

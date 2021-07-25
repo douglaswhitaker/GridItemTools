@@ -27,7 +27,9 @@ generate_trinomial_info(
 \item{P0s}{numeric vector of all possible probabilities of a tie.}
 }
 \value{
-
+A list containing possible probability distributions, numbers of ties,
+  probabilities of a tie, critical values, and rejection regions for a given 
+  number of observations and alpha level of a theoretical trinomial test.
 }
 \description{
 Title

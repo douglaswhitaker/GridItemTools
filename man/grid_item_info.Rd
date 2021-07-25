@@ -12,7 +12,8 @@ grid_item_info(x, rows = 5, cols = 5)
 \item{rows, cols}{the dimensions of the grid items.}
 }
 \value{
-
+A list containing information on which raw data columns contain grid items, 
+  as well as the item names and dimensions of the grid items.
 }
 \description{
 Title

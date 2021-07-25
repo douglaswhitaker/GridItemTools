@@ -12,7 +12,7 @@ delete_empty_grid(resp_list, remove = TRUE)
 \item{remove}{logical. If \code{TRUE} empty matrices are removed from the list.}
 }
 \value{
-
+A list of grids with empty grids removed or replaced by \code{NA}.
 }
 \description{
 Title

@@ -16,7 +16,8 @@ grid_to_nine(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE)
 \item{rc}{logical. If \code{TRUE} the function will correct for a reverse-coded grid item.}
 }
 \value{
-
+A number derived from a grid cell's position
+  and transformed to be equivalent to a value on a 9 point Likert-type scale.
 }
 \description{
 Title

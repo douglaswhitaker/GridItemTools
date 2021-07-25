@@ -18,7 +18,7 @@ fix_limesurvey_likert(
 \item{livals}{integer vector of Likert-type scale points.}
 }
 \value{
-
+A data frame of numeric Likert-type values for each response.
 }
 \description{
 Title

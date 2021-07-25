@@ -17,7 +17,8 @@ create_grid_score(x, gridinfo, b = -0.5, reverse_code = NULL)
 a value of 0 means not reverse coded; a value of 1 means reverse coded.}
 }
 \value{
-
+A data frame in which the grid scores for each respondent have been 
+  converted to values equivalent to those on 9 point Likert-type scales.
 }
 \description{
 Title

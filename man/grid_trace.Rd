@@ -14,7 +14,8 @@ grid_trace(mat, col = NULL, limesurvey = TRUE)
 \item{limesurvey}{logical. If \code{FALSE} the function calculates the sum of the diagonal from bottom-left to top-right.}
 }
 \value{
-
+The sum of the matrix's diagonal, either from top-left to bottom-right 
+  (the default) or from bottom-left to top-right.
 }
 \description{
 Title

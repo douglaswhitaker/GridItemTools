@@ -24,7 +24,9 @@ trinomial_test(
 \item{print_info}{logical. If \code{TRUE} the hypotheses and p-value of the test are returned.}
 }
 \value{
-
+An output object containing the number of observations; test statistic; 
+  p-value; hypotheses; number of positive, tied, or negative differences; 
+  critical value; and reverse flag notice for the trinomial test.
 }
 \description{
 Title

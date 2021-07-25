@@ -12,7 +12,7 @@ sum_resp_mats(mat_list, items = NULL)
 \item{items}{indicates which matrices to sum.}
 }
 \value{
-
+A matrix created by summing some or all of the inputted list of grids.
 }
 \description{
 Title

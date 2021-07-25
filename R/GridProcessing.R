@@ -10,7 +10,8 @@
 #' @param return_table logical. If \code{TRUE} a list of tables rather than matrices is returned.
 #' @param chosen_items integer vector indicating which grid items to include.
 #'
-#' @return
+#' @return A list of matrices, each of which is either the sum of all responses to a certain item (the default)
+#'   or the sum of a certain respondent's answers for all items.
 #' @export
 #'
 #' @examples
@@ -88,7 +89,8 @@ grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
 #' @param x data frame of raw LimeSurvey formatted data.
 #' @param rows,cols the dimensions of the grid items.
 #'
-#' @return
+#' @return A list containing information on which raw data columns contain grid items, 
+#'   as well as the item names and dimensions of the grid items.
 #' @export
 #'
 #' @examples
@@ -111,7 +113,8 @@ grid_item_info <- function(x, rows = 5, cols = 5) {
 #' @param reverse_code a vector indicating which grids are reverse-coded. 
 #'   a value of 0 means not reverse coded; a value of 1 means reverse coded.
 #'
-#' @return
+#' @return A data frame in which the grid scores for each respondent have been 
+#'   converted to values equivalent to those on 9 point Likert-type scales.
 #' @export
 #'
 #' @examples
@@ -144,7 +147,7 @@ create_grid_score <- function(x, gridinfo, b = -0.5, reverse_code = NULL) {
 #' @param mat a square matrix.
 #' @param col the number of columns of the matrix.
 #'
-#' @return
+#' @return The sum of the matrix's diagonal and two off-diagonals within one cell from the diagonal.
 #' @export
 #'
 #' @examples
@@ -167,7 +170,8 @@ within_diag <- function(mat, col = 5) {
 #' @param col the number of columns of the matrix.
 #' @param limesurvey logical. If \code{FALSE} the function calculates the sum of the diagonal from bottom-left to top-right.
 #'
-#' @return
+#' @return The sum of the matrix's diagonal, either from top-left to bottom-right 
+#'   (the default) or from bottom-left to top-right.
 #' @export
 #'
 #' @examples
@@ -195,7 +199,8 @@ grid_trace <- function(mat, col = NULL, limesurvey = TRUE) {
 #' @param return_table logical. If \code{TRUE} the function returns a table rather than a list.
 #' @param limesurvey logical. If \code{FALSE} the function uses the sum of the diagonal from bottom-left to top-right.
 #'
-#' @return
+#' @return A list (or table) containing the grid cell counts for each of three categories:
+#'   above the diagonal, on the diagonal, and below the diagonal.
 #' @export
 #'
 #' @examples
@@ -232,7 +237,8 @@ grid_summary_tri <- function(mat, rows = 5, cols = 5, offdiag = 0,
 #' @param b a parameter between -1 and 0.
 #' @param rc logical. If \code{TRUE} the function will correct for a reverse-coded grid item.
 #'
-#' @return
+#' @return A number derived from a grid cell's position
+#'   and transformed to be equivalent to a value on a 9 point Likert-type scale.
 #' @export
 #'
 #' @examples
@@ -256,7 +262,7 @@ grid_to_nine <- function(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE) {
 #' @param resp_list list of matrices.
 #' @param remove logical. If \code{TRUE} empty matrices are removed from the list.
 #' 
-#' @return
+#' @return A list of grids with empty grids removed or replaced by \code{NA}.
 #' @export
 #'
 #' @examples
@@ -292,7 +298,7 @@ delete_empty_grid <- function(resp_list, remove = TRUE) {
 #' @param mat_list list of matrices.
 #' @param items indicates which matrices to sum.
 #'
-#' @return
+#' @return A matrix created by summing some or all of the inputted list of grids.
 #' @export
 #'
 #' @examples
@@ -313,7 +319,7 @@ sum_resp_mats <- function(mat_list, items = NULL) {
 #' @param lsvals character vector of LimeSurvey's notation for Likert-type scale points.
 #' @param livals integer vector of Likert-type scale points.
 #'
-#' @return
+#' @return A data frame of numeric Likert-type values for each response.
 #' @export
 #'
 #' @examples
@@ -332,7 +338,8 @@ fix_limesurvey_likert <- function(dat,
 #'
 #' @param grid a matrix.
 #'
-#' @return
+#' @return A list containing the grid cell counts for each of four categories:
+#'   indifferent, ambivalent, positive, and negative. 
 #' @export
 #'
 #' @examples

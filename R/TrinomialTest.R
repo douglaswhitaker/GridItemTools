@@ -12,7 +12,9 @@
 #' @param p_tie theoretical proportion of ties; calculated from the data by default.
 #' @param print_info logical. If \code{TRUE} the hypotheses and p-value of the test are returned.
 #'
-#' @return
+#' @return An output object containing the number of observations; test statistic; 
+#'   p-value; hypotheses; number of positive, tied, or negative differences; 
+#'   critical value; and reverse flag notice for the trinomial test.
 #' @export
 #'
 #' @examples
@@ -163,7 +165,9 @@ trinomial_test <- function(col1,
 #' @param digits number of significant digits to be returned.
 #' @param P0s numeric vector of all possible probabilities of a tie.
 #'
-#' @return
+#' @return A list containing possible probability distributions, numbers of ties,
+#'   probabilities of a tie, critical values, and rejection regions for a given 
+#'   number of observations and alpha level of a theoretical trinomial test.
 #' @export
 #'
 #' @examples

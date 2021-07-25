@@ -27,7 +27,8 @@ grid_cell_counts(
 \item{chosen_items}{integer vector indicating which grid items to include.}
 }
 \value{
-
+A list of matrices, each of which is either the sum of all responses to a certain item (the default)
+  or the sum of a certain respondent's answers for all items.
 }
 \description{
 Title

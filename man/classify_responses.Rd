@@ -10,7 +10,8 @@ classify_responses(grid)
 \item{grid}{a matrix.}
 }
 \value{
-
+A list containing the grid cell counts for each of four categories:
+  indifferent, ambivalent, positive, and negative.
 }
 \description{
 Title

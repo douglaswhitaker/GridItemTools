@@ -12,7 +12,7 @@ within_diag(mat, col = 5)
 \item{col}{the number of columns of the matrix.}
 }
 \value{
-
+The sum of the matrix's diagonal and two off-diagonals within one cell from the diagonal.
 }
 \description{
 Title
