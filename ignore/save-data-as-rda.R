@@ -1,5 +1,5 @@
-all.data.code <- read.csv(file = "data/all-data-code.csv")
-all.data.text <- read.csv(file = "data/all-data-text.csv")
-grid.data.code <- read.csv(file = "data/grid-data-code.csv")
+griddata_all_code <- read.csv(file = "ignore/all-data-code.csv")
+griddata_all_text <- read.csv(file = "ignore/all-data-text.csv")
+griddata_gridonly_code <- read.csv(file = "ignore/grid-data-code.csv")
 
-save(all.data.code, all.data.text, grid.data.code, file = "data/grid-data.rda")
+save(griddata_all_code, griddata_all_text, griddata_gridonly_code, file = "data/grid-data.rda")
