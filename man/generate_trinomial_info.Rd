@@ -2,7 +2,7 @@
 % Please edit documentation in R/TrinomialTest.R
 \name{generate_trinomial_info}
 \alias{generate_trinomial_info}
-\title{Title}
+\title{Show Trinomial Test Information}
 \usage{
 generate_trinomial_info(
   n,
@@ -32,5 +32,5 @@ A list containing possible probability distributions, numbers of ties,
   number of observations and alpha level of a theoretical trinomial test.
 }
 \description{
-Title
+Returns a range of information relevant to a trinomial test subject to various settings.
 }

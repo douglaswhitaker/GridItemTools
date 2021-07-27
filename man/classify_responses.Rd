@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{classify_responses}
 \alias{classify_responses}
-\title{Title}
+\title{Form Counts for Four Grid Areas}
 \usage{
 classify_responses(grid)
 }
@@ -14,5 +14,6 @@ A list containing the grid cell counts for each of four categories:
   indifferent, ambivalent, positive, and negative.
 }
 \description{
-Title
+Returns the total cell counts for each of four grid regions corresponding to 
+attitudes that can be measured using grid items.
 }

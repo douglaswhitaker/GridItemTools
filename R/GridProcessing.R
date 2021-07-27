@@ -1,7 +1,10 @@
 
 
 # This generates a list of matrices where each cell is the count of the number of responses
-#' Title
+#' Form Grid Cell Counts
+#' 
+#' Creates grids with aggregate cell counts (summed across items or respondents)
+#' out of LimeSurvey formatted grid item data.
 #'
 #' @param x data frame of grid-only LimeSurvey formatted data.
 #' @param gridinfo list. The output of \code{grid_item_info}.
@@ -84,7 +87,9 @@ grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
 # Either raw data or grid-only data may be used
 # This presupposes LimeSurvey formatted data
 # In the future, develop a way to algorithmically determine rows and cols
-#' Title
+#' Show Grid Item Information
+#' 
+#' Displays the LimeSurvey columns, item name, and dimensions of each grid item.
 #'
 #' @param x data frame of raw LimeSurvey formatted data.
 #' @param rows,cols the dimensions of the grid items.
@@ -105,7 +110,10 @@ grid_item_info <- function(x, rows = 5, cols = 5) {
 
 
 # This function processes raw grid data into approximate scores from a Likert-type scale
-#' Title
+#' Form Likert-type Grid Scores
+#' 
+#' For each item and respondent, creates scores equivalent to a Likert-type scale
+#' out of LimeSurvey formatted grid item data. 
 #'
 #' @param x data frame of grid-only LimeSurvey formatted data.
 #' @param gridinfo list. The output of \code{grid_item_info}.
@@ -142,7 +150,9 @@ create_grid_score <- function(x, gridinfo, b = -0.5, reverse_code = NULL) {
 # In the future make number of off-diagonal diagonals selected (i.e. more than 1)
 # To-do: Make this an internal function, and create a function that does more summary statistic processing than this
 # (This requires sapply to work)
-#' Title
+#' Sum of the Diagonal and Off-diagonals
+#' 
+#' Returns the sum of all cells on a grid's main diagonal (trace) and on its two off-diagonals.
 #'
 #' @param mat a square matrix.
 #' @param col the number of columns of the matrix.
@@ -164,7 +174,9 @@ within_diag <- function(mat, col = 5) {
 # Note that this sums along the other diagonal that tr() does not do, 
 # i.e. this function sums the bottom-left to top-right diagonal.
 # To-do: Make this internal as with above
-#' Title
+#' Sum of the Diagonal
+#' 
+#' Returns the sum of all cells on either a grid's main diagonal (trace) or its secondary diagonal.
 #'
 #' @param mat a square matrix.
 #' @param col the number of columns of the matrix.
@@ -191,7 +203,10 @@ grid_trace <- function(mat, col = NULL, limesurvey = TRUE) {
 
 # This will be a simple version at first. We'll account for within_diag later
 
-#' Title
+#' Form Counts for Three Grid Areas
+#' 
+#' Returns the total cell counts for each of three grid regions: above the diagonal,
+#' on the diagonal, and below the diagonal.
 #'
 #' @param mat a matrix.
 #' @param rows,cols the dimensions of the matrix.
@@ -230,9 +245,12 @@ grid_summary_tri <- function(mat, rows = 5, cols = 5, offdiag = 0,
 
 # This function implements the model proposed in Audrezet, Olsen, and Tudoran (2016)'s Appendix 2
 # Convert grid value to 1 to 9 value
-#' Title
+#' Convert Grid Value to Likert-type Value
+#' 
+#' Converts a grid cell's position to a score equivalent to a Likert-type scale point.
 #'
-#' @param gc integer indicating a grid cell as formatted by LimeSurvey.
+#' @param gc integer indicating a grid cell's position as though the grid were a
+#'   matrix filled by row with sequential integers.
 #' @param rows,cols the dimensions of the grid item.
 #' @param b a parameter between -1 and 0.
 #' @param rc logical. If \code{TRUE} the function will correct for a reverse-coded grid item.
@@ -257,7 +275,9 @@ grid_to_nine <- function(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE) {
 # grid_cell_counts with type = "respondents"
 # If remove = TRUE, respondent summary matrices with sum 0 (no responses) are removed from the list
 # If remove = FALSE, such matrices are replaced with NA
-#' Title
+#' Remove Empty Grids
+#' 
+#' Deletes empty grids from a list, or replaces them with \code{NA}.
 #' 
 #' @param resp_list list of matrices.
 #' @param remove logical. If \code{TRUE} empty matrices are removed from the list.
@@ -293,7 +313,9 @@ delete_empty_grid <- function(resp_list, remove = TRUE) {
 # Note that it uses the first matrix in the list to determine the dimensions:
 # if this matrix is missing (an NA), there will be an error.
 # It is best to use this after delete_empty_grid.
-#' Title
+#' Sum of Grids
+#' 
+#' Sums across all (or a selection) of grids in a list.
 #' 
 #' @param mat_list list of matrices.
 #' @param items indicates which matrices to sum.
@@ -313,7 +335,9 @@ sum_resp_mats <- function(mat_list, items = NULL) {
   return(tmp)
 }
 
-#' Title
+#' Format LimeSurvey Likert-type Data
+#' 
+#' Replaces LimeSurvey's formatting of Likert-type data with the standard numerical scale points.
 #'
 #' @param dat data frame of LimeSurvey formatted Likert-type data.
 #' @param lsvals character vector of LimeSurvey's notation for Likert-type scale points.
@@ -334,7 +358,10 @@ fix_limesurvey_likert <- function(dat,
 }
 
 # This is hard-coded for 5x5 grid displayed in the manner this package uses
-#' Title
+#' Form Counts for Four Grid Areas
+#' 
+#' Returns the total cell counts for each of four grid regions corresponding to 
+#' attitudes that can be measured using grid items.
 #'
 #' @param grid a matrix.
 #'

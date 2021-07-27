@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{fix_limesurvey_likert}
 \alias{fix_limesurvey_likert}
-\title{Title}
+\title{Format LimeSurvey Likert-type Data}
 \usage{
 fix_limesurvey_likert(
   dat,
@@ -21,5 +21,5 @@ fix_limesurvey_likert(
 A data frame of numeric Likert-type values for each response.
 }
 \description{
-Title
+Replaces LimeSurvey's formatting of Likert-type data with the standard numerical scale points.
 }

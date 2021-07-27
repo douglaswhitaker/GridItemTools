@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{delete_empty_grid}
 \alias{delete_empty_grid}
-\title{Title}
+\title{Remove Empty Grids}
 \usage{
 delete_empty_grid(resp_list, remove = TRUE)
 }
@@ -15,5 +15,5 @@ delete_empty_grid(resp_list, remove = TRUE)
 A list of grids with empty grids removed or replaced by \code{NA}.
 }
 \description{
-Title
+Deletes empty grids from a list, or replaces them with \code{NA}.
 }

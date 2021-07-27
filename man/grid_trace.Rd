@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{grid_trace}
 \alias{grid_trace}
-\title{Title}
+\title{Sum of the Diagonal}
 \usage{
 grid_trace(mat, col = NULL, limesurvey = TRUE)
 }
@@ -18,5 +18,5 @@ The sum of the matrix's diagonal, either from top-left to bottom-right
   (the default) or from bottom-left to top-right.
 }
 \description{
-Title
+Returns the sum of all cells on either a grid's main diagonal (trace) or its secondary diagonal.
 }

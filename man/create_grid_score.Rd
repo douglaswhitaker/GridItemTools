@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{create_grid_score}
 \alias{create_grid_score}
-\title{Title}
+\title{Form Likert-type Grid Scores}
 \usage{
 create_grid_score(x, gridinfo, b = -0.5, reverse_code = NULL)
 }
@@ -21,5 +21,6 @@ A data frame in which the grid scores for each respondent have been
   converted to values equivalent to those on 9 point Likert-type scales.
 }
 \description{
-Title
+For each item and respondent, creates scores equivalent to a Likert-type scale
+out of LimeSurvey formatted grid item data.
 }

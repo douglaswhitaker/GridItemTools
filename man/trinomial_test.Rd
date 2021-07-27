@@ -2,7 +2,7 @@
 % Please edit documentation in R/TrinomialTest.R
 \name{trinomial_test}
 \alias{trinomial_test}
-\title{Title}
+\title{Trinomial Test}
 \usage{
 trinomial_test(
   col1,
@@ -29,5 +29,6 @@ An output object containing the number of observations; test statistic;
   critical value; and reverse flag notice for the trinomial test.
 }
 \description{
-Title
+Performs the trinomial test on either two data vectors or a vector of containing 
+the counts of positive, tied, and negative differences.
 }

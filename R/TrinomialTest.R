@@ -4,7 +4,10 @@
 # Add a flag to also run the sign.test
 # Have nice output processing of the returned object
 ###Trinomial Test Function 
-#' Title
+#' Trinomial Test
+#' 
+#' Performs the trinomial test on either two data vectors or a vector of containing 
+#' the counts of positive, tied, and negative differences.
 #'
 #' @param col1 first data vector or a vector of (positive, tie, negative) counts of differences.
 #' @param col2 second data vector.
@@ -156,7 +159,9 @@ trinomial_test <- function(col1,
 ################################################################################
 
 # Generate information about the trinomial test under various settings
-#' Title
+#' Show Trinomial Test Information
+#' 
+#' Returns a range of information relevant to a trinomial test subject to various settings.
 #'
 #' @param n number of paired observations.
 #' @param alpha significance level.

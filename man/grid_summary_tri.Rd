@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{grid_summary_tri}
 \alias{grid_summary_tri}
-\title{Title}
+\title{Form Counts for Three Grid Areas}
 \usage{
 grid_summary_tri(
   mat,
@@ -29,5 +29,6 @@ A list (or table) containing the grid cell counts for each of three categories:
   above the diagonal, on the diagonal, and below the diagonal.
 }
 \description{
-Title
+Returns the total cell counts for each of three grid regions: above the diagonal,
+on the diagonal, and below the diagonal.
 }

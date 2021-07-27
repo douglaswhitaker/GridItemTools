@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{grid_item_info}
 \alias{grid_item_info}
-\title{Title}
+\title{Show Grid Item Information}
 \usage{
 grid_item_info(x, rows = 5, cols = 5)
 }
@@ -16,5 +16,5 @@ A list containing information on which raw data columns contain grid items,
   as well as the item names and dimensions of the grid items.
 }
 \description{
-Title
+Displays the LimeSurvey columns, item name, and dimensions of each grid item.
 }

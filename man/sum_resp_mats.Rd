@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{sum_resp_mats}
 \alias{sum_resp_mats}
-\title{Title}
+\title{Sum of Grids}
 \usage{
 sum_resp_mats(mat_list, items = NULL)
 }
@@ -15,5 +15,5 @@ sum_resp_mats(mat_list, items = NULL)
 A matrix created by summing some or all of the inputted list of grids.
 }
 \description{
-Title
+Sums across all (or a selection) of grids in a list.
 }

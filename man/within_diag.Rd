@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{within_diag}
 \alias{within_diag}
-\title{Title}
+\title{Sum of the Diagonal and Off-diagonals}
 \usage{
 within_diag(mat, col = 5)
 }
@@ -15,5 +15,5 @@ within_diag(mat, col = 5)
 The sum of the matrix's diagonal and two off-diagonals within one cell from the diagonal.
 }
 \description{
-Title
+Returns the sum of all cells on a grid's main diagonal (trace) and on its two off-diagonals.
 }

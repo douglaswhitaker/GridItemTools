@@ -2,12 +2,13 @@
 % Please edit documentation in R/GridProcessing.R
 \name{grid_to_nine}
 \alias{grid_to_nine}
-\title{Title}
+\title{Convert Grid Value to Likert-type Value}
 \usage{
 grid_to_nine(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE)
 }
 \arguments{
-\item{gc}{integer indicating a grid cell as formatted by LimeSurvey.}
+\item{gc}{integer indicating a grid cell's position as though the grid were a
+matrix filled by row with sequential integers.}
 
 \item{rows, cols}{the dimensions of the grid item.}
 
@@ -20,5 +21,5 @@ A number derived from a grid cell's position
   and transformed to be equivalent to a value on a 9 point Likert-type scale.
 }
 \description{
-Title
+Converts a grid cell's position to a score equivalent to a Likert-type scale point.
 }

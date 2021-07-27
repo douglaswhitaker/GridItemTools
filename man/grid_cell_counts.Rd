@@ -2,7 +2,7 @@
 % Please edit documentation in R/GridProcessing.R
 \name{grid_cell_counts}
 \alias{grid_cell_counts}
-\title{Title}
+\title{Form Grid Cell Counts}
 \usage{
 grid_cell_counts(
   x,
@@ -31,5 +31,6 @@ A list of matrices, each of which is either the sum of all responses to a certai
   or the sum of a certain respondent's answers for all items.
 }
 \description{
-Title
+Creates grids with aggregate cell counts (summed across items or respondents)
+out of LimeSurvey formatted grid item data.
 }
