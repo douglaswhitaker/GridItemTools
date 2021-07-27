@@ -1,12 +1,12 @@
 Package: GridItemTools
 Type: Package
 Title: Grid Item Tools
-Version: 0.0.11
+Version: 0.0.12
 Authors@R: c(
   person("Douglas", "Whitaker", email = "douglas.whitaker@msvu.ca", 
     role = c("cre", "aut"), comment = c(ORCID = "0000-0002-6895-7437")),
   person("Bailey", "Drew", email = "bailey.drew@msvu.ca", role = "aut"),
-  person("Joseph", "Barss", email = "joseph.barss@msvu.ca", role = "ctb"))
+  person("Joseph", "Barss", email = "joseph.barss@msvu.ca", role = "aut"))
 Maintainer: Douglas Whitaker <douglas.whitaker@msvu.ca>
 Description: Functions used for analyzing grid-type items. This package includes
     functions for processing raw data from grid-type items from LimeSurvey and 
