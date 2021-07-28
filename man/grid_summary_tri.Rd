@@ -6,8 +6,8 @@
 \usage{
 grid_summary_tri(
   mat,
-  rows = 5,
-  cols = 5,
+  rows = NULL,
+  cols = NULL,
   offdiag = 0,
   return_table = TRUE,
   limesurvey = TRUE
@@ -30,5 +30,5 @@ A list (or table) containing the grid cell counts for each of three categories:
 }
 \description{
 Returns the total cell counts for each of three grid regions: above the diagonal,
-on the diagonal, and below the diagonal.
+on the diagonal, and below the diagonal. (The diagonal may include the off-diagonals.)
 }

@@ -206,7 +206,7 @@ grid_trace <- function(mat, col = NULL, limesurvey = TRUE) {
 #' Form Counts for Three Grid Areas
 #' 
 #' Returns the total cell counts for each of three grid regions: above the diagonal,
-#' on the diagonal, and below the diagonal.
+#' on the diagonal, and below the diagonal. (The diagonal may include the off-diagonals.)
 #'
 #' @param mat a matrix.
 #' @param rows,cols the dimensions of the matrix.
@@ -219,16 +219,33 @@ grid_trace <- function(mat, col = NULL, limesurvey = TRUE) {
 #' @export
 #'
 #' @examples
-grid_summary_tri <- function(mat, rows = 5, cols = 5, offdiag = 0, 
+grid_summary_tri <- function(mat, rows = NULL, cols = NULL, offdiag = 0, 
                              return_table = TRUE,
                              limesurvey = TRUE) {
+  if (is.null(rows)) {
+    rows <- nrow(mat)
+  }  
+  if (is.null(cols)) {
+    cols <- ncol(mat)
+  }
+  if (rows != cols) {
+    stop("Only square matrices are supported now.")
+  }
+  
+  if (!limesurvey) {
+    mat <- mat[, ncol(mat):1]
+  }
+  
   if (offdiag == 0) {
-    if (!limesurvey) {
-      mat <- mat[, ncol(mat):1]
-    }
     tie <- sum(diag(mat))
     upper <- sum(mat[upper.tri(mat, diag = FALSE)])
     lower <- sum(mat[lower.tri(mat, diag = FALSE)])
+  } else if (offdiag == 1) {
+    matL <- mat[2:rows, 1:(cols-1)]
+    matU <- mat[1:(rows-1), 2:cols]
+    tie <- sum(diag(mat)) + sum(diag(matL)) + sum(diag(matU))
+    upper <- sum(matU[upper.tri(matU,diag=FALSE)])
+    lower <- sum(matL[lower.tri(matL,diag=FALSE)]) 
   } else {
     stop("Not yet implemented.")
   }
@@ -236,6 +253,9 @@ grid_summary_tri <- function(mat, rows = 5, cols = 5, offdiag = 0,
   if (return_table) {
     tmp_tab <- as.table(c(upper, tie, lower))
     names(tmp_tab) <- c("upper", "diagonal", "lower")
+    if (sum(tmp_tab) != sum(mat)) {
+      stop("Calculation error.")
+    }
     return(tmp_tab)
   } else { #if we don't return a table, we return a list
     return(list(upper = upper, diagonal = tie, lower = lower))
