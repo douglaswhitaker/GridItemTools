@@ -25,7 +25,7 @@ col_to_xy <- function(gc, mat_rows, mat_cols, diag_info_warning = FALSE, rc = FA
     return(which(matrix(1:(mat_rows * mat_cols), 
                       nrow = mat_rows, 
                       byrow = TRUE) == gc,
-               arr.ind = TRUE))
+                 arr.ind = TRUE))
   }
 }
 
