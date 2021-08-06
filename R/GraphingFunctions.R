@@ -11,7 +11,9 @@
 #' @examples
 make_heatmap <- function(grid, title, labels = c("agree_disagree", 
                                                 "satisfied_dissatisfied", 
-                                                "negative_positive")) {
+                                                "negative_positive",
+                                                "other"),
+                         pos_labels = NULL, neg_labels = NULL) {
   
   heatmap_colours <- colorRampPalette(
     brewer.pal(n = 7, name = "Purples"))(100)
