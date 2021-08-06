@@ -355,6 +355,19 @@ sum_resp_mats <- function(mat_list, items = NULL) {
   return(tmp)
 }
 
+#' Title
+#'
+#' @param mat_list 
+#' @param items 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+sum_grid_mat_list <- function(mat_list, items = NULL) {
+  return(sum_resp_mats(mat_list = mat_list, items = items)) 
+}
+
 #' Format LimeSurvey Likert-type Data
 #' 
 #' Replaces LimeSurvey's formatting of Likert-type data with the standard numerical scale points.
