@@ -1,33 +1,15 @@
-#' Make a Heatmap for a Grid
-#'
-#' @param grid a matrix.
-#' @param title the title of the plot.
-#' @param labels a character string specifying which set of rownames and colnames
-#'   are to be used.
-#'
-#' @return a heatmap showing counts in each grid cell.
-#' @export
-#'
-#' @examples
-make_heatmap <- function(grid, title, labels = c("agree_disagree", 
-                                                "satisfied_dissatisfied", 
-                                                "negative_positive",
-                                                "other"),
-                         pos_labels = NULL, neg_labels = NULL) {
-  
-  heatmap_colours <- colorRampPalette(
-    brewer.pal(n = 7, name = "Purples"))(100)
+make_grid_labels <- function(grid, labels, pos_labels = NULL, neg_labels = NULL) {
   
   disagreement <- c("No disagreement \nat all",
-                      "Slightly disagree",
-                      "Moderately \ndisagree",
-                      "Greatly disagree",
-                      "Completely \ndisagree")
+                    "Slightly disagree",
+                    "Moderately \ndisagree",
+                    "Greatly disagree",
+                    "Completely \ndisagree")
   agreement <- c("No agreement \nat all",
-                   "Slightly agree",
-                   "Moderately \nagree",
-                   "Greatly agree",
-                   "Completely \nagree")
+                 "Slightly agree",
+                 "Moderately \nagree",
+                 "Greatly agree",
+                 "Completely \nagree")
   dissatisfaction <- c("Not at all dissatisfied",
                        "Slightly dissatisfied",
                        "Moderately dissatisfied",
@@ -52,21 +34,68 @@ make_heatmap <- function(grid, title, labels = c("agree_disagree",
   if (labels == "agree_disagree") {
     rownames(grid) <- disagreement
     colnames(grid) <- agreement
-  } else if (labels == "satisfied-dissatisfied") {
+  } else if (labels == "satisfied_dissatisfied") {
     rownames(grid) <- dissatisfaction
     colnames(grid) <- satisfaction
-  } else if (labels == "negative_positive"){
+  } else if (labels == "negative_positive") {
     rownames(grid) <- negativity
     colnames(grid) <- positivity
+  } else if (labels == "other") {
+    rownames(grid) <- neg_labels
+    colnames(grid) <- pos_labels
   }
+}
 
-  pheatmap(grid, display_numbers = TRUE, number_format = "%i", 
-           fontsize = 20, fontsize_col = 11, fontsize_row = 11, 
+#' Make a Heatmap for a Grid
+#'
+#' @param grid a matrix.
+#' @param title the title of the plot.
+#' @param labels a character string specifying which set of rownames and colnames
+#'   are to be used.
+#' @param pos_labels character. Custom column names.
+#' @param neg_labels character. Custom row names.
+#' @param show_counts logical. If \code{TRUE}, counts are shown for each cell.
+#' @param colours A colour palette, the output of \code{colorRampPalette}.
+#' @param fontsize base fontsize for the heatmap.
+#' @param fontsize_names fontsize for row and column names.
+#'
+#' @return a heatmap showing counts in each grid cell.
+#' @export
+#'
+#' @examples
+make_heatmap <- function(grid, title = "Heatmap for Grid Item", 
+                         labels = c("agree_disagree", "satisfied_dissatisfied",
+                                    "negative_positive", "other"),
+                         pos_labels = NULL, neg_labels = NULL, show_counts = TRUE, 
+                         colours = NULL, fontsize = 20, fontsize_names = 11) {
+  
+  if (is.null(colours)) {
+    heatmap_colours <- grDevices::colorRampPalette(
+    RColorBrewer::brewer.pal(n = 7, name = "Purples"))(100)
+  } else { 
+    heatmap_colours <- colours
+  }
+  
+  grid <- make_grid_labels(grid, labels, pos_labels, neg_labels)
+
+  pheatmap::pheatmap(grid, display_numbers = show_counts, number_format = "%i", 
+           fontsize = fontsize, fontsize_col = fontsize_names, fontsize_row = fontsize_names, 
            cluster_rows = FALSE, cluster_cols = FALSE, main = title, 
             color = heatmap_colours)
 }
 
-#' Title
+
+# A check brings up this note for this function.
+# make_path_diagram: no visible binding for global variable 'x0'
+# make_path_diagram: no visible binding for global variable 'y0'
+# make_path_diagram: no visible binding for global variable 'x1'
+# make_path_diagram: no visible binding for global variable 'y1'
+# make_path_diagram: no visible binding for global variable 'ID'
+# make_path_diagram: no visible binding for global variable 'index'
+# Undefined global functions or variables:
+#  ID index x0 x1 y0 y1
+
+#' Make a Path Diagram for Two Grids
 #'
 #' @param grid_data data frame of grid-only LimeSurvey formatted data.
 #' @param grid_info list. The output of \code{grid_item_info}.
@@ -74,6 +103,10 @@ make_heatmap <- function(grid, title, labels = c("agree_disagree",
 #' @param chosen_item_2 number. The second item of interest.
 #' @param labels a character string specifying which set of rownames and colnames
 #'   are to be used.
+#' @param pos_labels character. Custom column names.
+#' @param neg_labels character. Custom row names.
+#' @param custom_x_name Custom name for the x-axis.
+#' @param custom_y_name Custom name for the y-axis.
 #'
 #' @return a path diagram showing the shift in each respondent's answer from one
 #'   item to the other.
@@ -83,7 +116,9 @@ make_heatmap <- function(grid, title, labels = c("agree_disagree",
 make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2, 
                               labels = c("agree_disagree", 
                                          "satisfied_dissatisfied",
-                                         "negative_positive")) {
+                                         "negative_positive", "other"),
+                              pos_labels = NULL, neg_labels = NULL, 
+                              custom_x_name = NULL, custom_y_name = NULL) {
   
   item1_resps <- grid_cell_counts(x = grid_data, gridinfo = grid_info, 
                                    type = "respondents", return_table = TRUE, chosen_items = chosen_item_1)
@@ -96,8 +131,8 @@ make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2
   paths <- data.frame(x0 = double(), y0 = double(), x1 = double(), y1 = double(),
                       ID = character())
   
-  for (i in 1:length(item1_resps)){
-    if (sum(item1_resps[[i]] > 0)){
+  for (i in 1:length(item1_resps)) {
+    if (sum(item1_resps[[i]] > 0)) {
       item1x <- which(item1_resps[[i]] != 0, arr.ind = TRUE)[2]
       item1y <- which(item1_resps[[i]] != 0, arr.ind = TRUE)[1]
       item2x <- which(item2_resps[[i]] != 0, arr.ind = TRUE)[2]
@@ -143,27 +178,32 @@ make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2
   if (labels == "agree_disagree") {
     row_labels <- disagreement
     col_labels <- agreement
-    y_label <- "Disagreement"
-    x_label <- "Agreement"
-  } else if (labels == "satisfied-dissatisfied") {
+    y_name <- "Disagreement"
+    x_name <- "Agreement"
+  } else if (labels == "satisfied_dissatisfied") {
     row_labels <- dissatisfaction
     col_labels <- satisfaction
-    y_label <- "Dissatisfied Response"
-    x_label <- "Satisfied Response"
+    y_name <- "Dissatisfied Response"
+    x_name <- "Satisfied Response"
   } else if (labels == "negative_positive"){
     row_labels <- negativity
     col_labels <- positivity
-    y_label <- "Negative Response"
-    x_label <- "Positive Response"
+    y_name <- "Negative Response"
+    x_name <- "Positive Response"
+  } else if (labels == "other") {
+    row_labels <- neg_labels
+    col_labels <- pos_labels
+    y_name <- custom_y_name
+    x_name <- custom_x_name
   }
   
-  ggplot(paths) +
-    geom_link(aes(x = x0, y = y0, xend = x1, yend = y1, 
+  ggplot2::ggplot(paths) +
+    ggforce::geom_link(ggplot2::aes(x = x0, y = y0, xend = x1, yend = y1,
                   colour = ID, group = ID,
-                  alpha = stat(index), size = stat(index)),
+                  alpha = ggplot2::stat(index), size = ggplot2::stat(index)),
               n = 1000,
               show.legend = FALSE) +
-    scale_y_reverse(name = y_label, breaks = 1:5, labels = row_labels) +
-    scale_x_continuous(name = x_label, breaks = 1:5, labels = col_labels, position = "top") + 
-    ggtitle(label = paste("Change in Response from ", item1_name, " to ", item2_name, sep = ""))
+    ggplot2::scale_y_reverse(name = y_name, breaks = 1:5, labels = row_labels) +
+    ggplot2::scale_x_continuous(name = x_name, breaks = 1:5, labels = col_labels, position = "top") + 
+    ggplot2::ggtitle(label = paste("Change in Response from ", item1_name, " to ", item2_name, sep = ""))
 }

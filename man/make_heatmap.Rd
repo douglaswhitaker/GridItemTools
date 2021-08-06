@@ -6,8 +6,14 @@
 \usage{
 make_heatmap(
   grid,
-  title,
-  labels = c("agree_disagree", "satisfied_dissatisfied", "negative_positive")
+  title = "Heatmap for Grid Item",
+  labels = c("agree_disagree", "satisfied_dissatisfied", "negative_positive", "other"),
+  pos_labels = NULL,
+  neg_labels = NULL,
+  show_counts = TRUE,
+  colours = NULL,
+  fontsize = 20,
+  fontsize_names = 11
 )
 }
 \arguments{
@@ -17,6 +23,18 @@ make_heatmap(
 
 \item{labels}{a character string specifying which set of rownames and colnames
 are to be used.}
+
+\item{pos_labels}{character. Custom column names.}
+
+\item{neg_labels}{character. Custom row names.}
+
+\item{show_counts}{logical. If \code{TRUE}, counts are shown for each cell.}
+
+\item{colours}{A colour palette, the output of \code{colorRampPalette}.}
+
+\item{fontsize}{base fontsize for the heatmap.}
+
+\item{fontsize_names}{fontsize for row and column names.}
 }
 \value{
 a heatmap showing counts in each grid cell.
