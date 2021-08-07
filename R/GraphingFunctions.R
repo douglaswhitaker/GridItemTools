@@ -1,4 +1,5 @@
-make_grid_labels <- function(grid, labels, pos_labels = NULL, neg_labels = NULL) {
+make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissatisfied", "negative_positive", "other"), 
+                             pos_labels = NULL, neg_labels = NULL) {
   
   disagreement <- c("No disagreement \nat all",
                     "Slightly disagree",
@@ -44,6 +45,7 @@ make_grid_labels <- function(grid, labels, pos_labels = NULL, neg_labels = NULL)
     rownames(grid) <- neg_labels
     colnames(grid) <- pos_labels
   }
+  return(grid)
 }
 
 #' Make a Heatmap for a Grid
@@ -58,6 +60,8 @@ make_grid_labels <- function(grid, labels, pos_labels = NULL, neg_labels = NULL)
 #' @param colours A colour palette, the output of \code{colorRampPalette}.
 #' @param fontsize base fontsize for the heatmap.
 #' @param fontsize_names fontsize for row and column names.
+#' @param breaks A sequence of numbers that covers the range of values in the grid.
+#'   If the value is \code{NA}, the breaks are calculated automatically.
 #'
 #' @return a heatmap showing counts in each grid cell.
 #' @export
@@ -65,7 +69,7 @@ make_grid_labels <- function(grid, labels, pos_labels = NULL, neg_labels = NULL)
 #' @examples
 make_heatmap <- function(grid, title = "Heatmap for Grid Item", 
                          labels = c("agree_disagree", "satisfied_dissatisfied",
-                                    "negative_positive", "other"),
+                                    "negative_positive", "other"), breaks = NA,
                          pos_labels = NULL, neg_labels = NULL, show_counts = TRUE, 
                          colours = NULL, fontsize = 20, fontsize_names = 11) {
   
@@ -81,7 +85,7 @@ make_heatmap <- function(grid, title = "Heatmap for Grid Item",
   pheatmap::pheatmap(grid, display_numbers = show_counts, number_format = "%i", 
            fontsize = fontsize, fontsize_col = fontsize_names, fontsize_row = fontsize_names, 
            cluster_rows = FALSE, cluster_cols = FALSE, main = title, 
-            color = heatmap_colours)
+            color = heatmap_colours, breaks = NA)
 }
 
 
