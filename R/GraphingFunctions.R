@@ -1,6 +1,6 @@
-make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissatisfied", "negative_positive", "other"), 
-                             pos_labels = NULL, neg_labels = NULL) {
-  
+make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "other"), 
+                             pos_labels = NULL, neg_labels = NULL, ggplot = FALSE) {
+
   disagreement <- c("No disagreement \nat all",
                     "Slightly disagree",
                     "Moderately \ndisagree",
@@ -32,20 +32,43 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
                   "Quite a bit positive",
                   "Extremely positive")
   
-  if (labels == "agree_disagree") {
-    rownames(grid) <- disagreement
-    colnames(grid) <- agreement
-  } else if (labels == "satisfied_dissatisfied") {
-    rownames(grid) <- dissatisfaction
-    colnames(grid) <- satisfaction
-  } else if (labels == "negative_positive") {
-    rownames(grid) <- negativity
-    colnames(grid) <- positivity
-  } else if (labels == "other") {
-    rownames(grid) <- neg_labels
-    colnames(grid) <- pos_labels
+  if (ggplot) {
+    
+    if (labels == "agree_disagree") {
+      row_labels <- disagreement
+      col_labels <- agreement
+    } else if (labels == "satisfied_dissatisfied") {
+      row_labels <- dissatisfaction
+      col_labels <- satisfaction
+    } else if (labels == "positive_negative") {
+      row_labels <- negativity
+      col_labels <- positivity
+    } else if (labels == "other") {
+      row_labels <- neg_labels
+      col_labels <- pos_labels
+    }
+    
+    return(list(row_labels, col_labels))
+    
+  } else {
+    
+    if (labels == "agree_disagree") {
+      rownames(grid) <- disagreement
+      colnames(grid) <- agreement
+    } else if (labels == "satisfied_dissatisfied") {
+      rownames(grid) <- dissatisfaction
+      colnames(grid) <- satisfaction
+    } else if (labels == "positive_negative") {
+      rownames(grid) <- negativity
+      colnames(grid) <- positivity
+    } else if (labels == "other") {
+      rownames(grid) <- neg_labels
+      colnames(grid) <- pos_labels
+    }
+    
+    return(grid)
   }
-  return(grid)
+  
 }
 
 #' Make a Heatmap for a Grid
@@ -69,10 +92,10 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
 #' @examples
 make_heatmap <- function(grid, title = "Heatmap for Grid Item", 
                          labels = c("agree_disagree", "satisfied_dissatisfied",
-                                    "negative_positive", "other"), breaks = NA,
+                                    "positive_negative", "other"), breaks = NA,
                          pos_labels = NULL, neg_labels = NULL, show_counts = TRUE, 
                          colours = NULL, fontsize = 20, fontsize_names = 11) {
-  
+
   if (is.null(colours)) {
     heatmap_colours <- grDevices::colorRampPalette(
     RColorBrewer::brewer.pal(n = 7, name = "Purples"))(100)
@@ -86,6 +109,26 @@ make_heatmap <- function(grid, title = "Heatmap for Grid Item",
            fontsize = fontsize, fontsize_col = fontsize_names, fontsize_row = fontsize_names, 
            cluster_rows = FALSE, cluster_cols = FALSE, main = title, 
             color = heatmap_colours, breaks = NA)
+}
+
+make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied",
+                                       "positive_negative", "other"),
+                            custom_x_name, custom_y_name) {
+  if (labels == "agree_disagree") {
+    y_name <- "Disagreement"
+    x_name <- "Agreement"
+  } else if (labels == "satisfied_dissatisfied") {
+    y_name <- "Dissatisfied Response"
+    x_name <- "Satisfied Response"
+  } else if (labels == "positive_negative") {
+    y_name <- "Negative Response"
+    x_name <- "Positive Response"
+  } else if (labels == "other") {
+    y_name <- custom_y_name
+    x_name <- custom_x_name
+  }
+  names <- c(y_name, x_name)
+  return(names)
 }
 
 
@@ -120,7 +163,7 @@ make_heatmap <- function(grid, title = "Heatmap for Grid Item",
 make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2, 
                               labels = c("agree_disagree", 
                                          "satisfied_dissatisfied",
-                                         "negative_positive", "other"),
+                                         "positive_negative", "other"),
                               pos_labels = NULL, neg_labels = NULL, 
                               custom_x_name = NULL, custom_y_name = NULL) {
   
@@ -148,58 +191,10 @@ make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2
     }
   }
   
-  disagreement <- c("No disagreement \nat all",
-                    "Slightly disagree",
-                    "Moderately \ndisagree",
-                    "Greatly disagree",
-                    "Completely \ndisagree")
-  agreement <- c("No agreement \nat all",
-                 "Slightly agree",
-                 "Moderately \nagree",
-                 "Greatly agree",
-                 "Completely \nagree")
-  dissatisfaction <- c("Not at all dissatisfied",
-                       "Slightly dissatisfied",
-                       "Moderately dissatisfied",
-                       "Quite a bit dissatisfied",
-                       "Extremely dissatisfied")
-  satisfaction <- c("Not at all satisfied",
-                    "Slightly satisfied",
-                    "Moderately satisfied",
-                    "Quite a bit satisfied",
-                    "Extremely satisfied")
-  negativity <- c("Not at all negative",
-                  "Slightly negative",
-                  "Moderately negative",
-                  "Quite a bit negative",
-                  "Extremely negative")
-  positivity <- c("Not at all positive",
-                  "Slightly positive",
-                  "Moderately positive",
-                  "Quite a bit positive",
-                  "Extremely positive")
-  
-  if (labels == "agree_disagree") {
-    row_labels <- disagreement
-    col_labels <- agreement
-    y_name <- "Disagreement"
-    x_name <- "Agreement"
-  } else if (labels == "satisfied_dissatisfied") {
-    row_labels <- dissatisfaction
-    col_labels <- satisfaction
-    y_name <- "Dissatisfied Response"
-    x_name <- "Satisfied Response"
-  } else if (labels == "negative_positive"){
-    row_labels <- negativity
-    col_labels <- positivity
-    y_name <- "Negative Response"
-    x_name <- "Positive Response"
-  } else if (labels == "other") {
-    row_labels <- neg_labels
-    col_labels <- pos_labels
-    y_name <- custom_y_name
-    x_name <- custom_x_name
-  }
+row_labels <- make_grid_labels(labels, pos_labels, neg_labels, ggplot = TRUE)[[1]]
+col_labels <- make_grid_labels(labels, pos_labels, neg_labels, ggplot = TRUE)[[2]]
+y_name <- make_axis_names(labels, custom_x_name, custom_y_name)[1]
+x_name <- make_axis_names(labels, custom_x_name, custom_y_name)[2]
   
   ggplot2::ggplot(paths) +
     ggforce::geom_link(ggplot2::aes(x = x0, y = y0, xend = x1, yend = y1,

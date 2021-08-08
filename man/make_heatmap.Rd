@@ -7,7 +7,8 @@
 make_heatmap(
   grid,
   title = "Heatmap for Grid Item",
-  labels = c("agree_disagree", "satisfied_dissatisfied", "negative_positive", "other"),
+  labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "other"),
+  breaks = NA,
   pos_labels = NULL,
   neg_labels = NULL,
   show_counts = TRUE,
@@ -23,6 +24,9 @@ make_heatmap(
 
 \item{labels}{a character string specifying which set of rownames and colnames
 are to be used.}
+
+\item{breaks}{A sequence of numbers that covers the range of values in the grid.
+If the value is \code{NA}, the breaks are calculated automatically.}
 
 \item{pos_labels}{character. Custom column names.}
 

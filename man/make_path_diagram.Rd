@@ -9,7 +9,7 @@ make_path_diagram(
   grid_info,
   chosen_item_1,
   chosen_item_2,
-  labels = c("agree_disagree", "satisfied_dissatisfied", "negative_positive", "other"),
+  labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "other"),
   pos_labels = NULL,
   neg_labels = NULL,
   custom_x_name = NULL,
