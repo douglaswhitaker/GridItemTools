@@ -2,14 +2,18 @@
 % Please edit documentation in R/GraphingFunctions.R
 \name{make_path_diagram}
 \alias{make_path_diagram}
-\title{Title}
+\title{Make a Path Diagram for Two Grids}
 \usage{
 make_path_diagram(
   grid_data,
   grid_info,
   chosen_item_1,
   chosen_item_2,
-  labels = c("agree_disagree", "satisfied_dissatisfied", "negative_positive")
+  labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "other"),
+  pos_labels = NULL,
+  neg_labels = NULL,
+  custom_x_name = NULL,
+  custom_y_name = NULL
 )
 }
 \arguments{
@@ -23,11 +27,19 @@ make_path_diagram(
 
 \item{labels}{a character string specifying which set of rownames and colnames
 are to be used.}
+
+\item{pos_labels}{character. Custom column names.}
+
+\item{neg_labels}{character. Custom row names.}
+
+\item{custom_x_name}{Custom name for the x-axis.}
+
+\item{custom_y_name}{Custom name for the y-axis.}
 }
 \value{
 a path diagram showing the shift in each respondent's answer from one
   item to the other.
 }
 \description{
-Title
+Make a Path Diagram for Two Grids
 }

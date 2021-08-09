@@ -9,7 +9,8 @@
 #' @param x data frame of grid-only LimeSurvey formatted data.
 #' @param gridinfo list. The output of \code{grid_item_info}.
 #' @param type character. Indicates whether to create cell counts for \code{"items"} or \code{"respondents"}.
-#' @param reverse_code a value of 1 indicates that the grid items are reverse coded, and will correct for it.
+#' @param reverse_code integer or logical. Values of 0 (\code{FALSE}) indicate items that are not reverse-coded, 
+#'   while values of 1 (\code{TRUE}) indicate items that are reverse coded.
 #' @param return_table logical. If \code{TRUE} a list of tables rather than matrices is returned.
 #' @param chosen_items integer vector indicating which grid items to include.
 #'
@@ -21,6 +22,10 @@
 grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
                              return_table = FALSE, chosen_items = NULL) {
   grid_resp_list <- list()
+  
+  if (is.null(reverse_code)){
+    reverse_code <- rep(0, length(gridinfo$names))
+  }
   
   rows <- gridinfo$dim[1]
   cols <- gridinfo$dim[2]
@@ -35,15 +40,8 @@ grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
       for (current_row in 1:nrow(x)) {
         
         grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value
-        xy_tmp <- col_to_xy(grid_column, rows, cols)
-        if (!is.null(reverse_code)) {
-          if (reverse_code == 1) {
-            xy_tmp <- xy_tmp[2:1]
-          }
-        }
-        grid_xy <- xy_tmp
+        grid_xy <- col_to_xy(grid_column, rows, cols, rc = reverse_code[i])
         grid_resp_list[[gridinfo$names[i]]][grid_xy] <- grid_resp_list[[gridinfo$names[i]]][grid_xy] + 1
-        
       }
       
       if (return_table) {
@@ -67,15 +65,8 @@ grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
       for (i in chosen_items) {
         
         grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value
-        xy_tmp <- col_to_xy(grid_column, rows, cols)
-        if (!is.null(reverse_code)) {
-          if (reverse_code == 1) {
-            xy_tmp <- xy_tmp[2:1]
-          }
-        }
-        grid_xy <- xy_tmp        
+        grid_xy <- col_to_xy(grid_column, rows, cols, rc = reverse_code[i])
         grid_resp_list[[current_row]][grid_xy] <- grid_resp_list[[current_row]][grid_xy] + 1
-        
       }
     }
   }
@@ -355,12 +346,15 @@ sum_resp_mats <- function(mat_list, items = NULL) {
   return(tmp)
 }
 
-#' Title
+# Intended to eventually replace sum_resp_mats as it has a more accurate name.
+#' Sum of Grids
+#' 
+#' Sums across all (or a selection) of grids in a list.
 #'
-#' @param mat_list 
-#' @param items 
+#' @param mat_list list of matrices.
+#' @param items indicates which matrices to sum.
 #'
-#' @return
+#' @return A matrix created by summing some or all of the inputted list of grids.
 #' @export
 #'
 #' @examples

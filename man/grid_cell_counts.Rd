@@ -20,7 +20,8 @@ grid_cell_counts(
 
 \item{type}{character. Indicates whether to create cell counts for \code{"items"} or \code{"respondents"}.}
 
-\item{reverse_code}{a value of 1 indicates that the grid items are reverse coded, and will correct for it.}
+\item{reverse_code}{integer or logical. Values of 0 (\code{FALSE}) indicate items that are not reverse-coded, 
+while values of 1 (\code{TRUE}) indicate items that are reverse coded.}
 
 \item{return_table}{logical. If \code{TRUE} a list of tables rather than matrices is returned.}
 
