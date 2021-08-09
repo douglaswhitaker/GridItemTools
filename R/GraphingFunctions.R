@@ -77,14 +77,17 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
 #' @param title the title of the plot.
 #' @param labels a character string specifying which set of rownames and colnames
 #'   are to be used.
+#' @param breaks A sequence of numbers that covers the range of values in the grid.
+#'   If the value is \code{NA}, the breaks are calculated automatically.
 #' @param pos_labels character. Custom column names.
 #' @param neg_labels character. Custom row names.
 #' @param show_counts logical. If \code{TRUE}, counts are shown for each cell.
-#' @param colours A colour palette, the output of \code{colorRampPalette}.
+#' @param colours a character string indicating what colour the heatmap will be.
+#'   Choosing \code{"custom"} allows for setting the \code{custom_palette} variable
+#'   to a palette other than \code{"purple"}, \code{"green"}, or \code{"red"}.
+#' @param custom_palette a colour palette, the output of \code{colorRampPalette}.
 #' @param fontsize base fontsize for the heatmap.
 #' @param fontsize_names fontsize for row and column names.
-#' @param breaks A sequence of numbers that covers the range of values in the grid.
-#'   If the value is \code{NA}, the breaks are calculated automatically.
 #'
 #' @return a heatmap showing counts in each grid cell.
 #' @export
@@ -94,14 +97,21 @@ make_heatmap <- function(grid, title = "Heatmap for Grid Item",
                          labels = c("agree_disagree", "satisfied_dissatisfied",
                                     "positive_negative", "other"), breaks = NA,
                          pos_labels = NULL, neg_labels = NULL, show_counts = TRUE, 
-                         colours = NULL, fontsize = 20, fontsize_names = 11) {
+                         colours = c("purple", "green", "red"), custom_palette, fontsize = 20, fontsize_names = 11) {
 
-  if (is.null(colours)) {
+  if (colours == "purple") {
     heatmap_colours <- grDevices::colorRampPalette(
     RColorBrewer::brewer.pal(n = 7, name = "Purples"))(100)
-  } else { 
-    heatmap_colours <- colours
+  } else if (colours == "green") { 
+    heatmap_colours <- c("white", grDevices::colorRampPalette(
+    RColorBrewer::brewer.pal(n = 7, name = "Greens"))(32)[2:32])
+  } else if (colours == "red") {
+    heatmap_colours <- grDevices::colorRampPalette(
+    RColorBrewer::brewer.pal(n = 7, name = "Reds"))(100)
+  } else if (colours == "custom"){
+    heatmap_colours <- custom_palette
   }
+
   
   grid <- make_grid_labels(grid, labels, pos_labels, neg_labels)
 

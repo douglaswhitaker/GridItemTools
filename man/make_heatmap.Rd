@@ -12,7 +12,8 @@ make_heatmap(
   pos_labels = NULL,
   neg_labels = NULL,
   show_counts = TRUE,
-  colours = NULL,
+  colours = c("purple", "green", "red"),
+  custom_palette,
   fontsize = 20,
   fontsize_names = 11
 )
@@ -34,7 +35,11 @@ If the value is \code{NA}, the breaks are calculated automatically.}
 
 \item{show_counts}{logical. If \code{TRUE}, counts are shown for each cell.}
 
-\item{colours}{A colour palette, the output of \code{colorRampPalette}.}
+\item{colours}{a character string indicating what colour the heatmap will be.
+Choosing \code{"custom"} allows for setting the \code{custom_palette} variable
+to a palette other than \code{"purple"}, \code{"green"}, or \code{"red"}.}
+
+\item{custom_palette}{a colour palette, the output of \code{colorRampPalette}.}
 
 \item{fontsize}{base fontsize for the heatmap.}
 
