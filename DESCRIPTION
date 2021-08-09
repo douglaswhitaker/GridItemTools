@@ -6,7 +6,8 @@ Date: 2021-07-27
 Authors@R: c(
   person("Douglas", "Whitaker", email = "douglas.whitaker@msvu.ca", 
     role = c("cre", "aut"), comment = c(ORCID = "0000-0002-6895-7437")),
-  person("Bailey", "Drew", email = "bailey.drew@msvu.ca", role = "aut"),
+  person("Bailey", "Drew", email = "bailey.drew@msvu.ca", role = "aut",
+    comment = c(ORCID = "0000-0001-9373-0755")),
   person("Joseph", "Barss", email = "joseph.barss@msvu.ca", role = "aut",
     comment = c(ORCID = "0000-0001-9978-1780")))
 Maintainer: Douglas Whitaker <douglas.whitaker@msvu.ca>
