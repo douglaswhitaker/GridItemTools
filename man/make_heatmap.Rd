@@ -12,7 +12,7 @@ make_heatmap(
   pos_labels = NULL,
   neg_labels = NULL,
   show_counts = TRUE,
-  colours = c("purple", "green", "red"),
+  colours = c("purple", "green", "red", "custom"),
   custom_palette,
   fontsize = 20,
   fontsize_names = 11
@@ -49,5 +49,6 @@ to a palette other than \code{"purple"}, \code{"green"}, or \code{"red"}.}
 a heatmap showing counts in each grid cell.
 }
 \description{
-Make a Heatmap for a Grid
+The function makes a heatmap showing cell counts for a grid. By default, 
+darker colours indicate larger counts, while lighter colours indicate smaller counts.
 }

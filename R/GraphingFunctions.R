@@ -72,6 +72,9 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
 }
 
 #' Make a Heatmap for a Grid
+#' 
+#' The function makes a heatmap showing cell counts for a grid. By default, 
+#' darker colours indicate larger counts, while lighter colours indicate smaller counts.
 #'
 #' @param grid a matrix.
 #' @param title the title of the plot.
@@ -97,7 +100,7 @@ make_heatmap <- function(grid, title = "Heatmap for Grid Item",
                          labels = c("agree_disagree", "satisfied_dissatisfied",
                                     "positive_negative", "other"), breaks = NA,
                          pos_labels = NULL, neg_labels = NULL, show_counts = TRUE, 
-                         colours = c("purple", "green", "red"), custom_palette, fontsize = 20, fontsize_names = 11) {
+                         colours = c("purple", "green", "red", "custom"), custom_palette, fontsize = 20, fontsize_names = 11) {
 
   if (colours == "purple") {
     heatmap_colours <- grDevices::colorRampPalette(
@@ -123,7 +126,7 @@ make_heatmap <- function(grid, title = "Heatmap for Grid Item",
 
 make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied",
                                        "positive_negative", "other"),
-                            custom_x_name, custom_y_name) {
+                            custom_x_name = NULL, custom_y_name = NULL) {
   if (labels == "agree_disagree") {
     y_name <- "Disagreement"
     x_name <- "Agreement"
@@ -156,34 +159,44 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
 #'
 #' @param grid_data data frame of grid-only LimeSurvey formatted data.
 #' @param grid_info list. The output of \code{grid_item_info}.
-#' @param chosen_item_1 number. The first item of interest.
-#' @param chosen_item_2 number. The second item of interest.
+#' @param chosen_item_1 a number, OR, if \code{raw_data = TRUE}, a list of matrices. The first item of interest.
+#' @param chosen_item_2 a number, OR, if \code{raw_data = FALSE}, a list of matrices. The second item of interest.
 #' @param labels a character string specifying which set of rownames and colnames
 #'   are to be used.
 #' @param pos_labels character. Custom column names.
 #' @param neg_labels character. Custom row names.
 #' @param custom_x_name Custom name for the x-axis.
 #' @param custom_y_name Custom name for the y-axis.
+#' @param raw_data logical. If \code{TRUE}, \code{grid_data} and \code{grid_info} must be inputted, 
+#' and \code{chosen_item_1} and \code{chosen_item_2} should be integers. If \code{FALSE}, 
+#' input \code{chosen_item_1} and \code{chosen_item_2} as lists of matrices, and do not input
+#' \code{grid_data} and \code{grid_info}.
 #'
 #' @return a path diagram showing the shift in each respondent's answer from one
 #'   item to the other.
 #' @export
 #'
 #' @examples
-make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2, 
+make_path_diagram <- function(raw_data = TRUE, grid_data, grid_info, chosen_item_1, chosen_item_2, 
                               labels = c("agree_disagree", 
                                          "satisfied_dissatisfied",
                                          "positive_negative", "other"),
                               pos_labels = NULL, neg_labels = NULL, 
                               custom_x_name = NULL, custom_y_name = NULL) {
-  
-  item1_resps <- grid_cell_counts(x = grid_data, gridinfo = grid_info, 
-                                   type = "respondents", return_table = TRUE, chosen_items = chosen_item_1)
-  item1_name <- grid_info$names[chosen_item_1]
-  
-  item2_resps <- grid_cell_counts(x = grid_data, gridinfo = grid_info, 
-                                   type = "respondents", return_table = TRUE, chosen_items = chosen_item_2)
-  item2_name <- grid_info$names[chosen_item_2]
+  if (raw_data) {
+    item1_resps <- grid_cell_counts(x = grid_data, gridinfo = grid_info, 
+                                    type = "respondents", return_table = TRUE, chosen_items = chosen_item_1)
+    item1_name <- grid_info$names[chosen_item_1]
+    
+    item2_resps <- grid_cell_counts(x = grid_data, gridinfo = grid_info, 
+                                    type = "respondents", return_table = TRUE, chosen_items = chosen_item_2)
+    item2_name <- grid_info$names[chosen_item_2]
+  } else {
+    item1_resps <- chosen_item_1
+    item1_name <- names(chosen_item_1)
+    item2_resps <- chosen_item_2
+    item2_name <- names(chosen_item_2)
+  }
   
   paths <- data.frame(x0 = double(), y0 = double(), x1 = double(), y1 = double(),
                       ID = character())
@@ -201,8 +214,8 @@ make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2
     }
   }
   
-row_labels <- make_grid_labels(labels, pos_labels, neg_labels, ggplot = TRUE)[[1]]
-col_labels <- make_grid_labels(labels, pos_labels, neg_labels, ggplot = TRUE)[[2]]
+row_labels <- make_grid_labels(labels = labels, pos_labels = pos_labels, neg_labels = neg_labels, ggplot = TRUE)[[1]]
+col_labels <- make_grid_labels(labels = labels, pos_labels = pos_labels, neg_labels = neg_labels, ggplot = TRUE)[[2]]
 y_name <- make_axis_names(labels, custom_x_name, custom_y_name)[1]
 x_name <- make_axis_names(labels, custom_x_name, custom_y_name)[2]
   

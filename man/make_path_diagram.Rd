@@ -5,6 +5,7 @@
 \title{Make a Path Diagram for Two Grids}
 \usage{
 make_path_diagram(
+  raw_data = TRUE,
   grid_data,
   grid_info,
   chosen_item_1,
@@ -17,13 +18,18 @@ make_path_diagram(
 )
 }
 \arguments{
+\item{raw_data}{logical. If \code{TRUE}, \code{grid_data} and \code{grid_info} must be inputted, 
+and \code{chosen_item_1} and \code{chosen_item_2} should be integers. If \code{FALSE}, 
+input \code{chosen_item_1} and \code{chosen_item_2} as lists of matrices, and do not input
+\code{grid_data} and \code{grid_info}.}
+
 \item{grid_data}{data frame of grid-only LimeSurvey formatted data.}
 
 \item{grid_info}{list. The output of \code{grid_item_info}.}
 
-\item{chosen_item_1}{number. The first item of interest.}
+\item{chosen_item_1}{a number, OR, if \code{raw_data = TRUE}, a list of matrices. The first item of interest.}
 
-\item{chosen_item_2}{number. The second item of interest.}
+\item{chosen_item_2}{a number, OR, if \code{raw_data = FALSE}, a list of matrices. The second item of interest.}
 
 \item{labels}{a character string specifying which set of rownames and colnames
 are to be used.}
