@@ -6,14 +6,14 @@
 \usage{
 make_heatmap(
   grid,
-  title = "Heatmap for Grid Item",
   labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "other"),
-  breaks = NA,
+  title = "Heatmap for Grid Item",
   pos_labels = NULL,
   neg_labels = NULL,
-  show_counts = TRUE,
   colours = c("purple", "green", "red", "custom"),
   custom_palette,
+  show_counts = TRUE,
+  breaks = NA,
   fontsize = 20,
   fontsize_names = 11
 )
@@ -21,25 +21,25 @@ make_heatmap(
 \arguments{
 \item{grid}{a matrix.}
 
-\item{title}{the title of the plot.}
-
 \item{labels}{a character string specifying which set of rownames and colnames
 are to be used.}
 
-\item{breaks}{A sequence of numbers that covers the range of values in the grid.
-If the value is \code{NA}, the breaks are calculated automatically.}
+\item{title}{the title of the plot.}
 
 \item{pos_labels}{character. Custom column names.}
 
 \item{neg_labels}{character. Custom row names.}
-
-\item{show_counts}{logical. If \code{TRUE}, counts are shown for each cell.}
 
 \item{colours}{a character string indicating what colour the heatmap will be.
 Choosing \code{"custom"} allows for setting the \code{custom_palette} variable
 to a palette other than \code{"purple"}, \code{"green"}, or \code{"red"}.}
 
 \item{custom_palette}{a colour palette, the output of \code{colorRampPalette}.}
+
+\item{show_counts}{logical. If \code{TRUE}, counts are shown for each cell.}
+
+\item{breaks}{A sequence of numbers that covers the range of values in the grid.
+If the value is \code{NA}, the breaks are calculated automatically.}
 
 \item{fontsize}{base fontsize for the heatmap.}
 

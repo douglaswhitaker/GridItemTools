@@ -5,7 +5,6 @@
 \title{Make a Path Diagram for Two Grids}
 \usage{
 make_path_diagram(
-  raw_data = TRUE,
   grid_data,
   grid_info,
   chosen_item_1,
@@ -13,16 +12,14 @@ make_path_diagram(
   labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "other"),
   pos_labels = NULL,
   neg_labels = NULL,
-  custom_x_name = NULL,
-  custom_y_name = NULL
+  x_axis_label = NULL,
+  y_axis_label = NULL,
+  item_1_name = "Item 1",
+  item_2_name = "Item 2",
+  limesurvey = TRUE
 )
 }
 \arguments{
-\item{raw_data}{logical. If \code{TRUE}, \code{grid_data} and \code{grid_info} must be inputted, 
-and \code{chosen_item_1} and \code{chosen_item_2} should be integers. If \code{FALSE}, 
-input \code{chosen_item_1} and \code{chosen_item_2} as lists of matrices, and do not input
-\code{grid_data} and \code{grid_info}.}
-
 \item{grid_data}{data frame of grid-only LimeSurvey formatted data.}
 
 \item{grid_info}{list. The output of \code{grid_item_info}.}
@@ -38,14 +35,26 @@ are to be used.}
 
 \item{neg_labels}{character. Custom row names.}
 
-\item{custom_x_name}{Custom name for the x-axis.}
+\item{x_axis_label}{a custom label for the x-axis.}
 
-\item{custom_y_name}{Custom name for the y-axis.}
+\item{y_axis_label}{a custom label for the y-axis.}
+
+\item{item_1_name}{the name of the first chosen item.}
+
+\item{item_2_name}{the name of the second chosen item.}
+
+\item{limesurvey}{logical. If \code{TRUE}, \code{grid_data} and \code{grid_info} must be inputted, 
+and \code{chosen_item_1} and \code{chosen_item_2} should be integers. If \code{FALSE}, 
+input \code{chosen_item_1} and \code{chosen_item_2} as lists of matrices, and do not input
+\code{grid_data} and \code{grid_info}.}
 }
 \value{
 a path diagram showing the shift in each respondent's answer from one
   item to the other.
 }
 \description{
-Make a Path Diagram for Two Grids
+The function \code{make_path_diagram} constructs a diagram showing the changes
+in response from one grid-type item to another for all respondents. 
+The function can be used in two ways: either with LimeSurvey formatted data, 
+or with two lists of grids.
 }

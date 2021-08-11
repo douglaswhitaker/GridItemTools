@@ -11,25 +11,25 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
                  "Moderately \nagree",
                  "Greatly agree",
                  "Completely \nagree")
-  dissatisfaction <- c("Not at all dissatisfied",
-                       "Slightly dissatisfied",
-                       "Moderately dissatisfied",
-                       "Quite a bit dissatisfied",
-                       "Extremely dissatisfied")
-  satisfaction <- c("Not at all satisfied",
-                    "Slightly satisfied",
-                    "Moderately satisfied",
-                    "Quite a bit satisfied",
-                    "Extremely satisfied")
-  negativity <- c("Not at all negative",
+  dissatisfaction <- c("Not at all \ndissatisfied",
+                       "Slightly \ndissatisfied",
+                       "Moderately \ndissatisfied",
+                       "Quite a bit \ndissatisfied",
+                       "Extremely \ndissatisfied")
+  satisfaction <- c("Not at all \nsatisfied",
+                    "Slightly \nsatisfied",
+                    "Moderately \nsatisfied",
+                    "Quite a bit \nsatisfied",
+                    "Extremely \nsatisfied")
+  negativity <- c("Not at all \nnegative",
                   "Slightly negative",
-                  "Moderately negative",
-                  "Quite a bit negative",
+                  "Moderately \nnegative",
+                  "Quite a bit \nnegative",
                   "Extremely negative")
-  positivity <- c("Not at all positive",
+  positivity <- c("Not at all \npositive",
                   "Slightly positive",
-                  "Moderately positive",
-                  "Quite a bit positive",
+                  "Moderately \npositive",
+                  "Quite a bit \npositive",
                   "Extremely positive")
   
   if (ggplot) {
@@ -77,18 +77,18 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
 #' darker colours indicate larger counts, while lighter colours indicate smaller counts.
 #'
 #' @param grid a matrix.
-#' @param title the title of the plot.
 #' @param labels a character string specifying which set of rownames and colnames
 #'   are to be used.
-#' @param breaks A sequence of numbers that covers the range of values in the grid.
-#'   If the value is \code{NA}, the breaks are calculated automatically.
+#' @param title the title of the plot.
 #' @param pos_labels character. Custom column names.
 #' @param neg_labels character. Custom row names.
-#' @param show_counts logical. If \code{TRUE}, counts are shown for each cell.
 #' @param colours a character string indicating what colour the heatmap will be.
 #'   Choosing \code{"custom"} allows for setting the \code{custom_palette} variable
 #'   to a palette other than \code{"purple"}, \code{"green"}, or \code{"red"}.
 #' @param custom_palette a colour palette, the output of \code{colorRampPalette}.
+#' @param breaks A sequence of numbers that covers the range of values in the grid.
+#'   If the value is \code{NA}, the breaks are calculated automatically.
+#' @param show_counts logical. If \code{TRUE}, counts are shown for each cell.
 #' @param fontsize base fontsize for the heatmap.
 #' @param fontsize_names fontsize for row and column names.
 #'
@@ -96,11 +96,12 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
 #' @export
 #'
 #' @examples
-make_heatmap <- function(grid, title = "Heatmap for Grid Item", 
-                         labels = c("agree_disagree", "satisfied_dissatisfied",
-                                    "positive_negative", "other"), breaks = NA,
-                         pos_labels = NULL, neg_labels = NULL, show_counts = TRUE, 
-                         colours = c("purple", "green", "red", "custom"), custom_palette, fontsize = 20, fontsize_names = 11) {
+make_heatmap <- function(grid, labels = c("agree_disagree", "satisfied_dissatisfied",
+                                          "positive_negative", "other"),
+                         title = "Heatmap for Grid Item", pos_labels = NULL, 
+                         neg_labels = NULL, colours = c("purple", "green", "red", "custom"),
+                         custom_palette, show_counts = TRUE, breaks = NA, 
+                         fontsize = 20, fontsize_names = 11) {
 
   if (colours == "purple") {
     heatmap_colours <- grDevices::colorRampPalette(
@@ -126,7 +127,7 @@ make_heatmap <- function(grid, title = "Heatmap for Grid Item",
 
 make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied",
                                        "positive_negative", "other"),
-                            custom_x_name = NULL, custom_y_name = NULL) {
+                            x_axis_label = NULL, y_axis_label = NULL) {
   if (labels == "agree_disagree") {
     y_name <- "Disagreement"
     x_name <- "Agreement"
@@ -137,8 +138,8 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
     y_name <- "Negative Response"
     x_name <- "Positive Response"
   } else if (labels == "other") {
-    y_name <- custom_y_name
-    x_name <- custom_x_name
+    y_name <- y_axis_label
+    x_name <- x_axis_label
   }
   names <- c(y_name, x_name)
   return(names)
@@ -156,6 +157,11 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
 #  ID index x0 x1 y0 y1
 
 #' Make a Path Diagram for Two Grids
+#' 
+#' The function \code{make_path_diagram} constructs a diagram showing the changes
+#' in response from one grid-type item to another for all respondents. 
+#' The function can be used in two ways: either with LimeSurvey formatted data, 
+#' or with two lists of grids.
 #'
 #' @param grid_data data frame of grid-only LimeSurvey formatted data.
 #' @param grid_info list. The output of \code{grid_item_info}.
@@ -165,9 +171,11 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
 #'   are to be used.
 #' @param pos_labels character. Custom column names.
 #' @param neg_labels character. Custom row names.
-#' @param custom_x_name Custom name for the x-axis.
-#' @param custom_y_name Custom name for the y-axis.
-#' @param raw_data logical. If \code{TRUE}, \code{grid_data} and \code{grid_info} must be inputted, 
+#' @param x_axis_label a custom label for the x-axis.
+#' @param y_axis_label a custom label for the y-axis.
+#' @param item_1_name the name of the first chosen item.
+#' @param item_2_name the name of the second chosen item.
+#' @param limesurvey logical. If \code{TRUE}, \code{grid_data} and \code{grid_info} must be inputted, 
 #' and \code{chosen_item_1} and \code{chosen_item_2} should be integers. If \code{FALSE}, 
 #' input \code{chosen_item_1} and \code{chosen_item_2} as lists of matrices, and do not input
 #' \code{grid_data} and \code{grid_info}.
@@ -177,13 +185,14 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
 #' @export
 #'
 #' @examples
-make_path_diagram <- function(raw_data = TRUE, grid_data, grid_info, chosen_item_1, chosen_item_2, 
+make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2, 
                               labels = c("agree_disagree", 
                                          "satisfied_dissatisfied",
                                          "positive_negative", "other"),
                               pos_labels = NULL, neg_labels = NULL, 
-                              custom_x_name = NULL, custom_y_name = NULL) {
-  if (raw_data) {
+                              x_axis_label = NULL, y_axis_label = NULL, 
+                              item_1_name = "Item 1", item_2_name = "Item 2", limesurvey = TRUE) {
+  if (limesurvey) {
     item1_resps <- grid_cell_counts(x = grid_data, gridinfo = grid_info, 
                                     type = "respondents", return_table = TRUE, chosen_items = chosen_item_1)
     item1_name <- grid_info$names[chosen_item_1]
@@ -193,9 +202,9 @@ make_path_diagram <- function(raw_data = TRUE, grid_data, grid_info, chosen_item
     item2_name <- grid_info$names[chosen_item_2]
   } else {
     item1_resps <- chosen_item_1
-    item1_name <- names(chosen_item_1)
+    item1_name <- item_1_name
     item2_resps <- chosen_item_2
-    item2_name <- names(chosen_item_2)
+    item2_name <- item_2_name
   }
   
   paths <- data.frame(x0 = double(), y0 = double(), x1 = double(), y1 = double(),
@@ -216,13 +225,13 @@ make_path_diagram <- function(raw_data = TRUE, grid_data, grid_info, chosen_item
   
 row_labels <- make_grid_labels(labels = labels, pos_labels = pos_labels, neg_labels = neg_labels, ggplot = TRUE)[[1]]
 col_labels <- make_grid_labels(labels = labels, pos_labels = pos_labels, neg_labels = neg_labels, ggplot = TRUE)[[2]]
-y_name <- make_axis_names(labels, custom_x_name, custom_y_name)[1]
-x_name <- make_axis_names(labels, custom_x_name, custom_y_name)[2]
+y_name <- make_axis_names(labels, x_axis_label, y_axis_label)[1]
+x_name <- make_axis_names(labels, x_axis_label, y_axis_label)[2]
   
   ggplot2::ggplot(paths) +
     ggforce::geom_link(ggplot2::aes(x = x0, y = y0, xend = x1, yend = y1,
                   colour = ID, group = ID,
-                  alpha = ggplot2::stat(index), size = ggplot2::stat(index)),
+                  alpha = ggplot2::after_stat(index), size = ggplot2::after_stat(index)),
               n = 1000,
               show.legend = FALSE) +
     ggplot2::scale_y_reverse(name = y_name, breaks = 1:5, labels = row_labels) +
