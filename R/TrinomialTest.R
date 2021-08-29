@@ -148,7 +148,7 @@ trinomial_test <- function(col1,
   }
   
   # Work on a better return value
-  return(list(N = n,
+  invisible(list(N = n,
               statistic = n_diff,
               p_value = true_p_val,
               alternative = alternative,
