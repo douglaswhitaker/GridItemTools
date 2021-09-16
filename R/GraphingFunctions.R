@@ -223,17 +223,17 @@ make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2
     }
   }
   
-row_labels <- make_grid_labels(labels = labels, pos_labels = pos_labels, neg_labels = neg_labels, ggplot = TRUE)[[1]]
-col_labels <- make_grid_labels(labels = labels, pos_labels = pos_labels, neg_labels = neg_labels, ggplot = TRUE)[[2]]
-y_name <- make_axis_names(labels, x_axis_label, y_axis_label)[1]
-x_name <- make_axis_names(labels, x_axis_label, y_axis_label)[2]
+  row_labels <- make_grid_labels(labels = labels, pos_labels = pos_labels, neg_labels = neg_labels, ggplot = TRUE)[[1]]
+  col_labels <- make_grid_labels(labels = labels, pos_labels = pos_labels, neg_labels = neg_labels, ggplot = TRUE)[[2]]
+  y_name <- make_axis_names(labels, x_axis_label, y_axis_label)[1]
+  x_name <- make_axis_names(labels, x_axis_label, y_axis_label)[2]
   
   ggplot2::ggplot(paths) +
     ggforce::geom_link(ggplot2::aes(x = x0, y = y0, xend = x1, yend = y1,
                   colour = ID, group = ID,
                   alpha = ggplot2::after_stat(index), size = ggplot2::after_stat(index)),
-              n = 1000,
-              show.legend = FALSE) +
+                  n = 1000,
+                  show.legend = FALSE) +
     ggplot2::scale_y_reverse(name = y_name, breaks = 1:5, labels = row_labels) +
     ggplot2::scale_x_continuous(name = x_name, breaks = 1:5, labels = col_labels, position = "top") + 
     ggplot2::ggtitle(label = paste("Change in Response from ", item1_name, " to ", item2_name, sep = ""))
