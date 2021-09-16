@@ -17,5 +17,5 @@ Description: Functions used for analyzing grid-type items. This package includes
 License: GPL-2 | GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: ggplot2, ggforce, pheatmap, grDevices, RColorBrewer
+Imports: ggplot2, ggforce, pheatmap, grDevices, RColorBrewer, rlang
 RoxygenNote: 7.1.2

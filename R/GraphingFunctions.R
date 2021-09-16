@@ -146,16 +146,6 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
 }
 
 
-# A check brings up this note for this function.
-# make_path_diagram: no visible binding for global variable 'x0'
-# make_path_diagram: no visible binding for global variable 'y0'
-# make_path_diagram: no visible binding for global variable 'x1'
-# make_path_diagram: no visible binding for global variable 'y1'
-# make_path_diagram: no visible binding for global variable 'ID'
-# make_path_diagram: no visible binding for global variable 'index'
-# Undefined global functions or variables:
-#  ID index x0 x1 y0 y1
-
 #' Make a Path Diagram for Two Grids
 #' 
 #' The function \code{make_path_diagram} constructs a diagram showing the changes
@@ -183,6 +173,7 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
 #' @return a path diagram showing the shift in each respondent's answer from one
 #'   item to the other.
 #' @export
+#' @importFrom rlang .data
 #'
 #' @examples
 make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2, 
@@ -229,9 +220,9 @@ make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2
   x_name <- make_axis_names(labels, x_axis_label, y_axis_label)[2]
   
   ggplot2::ggplot(paths) +
-    ggforce::geom_link(ggplot2::aes(x = x0, y = y0, xend = x1, yend = y1,
-                  colour = ID, group = ID,
-                  alpha = ggplot2::after_stat(index), size = ggplot2::after_stat(index)),
+    ggforce::geom_link(ggplot2::aes(x = rlang::.data$x0, y = rlang::.data$xy0, xend = rlang::.data$xx1, yend = rlang::.data$xy1,
+                  colour = rlang::.data$xID, group = rlang::.data$xID,
+                  alpha = ggplot2::after_stat(rlang::.data$xindex), size = ggplot2::after_stat(rlang::.data$xindex)),
                   n = 1000,
                   show.legend = FALSE) +
     ggplot2::scale_y_reverse(name = y_name, breaks = 1:5, labels = row_labels) +
