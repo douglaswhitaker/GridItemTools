@@ -77,7 +77,7 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
 #' darker colours indicate larger counts, while lighter colours indicate smaller counts.
 #'
 #' @param grid a matrix.
-#' @param labels a character string specifying which set of rownames and colnames
+#' @param labels a character string specifying which set of row names and col names
 #'   are to be used.
 #' @param title the title of the plot.
 #' @param pos_labels character. Custom column names.
@@ -122,7 +122,7 @@ make_heatmap <- function(grid, labels = c("agree_disagree", "satisfied_dissatisf
   pheatmap::pheatmap(grid, display_numbers = show_counts, number_format = "%i", 
            fontsize = fontsize, fontsize_col = fontsize_names, fontsize_row = fontsize_names, 
            cluster_rows = FALSE, cluster_cols = FALSE, main = title, 
-            color = heatmap_colours, breaks = NA)
+            color = heatmap_colours, breaks = breaks)
 }
 
 make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied",
@@ -155,9 +155,9 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
 #'
 #' @param grid_data data frame of grid-only LimeSurvey formatted data.
 #' @param grid_info list. The output of \code{grid_item_info}.
-#' @param chosen_item_1 a number, OR, if \code{raw_data = TRUE}, a list of matrices. The first item of interest.
-#' @param chosen_item_2 a number, OR, if \code{raw_data = FALSE}, a list of matrices. The second item of interest.
-#' @param labels a character string specifying which set of rownames and colnames
+#' @param chosen_item_1 a number, OR, if \code{limesurvey = FALSE}, a list of matrices. The first item of interest.
+#' @param chosen_item_2 a number, OR, if \code{limesurvey = FALSE}, a list of matrices. The second item of interest.
+#' @param labels a character string specifying which set of row names and col names
 #'   are to be used.
 #' @param pos_labels character. Custom column names.
 #' @param neg_labels character. Custom row names.
