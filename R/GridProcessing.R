@@ -367,21 +367,48 @@ sum_grid_mat_list <- function(mat_list, items = NULL) {
 #' Replaces LimeSurvey's formatting of Likert-type data with the standard numerical scale points.
 #'
 #' @param dat data frame of LimeSurvey formatted Likert-type data.
+#' @param mapping character indicating which pre-generated mapping from LimeSurvey notation to numeric values should be used. 
 #' @param lsvals character vector of LimeSurvey's notation for Likert-type scale points.
 #' @param livals integer vector of Likert-type scale points.
+#' @param cols integer vector indicating which columns/items the fix should be applied to. If default (NULL), all columns/items will be used.
 #'
 #' @return A data frame of numeric Likert-type values for each response.
 #' @export
 #'
 #' @examples
 fix_limesurvey_likert <- function(dat, 
-                                lsvals = c("D4", "D3", "D2", "D1",
-                                           "N0", "A1", "A2", "A3", "A4"), 
-                                livals = 1:9) {
-  for (i in 1:length(livals)) {
-    dat[dat == lsvals[i]] <- livals[i]
+                                  mapping = "DA9",
+                                  lsvals = NULL, 
+                                  livals = NULL,
+                                  cols = NULL) {
+  if (mapping == "DA9"){
+    lsvals <- c("D4", "D3", "D2", "D1",
+                "N0", "A1", "A2", "A3", "A4")
+    livals <- 1:9
+  } else if (mapping == "bA7"){
+    lsvals <- c("A1", "A2", "A3", "A4", "A5", "A6", "A7")
+    livals <- 1:7
+  } else if (mapping == "bA5"){
+    lsvals <- c("A1", "A2", "A3", "A4", "A5")
+    livals <- 1:5
+  } else if (mapping == "other") {
+    cat(paste("Using custom mapping: ", paste(lsvals, livals, sep = "=", collapse = ","), sep = ""))
   }
-  return(as.data.frame(sapply(dat, as.numeric)))
+  
+  if (is.null(cols)){
+    cols <- 1:ncol(dat)
+  } else {
+    other_cols <- which(!(1:ncol(dat) %in% cols))
+  }
+  dat_cols <- dat[,cols]
+  for (i in 1:length(livals)) {
+    dat_cols[dat_cols == lsvals[i]] <- livals[i]
+    #dat[dat[,cols] == lsvals[i], cols] <- livals[i]
+  }
+  dat_cols <- as.data.frame(sapply(dat_cols, as.numeric))
+  full_dat <- cbind(dat[,other_cols], dat_cols)
+  full_dat <- full_dat[,sort(c(other_cols, cols), index.return = TRUE)$ix]
+  return(full_dat)
 }
 
 # This is hard-coded for 5x5 grid displayed in the manner this package uses

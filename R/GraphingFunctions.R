@@ -31,7 +31,16 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
                   "Moderately \npositive",
                   "Quite a bit \npositive",
                   "Extremely positive")
-  
+  accurate   <- c("Not at all \naccurate",
+                  "Slightly accurate",
+                  "Moderately \naccurate",
+                  "Quite a bit \naccurate",
+                  "Extremely accurate")  
+  inaccurate <- c("Not at all \ninaccurate",
+                  "Slightly inaccurate",
+                  "Moderately \ninaccurate",
+                  "Quite a bit \ninaccurate",
+                  "Extremely inaccurate")  
   if (ggplot) {
     
     if (labels == "agree_disagree") {
@@ -43,6 +52,9 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
     } else if (labels == "positive_negative") {
       row_labels <- negativity
       col_labels <- positivity
+    } else if (labels == "accurate_inaccurate") {
+      row_labels <- inaccurate
+      col_labels <- accurate
     } else if (labels == "other") {
       row_labels <- neg_labels
       col_labels <- pos_labels
