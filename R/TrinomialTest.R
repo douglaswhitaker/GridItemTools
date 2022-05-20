@@ -124,16 +124,12 @@ trinomial_test <- function(col1,
   
   # TO DO: make this look nicer (i.e., mimic the output of, say, t.test)
   if (print_info) {
-    print("***   ***   ***   ***   ***   ***   ***")
-    print("Trinomial Test (Ganesalingam, 1994; Bian et al., 2011)")
-    print("")
-    print("Null hypothesis:        prob_pos = prob_neg")
     if (alternative == "greater") {
-      print("Alternative hypothesis: prob_pos > prob_neg")
+      alternative_output <- c("Alternative hypothesis: prob_pos > prob_neg")
     } else if (alternative == "less") {
-      print("Alternative hypothesis: prob_pos < prob_neg")
+      alternative_output <- c("Alternative hypothesis: prob_pos < prob_neg")
     } else if (alternative == "two.sided") {
-      print("Alternative hypothesis: prob_pos != prob_neg")
+      alternative_output <- c("Alternative hypothesis: prob_pos != prob_neg")
     }
     
     # if (reverse_flag){
@@ -141,12 +137,18 @@ trinomial_test <- function(col1,
     #   print("NOTE: Sanity check of data and alternative triggered.")
     #   print("reported p-value is for the OTHER sided test")
     # }
-    print("")
-    print(paste("p-value:", true_p_val))
+    
+    cat("",
+        "        Trinomial Test (Ganesalingam, 1994; Bian et al., 2011)",
+        "",
+        "Null hypothesis:        prob_pos = prob_neg",
+        alternative_output,
+        "",
+        paste("statistic:", n_diff), paste("p-value:", true_p_val), sep = "\n")
   }
   
   # Work on a better return value
-  return(list(N = n,
+  invisible(list(N = n,
               statistic = n_diff,
               p_value = true_p_val,
               alternative = alternative,
