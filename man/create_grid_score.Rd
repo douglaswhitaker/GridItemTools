@@ -4,21 +4,33 @@
 \alias{create_grid_score}
 \title{Form Likert-type Grid Scores}
 \usage{
-create_grid_score(x, gridinfo, b = -0.5, reverse_code = NULL)
+create_grid_score(
+  x,
+  gridinfo,
+  b = (uni.min - uni.max)/16,
+  uni.min = 1,
+  uni.max = 9,
+  reverse_code = NULL,
+  prefix = "conv_uni_"
+)
 }
 \arguments{
 \item{x}{data frame of grid-only LimeSurvey formatted data.}
 
 \item{gridinfo}{list. The output of \code{grid_item_info}.}
 
-\item{b}{a parameter between -1 and 0.}
+\item{b}{a parameter between -1 and 0, default is a value satisfying Audrezet's (2016) six constraints.}
 
-\item{reverse_code}{a vector indicating which grids are reverse-coded. 
+\item{uni.min, uni.max}{integers specifying the minimum and maximum value for the unidimensional (Likert-type) mapping. Default is a 9-point scale.}
+
+\item{reverse_code}{a vector indicating which grids are reverse-coded.}
+
+\item{prefix}{a string which is the prefix used for column names for the converted score data frame. 
 a value of 0 means not reverse coded; a value of 1 means reverse coded.}
 }
 \value{
 A data frame in which the grid scores for each respondent have been 
-  converted to values equivalent to those on 9 point Likert-type scales.
+  converted to values equivalent to those on Likert-type scale.
 }
 \description{
 For each item and respondent, creates scores equivalent to a Likert-type scale

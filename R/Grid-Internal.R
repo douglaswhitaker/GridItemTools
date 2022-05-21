@@ -30,9 +30,10 @@ col_to_xy <- function(gc, mat_rows, mat_cols, diag_info_warning = FALSE, rc = FA
 }
 
 # Essentially just creating an empty data.frame with the appropriate column names
-make_grid9s <- function(grid_items_names) {
+# Eventually rename this because it isn't just a 9-point conversion anymore, but this is a low-priority (this is an internal function).
+make_grid9s <- function(grid_items_names, prefix = "conv_uni_") {
   grid9s <- t(data.frame(rep(NA, length(grid_items_names))))
-  colnames(grid9s) <- paste("c9", grid_items_names, sep = "")
+  colnames(grid9s) <- paste(prefix, grid_items_names, sep = "")
   grid9s <- grid9s[-1, ]
   return(grid9s)
 } # This function seems to be designed for a 9 point scale; could it be adapted?
@@ -49,12 +50,12 @@ rename_cols <- function(grid_items) {
   return(new_names)
 }
 
-display_grid_to_nine <- function(gcvals=c(1:25), rows=5, cols=5, b=-0.5, match_lit = FALSE) {
+display_grid_to_uni <- function(gcvals=c(1:25), rows=5, cols=5, b=-0.5, match_lit = FALSE) {
   mat <- matrix(NA, nrow = 5, ncol = 5)
   for (gc in gcvals) {
     i <- col_to_xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
     j <- col_to_xy(gc, rows, cols)[1] # the Y value, the row in our format
-    mat[j, i] <- grid_to_nine(gc, rows, cols, b)
+    mat[j, i] <- grid_to_uni(gc, rows, cols, b)
   }
   colnames(mat) <- paste("Agree", 1:5, sep = "")
   rownames(mat) <- paste("Disagree", 1:5, sep = "")

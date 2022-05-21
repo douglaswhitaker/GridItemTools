@@ -24,11 +24,11 @@ make_path_diagram(
 
 \item{grid_info}{list. The output of \code{grid_item_info}.}
 
-\item{chosen_item_1}{a number, OR, if \code{raw_data = TRUE}, a list of matrices. The first item of interest.}
+\item{chosen_item_1}{a number, OR, if \code{limesurvey = FALSE}, a list of matrices. The first item of interest.}
 
-\item{chosen_item_2}{a number, OR, if \code{raw_data = FALSE}, a list of matrices. The second item of interest.}
+\item{chosen_item_2}{a number, OR, if \code{limesurvey = FALSE}, a list of matrices. The second item of interest.}
 
-\item{labels}{a character string specifying which set of rownames and colnames
+\item{labels}{a character string specifying which set of row names and col names
 are to be used.}
 
 \item{pos_labels}{character. Custom column names.}

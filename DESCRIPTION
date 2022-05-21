@@ -1,8 +1,8 @@
 Package: GridItemTools
 Type: Package
 Title: Grid Item Tools
-Version: 0.0.14
-Date: 2022-05-20
+Version: 0.0.15
+Date: 2022-05-21
 Authors@R: c(
   person("Douglas", "Whitaker", email = "douglas.whitaker@msvu.ca", 
     role = c("cre", "aut"), comment = c(ORCID = "0000-0002-6895-7437")),
@@ -19,4 +19,4 @@ License: GPL-2 | GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: ggplot2, ggforce, pheatmap, grDevices, RColorBrewer, rlang
-RoxygenNote: 7.1.2
+RoxygenNote: 7.1.1

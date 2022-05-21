@@ -6,16 +6,22 @@
 \usage{
 fix_limesurvey_likert(
   dat,
-  lsvals = c("D4", "D3", "D2", "D1", "N0", "A1", "A2", "A3", "A4"),
-  livals = 1:9
+  mapping = "DA9",
+  lsvals = NULL,
+  livals = NULL,
+  cols = NULL
 )
 }
 \arguments{
 \item{dat}{data frame of LimeSurvey formatted Likert-type data.}
 
+\item{mapping}{character indicating which pre-generated mapping from LimeSurvey notation to numeric values should be used.}
+
 \item{lsvals}{character vector of LimeSurvey's notation for Likert-type scale points.}
 
 \item{livals}{integer vector of Likert-type scale points.}
+
+\item{cols}{integer vector indicating which columns/items the fix should be applied to. If default (NULL), all columns/items will be used.}
 }
 \value{
 A data frame of numeric Likert-type values for each response.

@@ -108,17 +108,19 @@ grid_item_info <- function(x, rows = 5, cols = 5) {
 #'
 #' @param x data frame of grid-only LimeSurvey formatted data.
 #' @param gridinfo list. The output of \code{grid_item_info}.
-#' @param b a parameter between -1 and 0.
+#' @param b a parameter between -1 and 0, default is a value satisfying Audrezet's (2016) six constraints. 
+#' @param uni.min,uni.max integers specifying the minimum and maximum value for the unidimensional (Likert-type) mapping. Default is a 9-point scale.
 #' @param reverse_code a vector indicating which grids are reverse-coded. 
+#' @param prefix a string which is the prefix used for column names for the converted score data frame. 
 #'   a value of 0 means not reverse coded; a value of 1 means reverse coded.
 #'
 #' @return A data frame in which the grid scores for each respondent have been 
-#'   converted to values equivalent to those on 9 point Likert-type scales.
+#'   converted to values equivalent to those on Likert-type scale.
 #' @export
 #'
 #' @examples
-create_grid_score <- function(x, gridinfo, b = -0.5, reverse_code = NULL) {
-  grid9s <- make_grid9s(gridinfo$names)
+create_grid_score <- function(x, gridinfo, b = (uni.min - uni.max)/16, uni.min = 1, uni.max = 9, reverse_code = NULL, prefix = "conv_uni_") {
+  grid9s <- make_grid9s(gridinfo$names, prefix = prefix)
   rows <- gridinfo$dim[1]
   cols <- gridinfo$dim[2]
   
@@ -130,7 +132,7 @@ create_grid_score <- function(x, gridinfo, b = -0.5, reverse_code = NULL) {
     vals <- c()
     for (i in 1:length(gridinfo$names)) {
       grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value, the indicator of which of 25 columns the response is in
-      vals[i] <- grid_to_nine(grid_column, b = b, rc = reverse_code[i])
+      vals[i] <- grid_to_uni(grid_column, b = b, rc = reverse_code[i])
     }
     grid9s <- rbind(grid9s, current_row = vals)
   }
@@ -254,8 +256,8 @@ grid_summary_tri <- function(mat, rows = NULL, cols = NULL, offdiag = 0,
 } # Could be adapted for non-5x5 grids.
 
 
-# This function implements the model proposed in Audrezet, Olsen, and Tudoran (2016)'s Appendix 2
-# Convert grid value to 1 to 9 value
+# This function implements the model proposed in Audrezet, Olsen, and Tudoran (2016)'s Appendix 2 with modifications for different unidimensional scales.
+# Convert grid value to unidimensional value
 #' Convert Grid Value to Likert-type Value
 #' 
 #' Converts a grid cell's position to a score equivalent to a Likert-type scale point.
@@ -263,7 +265,8 @@ grid_summary_tri <- function(mat, rows = NULL, cols = NULL, offdiag = 0,
 #' @param gc integer indicating a grid cell's position as though the grid were a
 #'   matrix filled by row with sequential integers.
 #' @param rows,cols the dimensions of the grid item.
-#' @param b a parameter between -1 and 0.
+#' @param b a parameter between -1 and 0, default is a value satisfying Audrezet's (2016) six constraints. 
+#' @param uni.min,uni.max integers specifying the minimum and maximum value for the unidimensional (Likert-type) mapping. Default is a 9-point scale.
 #' @param rc logical. If \code{TRUE} the function will correct for a reverse-coded grid item.
 #'
 #' @return A number derived from a grid cell's position
@@ -271,7 +274,7 @@ grid_summary_tri <- function(mat, rows = NULL, cols = NULL, offdiag = 0,
 #' @export
 #'
 #' @examples
-grid_to_nine <- function(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE) {
+grid_to_uni <- function(gc, rows = 5, cols = 5, b = (uni.min - uni.max)/16, uni.min = 1, uni.max = 9, rc = FALSE) {
   if (rc) { # reverse-coded
     i <- col_to_xy(gc, rows, cols)[1] 
     j <- col_to_xy(gc, rows, cols)[2]
@@ -279,8 +282,9 @@ grid_to_nine <- function(gc, rows = 5, cols = 5, b = -0.5, rc = FALSE) {
     i <- col_to_xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
     j <- col_to_xy(gc, rows, cols)[1] # the Y value, the row in our format
   }
-  return((b + 2) * i + (b * j) - 1 - (6 * b))
-} # This function can only be used to transform a 5-by-5 grid to a 9 point scale. 
+  return((i-1)*((uni.max - uni.min)/4) + (i + j - 6)*b + uni.min)
+  #return((b + 2) * i + (b * j) - 1 - (6 * b)) # Audrezet's fixed 9-point version
+} 
 
 # This function is intended to be applied to a list that is the output of 
 # grid_cell_counts with type = "respondents"

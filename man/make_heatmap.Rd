@@ -21,7 +21,7 @@ make_heatmap(
 \arguments{
 \item{grid}{a matrix.}
 
-\item{labels}{a character string specifying which set of rownames and colnames
+\item{labels}{a character string specifying which set of row names and col names
 are to be used.}
 
 \item{title}{the title of the plot.}
