@@ -11,6 +11,7 @@ create_grid_score(
   uni.min = 1,
   uni.max = 9,
   reverse_code = NULL,
+  subset = NULL,
   prefix = "conv_uni_"
 )
 }
@@ -24,6 +25,8 @@ create_grid_score(
 \item{uni.min, uni.max}{integers specifying the minimum and maximum value for the unidimensional (Likert-type) mapping. Default is a 9-point scale.}
 
 \item{reverse_code}{a vector indicating which grids are reverse-coded.}
+
+\item{subset}{a vector indiciating which items to include. By default (NULL) items are used.}
 
 \item{prefix}{a string which is the prefix used for column names for the converted score data frame. 
 a value of 0 means not reverse coded; a value of 1 means reverse coded.}
