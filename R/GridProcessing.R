@@ -111,6 +111,7 @@ grid_item_info <- function(x, rows = 5, cols = 5) {
 #' @param b a parameter between -1 and 0, default is a value satisfying Audrezet's (2016) six constraints. 
 #' @param uni.min,uni.max integers specifying the minimum and maximum value for the unidimensional (Likert-type) mapping. Default is a 9-point scale.
 #' @param reverse_code a vector indicating which grids are reverse-coded. 
+#' @param subset a vector indiciating which items to include. By default (NULL) items are used.
 #' @param prefix a string which is the prefix used for column names for the converted score data frame. 
 #'   a value of 0 means not reverse coded; a value of 1 means reverse coded.
 #'
@@ -119,18 +120,25 @@ grid_item_info <- function(x, rows = 5, cols = 5) {
 #' @export
 #'
 #' @examples
-create_grid_score <- function(x, gridinfo, b = (uni.min - uni.max)/16, uni.min = 1, uni.max = 9, reverse_code = NULL, prefix = "conv_uni_") {
-  grid9s <- make_grid9s(gridinfo$names, prefix = prefix)
+create_grid_score <- function(x, gridinfo, b = (uni.min - uni.max)/16, 
+                              uni.min = 1, uni.max = 9, 
+                              reverse_code = NULL, 
+                              subset = NULL,
+                              prefix = "conv_uni_") {
+  if (is.null(subset)){
+    subset <- 1:length(gridinfo$names)
+  }
+  grid9s <- make_grid9s(gridinfo$names[subset], prefix = prefix)
   rows <- gridinfo$dim[1]
   cols <- gridinfo$dim[2]
   
   if (is.null(reverse_code)) {
-    reverse_code <- rep(0, length(gridinfo$names))
+    reverse_code <- rep(0, length(gridinfo$names[subset]))
   }
   
   for (current_row in 1:nrow(x)) {
     vals <- c()
-    for (i in 1:length(gridinfo$names)) {
+    for (i in 1:length(gridinfo$names[subset])) {
       grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value, the indicator of which of 25 columns the response is in
       vals[i] <- grid_to_uni(grid_column, b = b, rc = reverse_code[i])
     }
