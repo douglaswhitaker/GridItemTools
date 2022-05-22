@@ -34,23 +34,29 @@ grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
     if (is.null(chosen_items)) {
       chosen_items <- 1:length(gridinfo$names)
     }
-    for (i in chosen_items) {      
-      grid_resp_list[[gridinfo$names[i]]] <- matrix(0, nrow = rows, ncol = cols)
+    for (i in 1:length(chosen_items)) {      
+      grid_resp_list[[gridinfo$names[chosen_items[i]]]] <- matrix(0, nrow = rows, ncol = cols)
       
       for (current_row in 1:nrow(x)) {
-        
-        grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value
-        grid_xy <- col_to_xy(grid_column, rows, cols, rc = reverse_code[i])
-        grid_resp_list[[gridinfo$names[i]]][grid_xy] <- grid_resp_list[[gridinfo$names[i]]][grid_xy] + 1
+        grid_column <- which(!is.na(x[current_row, 
+                                      grepl(x = names(x), 
+                                            fixed = TRUE, 
+                                            pattern = paste(
+                                              gridinfo$names[chosen_items[i]], 
+                                              ".", 
+                                              sep = ""))]))
+        #grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value
+        grid_xy <- col_to_xy(grid_column, rows, cols, rc = reverse_code[chosen_items[i]])
+        grid_resp_list[[gridinfo$names[chosen_items[i]]]][grid_xy] <- grid_resp_list[[gridinfo$names[chosen_items[i]]]][grid_xy] + 1
       }
       
       if (return_table) {
-        grid_resp_list[[gridinfo$names[i]]] <- as.table(grid_resp_list[[gridinfo$names[i]]])
-        rownames(grid_resp_list[[gridinfo$names[i]]]) <- c("LowNeg",
-                                                           rep("", nrow(grid_resp_list[[gridinfo$names[i]]]) - 2),
+        grid_resp_list[[gridinfo$names[chosen_items[i]]]] <- as.table(grid_resp_list[[gridinfo$names[chosen_items[i]]]])
+        rownames(grid_resp_list[[gridinfo$names[chosen_items[i]]]]) <- c("LowNeg",
+                                                           rep("", nrow(grid_resp_list[[gridinfo$names[chosen_items[i]]]]) - 2),
                                                            "HighNeg")
-        colnames(grid_resp_list[[gridinfo$names[i]]]) <- c("LowPos",
-                                                           rep("", ncol(grid_resp_list[[gridinfo$names[i]]]) - 2),
+        colnames(grid_resp_list[[gridinfo$names[chosen_items[i]]]]) <- c("LowPos",
+                                                           rep("", ncol(grid_resp_list[[gridinfo$names[chosen_items[i]]]]) - 2),
                                                            "HighPos")
       }
     }
@@ -62,9 +68,15 @@ grid_cell_counts <- function(x, gridinfo, type = "items", reverse_code = NULL,
       if (is.null(chosen_items)) {
         chosen_items <- 1:length(gridinfo$names)
       }
-      for (i in chosen_items) {
-        
-        grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value
+      for (i in 1:length(chosen_items)) {      
+        grid_column <- which(!is.na(x[current_row, 
+                                      grepl(x = names(x), 
+                                            fixed = TRUE, 
+                                            pattern = paste(
+                                              gridinfo$names[chosen_items[i]], 
+                                              ".", 
+                                              sep = ""))]))
+        #grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value
         grid_xy <- col_to_xy(grid_column, rows, cols, rc = reverse_code[i])
         grid_resp_list[[current_row]][grid_xy] <- grid_resp_list[[current_row]][grid_xy] + 1
       }
