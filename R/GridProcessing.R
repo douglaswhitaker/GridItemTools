@@ -138,8 +138,9 @@ create_grid_score <- function(x, gridinfo, b = (uni.min - uni.max)/16,
   
   for (current_row in 1:nrow(x)) {
     vals <- c()
-    for (item in gridinfo$names[subset]){
-      grid_column <- x[current_row, grepl(x = names(x), pattern = item)]
+    for (i in 1:length(gridinfo$names[subset])){
+      grid_column <- which(!is.na(x[current_row, grepl(x = names(x), fixed = TRUE, 
+                                                       pattern = paste(gridinfo$names[subset][i], ".", sep = ""))]))
       vals[i] <- grid_to_uni(grid_column, b = b, rc = reverse_code[i],
                             uni.min = uni.min, uni.max = uni.max)
     }
