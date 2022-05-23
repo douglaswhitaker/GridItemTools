@@ -6,7 +6,8 @@
 \usage{
 make_heatmap(
   grid,
-  labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "other"),
+  labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative",
+    "accurate_inaccurate", "other"),
   title = "Heatmap for Grid Item",
   pos_labels = NULL,
   neg_labels = NULL,

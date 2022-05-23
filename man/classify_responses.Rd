@@ -4,10 +4,12 @@
 \alias{classify_responses}
 \title{Form Counts for Four Grid Areas}
 \usage{
-classify_responses(grid)
+classify_responses(grid, print_cell_class_mapping = FALSE)
 }
 \arguments{
 \item{grid}{a matrix.}
+
+\item{print_cell_class_mapping}{A logical indicating whether a matrix showing the mapping of response types to cells should be printed. If TRUE, then no computation occurs and any option passed to grid is ignored.}
 }
 \value{
 A list containing the grid cell counts for each of four categories:

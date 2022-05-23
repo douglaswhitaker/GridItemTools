@@ -11,7 +11,8 @@ grid_to_uni(
   b = (uni.min - uni.max)/16,
   uni.min = 1,
   uni.max = 9,
-  rc = FALSE
+  rc = FALSE,
+  classify_response = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ matrix filled by row with sequential integers.}
 \item{uni.min, uni.max}{integers specifying the minimum and maximum value for the unidimensional (Likert-type) mapping. Default is a 9-point scale.}
 
 \item{rc}{logical. If \code{TRUE} the function will correct for a reverse-coded grid item.}
+
+\item{classify_response}{Logical indicating if Positive (P), Negative (N), Indifferent (I), or Ambivalent (A) should be returned instead of a numeric value computed with S(i,j). Default is FALSE.}
 }
 \value{
 A number derived from a grid cell's position

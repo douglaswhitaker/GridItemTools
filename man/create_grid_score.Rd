@@ -12,7 +12,8 @@ create_grid_score(
   uni.max = 9,
   reverse_code = NULL,
   subset = NULL,
-  prefix = "conv_uni_"
+  prefix = "conv_uni_",
+  classify_response = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ create_grid_score(
 
 \item{prefix}{a string which is the prefix used for column names for the converted score data frame. 
 a value of 0 means not reverse coded; a value of 1 means reverse coded.}
+
+\item{classify_response}{Logical indicating if Positive (P), Negative (N), Indifferent (I), or Ambivalent (A) should be returned instead of a numeric value computed with S(i,j). Default is FALSE.}
 }
 \value{
 A data frame in which the grid scores for each respondent have been 

@@ -126,6 +126,7 @@ grid_item_info <- function(x, rows = 5, cols = 5) {
 #' @param subset a vector indiciating which items to include. By default (NULL) items are used.
 #' @param prefix a string which is the prefix used for column names for the converted score data frame. 
 #'   a value of 0 means not reverse coded; a value of 1 means reverse coded.
+#' @param classify_response Logical indicating if Positive (P), Negative (N), Indifferent (I), or Ambivalent (A) should be returned instead of a numeric value computed with S(i,j). Default is FALSE.
 #'
 #' @return A data frame in which the grid scores for each respondent have been 
 #'   converted to values equivalent to those on Likert-type scale.
@@ -136,7 +137,8 @@ create_grid_score <- function(x, gridinfo, b = (uni.min - uni.max)/16,
                               uni.min = 1, uni.max = 9, 
                               reverse_code = NULL, 
                               subset = NULL,
-                              prefix = "conv_uni_") {
+                              prefix = "conv_uni_",
+                              classify_response = FALSE) {
   if (is.null(subset)){
     subset <- 1:length(gridinfo$names)
   }
@@ -154,7 +156,7 @@ create_grid_score <- function(x, gridinfo, b = (uni.min - uni.max)/16,
       grid_column <- which(!is.na(x[current_row, grepl(x = names(x), fixed = TRUE, 
                                                        pattern = paste(gridinfo$names[subset][i], ".", sep = ""))]))
       vals[i] <- grid_to_uni(grid_column, b = b, rc = reverse_code[i],
-                            uni.min = uni.min, uni.max = uni.max)
+                            uni.min = uni.min, uni.max = uni.max, classify_response = classify_response)
     }
     # for (i in 1:length(gridinfo$names[subset])) {
     #   grid_column <- which(!is.na(x[current_row, ((i - 1) * (rows * cols) + 1):(i * (rows * cols))])) # should only be one value, the indicator of which of 25 columns the response is in
@@ -295,13 +297,14 @@ grid_summary_tri <- function(mat, rows = NULL, cols = NULL, offdiag = 0,
 #' @param b a parameter between -1 and 0, default is a value satisfying Audrezet's (2016) six constraints. 
 #' @param uni.min,uni.max integers specifying the minimum and maximum value for the unidimensional (Likert-type) mapping. Default is a 9-point scale.
 #' @param rc logical. If \code{TRUE} the function will correct for a reverse-coded grid item.
-#'
+#' @param classify_response Logical indicating if Positive (P), Negative (N), Indifferent (I), or Ambivalent (A) should be returned instead of a numeric value computed with S(i,j). Default is FALSE.
+#' 
 #' @return A number derived from a grid cell's position
 #'   and transformed to be equivalent to a value on a 9 point Likert-type scale.
 #' @export
 #'
 #' @examples
-grid_to_uni <- function(gc, rows = 5, cols = 5, b = (uni.min - uni.max)/16, uni.min = 1, uni.max = 9, rc = FALSE) {
+grid_to_uni <- function(gc, rows = 5, cols = 5, b = (uni.min - uni.max)/16, uni.min = 1, uni.max = 9, rc = FALSE, classify_response = FALSE) {
   if (rc) { # reverse-coded
     i <- col_to_xy(gc, rows, cols)[1] 
     j <- col_to_xy(gc, rows, cols)[2]
@@ -309,8 +312,35 @@ grid_to_uni <- function(gc, rows = 5, cols = 5, b = (uni.min - uni.max)/16, uni.
     i <- col_to_xy(gc, rows, cols)[2] # this is the X value (positive axis), so the column in our format
     j <- col_to_xy(gc, rows, cols)[1] # the Y value, the row in our format
   }
-  return((i-1)*((uni.max - uni.min)/4) + (i + j - 6)*b + uni.min)
-  #return((b + 2) * i + (b * j) - 1 - (6 * b)) # Audrezet's fixed 9-point version
+  if (classify_response){
+    if (rows != 5 | cols != 5){
+      stop("Only implemented for 5x5 grids.")
+    }
+    tmp_grid <- matrix(0, nrow = rows, ncol = cols)
+    tmp_grid[i,j] <- 1
+    tmp_grid <- t(tmp_grid)
+    #print(tmp_grid)
+    tmp_resp <- classify_responses(tmp_grid)
+
+    #print(tmp_resp)
+    # if (sum(sapply(classify_responses(tmp_resp), FUN = I)) != 1){
+    #   stop("Error: different than 1 response when 1 response expected.")
+    # }
+    if (tmp_resp$indifferent_counts == 1){
+      return("I")
+    } else if (tmp_resp$ambivalent_counts == 1) {
+      return("A")
+    } else if (tmp_resp$positive_counts == 1) {
+      return("P")
+    } else if (tmp_resp$negative_counts == 1) {
+      return("N")
+    } 
+  }
+  else {
+    return((i-1)*((uni.max - uni.min)/4) + (i + j - 6)*b + uni.min)
+    #return((b + 2) * i + (b * j) - 1 - (6 * b)) # Audrezet's fixed 9-point version
+  }
+
 } 
 
 # This function is intended to be applied to a list that is the output of 
@@ -449,19 +479,30 @@ fix_limesurvey_likert <- function(dat,
 #' attitudes that can be measured using grid items.
 #'
 #' @param grid a matrix.
+#' @param print_cell_class_mapping A logical indicating whether a matrix showing the mapping of response types to cells should be printed. If TRUE, then no computation occurs and any option passed to grid is ignored.
 #'
 #' @return A list containing the grid cell counts for each of four categories:
 #'   indifferent, ambivalent, positive, and negative. 
 #' @export
 #'
 #' @examples
-classify_responses <- function(grid) {
-  grid <- t(grid) # based the counts on the one in the appendix, but it's really the transpose
+classify_responses <- function(grid, print_cell_class_mapping = FALSE) {
   # These are based on Audrezet et al. (2016, p. 47) Figure A2
   indifferent_cells <- c(1, 2, 6, 7, 8, 12)
   ambivalent_cells <- c(13, 14, 18, 19, 24, 20, 25)
   negative_cells <- c(21, 22, 16, 17, 11, 23)
   positive_cells <- c(5, 4, 10, 3, 9, 15)
+  
+  if (print_cell_class_mapping){
+    tmp <- matrix(NA, nrow = 5, ncol = 5)
+    tmp[indifferent_cells] <- "I"
+    tmp[ambivalent_cells] <- "A"
+    tmp[negative_cells] <- "N"
+    tmp[positive_cells] <- "P"
+    return(t(tmp))
+  }
+
+  grid <- t(grid) # based the counts on the one in the appendix, but it's really the transpose
   
   indifferent_counts <- sum(as.vector(grid)[indifferent_cells])
   ambivalent_counts <- sum(as.vector(grid)[ambivalent_cells])
