@@ -1,4 +1,4 @@
-make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "other"), 
+make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissatisfied", "positive_negative", "accurate_inaccurate", "other"), 
                              pos_labels = NULL, neg_labels = NULL, ggplot = FALSE) {
 
   disagreement <- c("No disagreement \nat all",
@@ -73,6 +73,9 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
     } else if (labels == "positive_negative") {
       rownames(grid) <- negativity
       colnames(grid) <- positivity
+    } else if (labels == "accurate_inaccurate") {
+      rownames(grid) <- inaccurate
+      colnames(grid) <- accurate
     } else if (labels == "other") {
       rownames(grid) <- neg_labels
       colnames(grid) <- pos_labels
@@ -109,7 +112,7 @@ make_grid_labels <- function(grid, labels = c("agree_disagree", "satisfied_dissa
 #'
 #' @examples
 make_heatmap <- function(grid, labels = c("agree_disagree", "satisfied_dissatisfied",
-                                          "positive_negative", "other"),
+                                          "positive_negative", "accurate_inaccurate", "other"),
                          title = "Heatmap for Grid Item", pos_labels = NULL, 
                          neg_labels = NULL, colours = c("purple", "green", "red", "custom"),
                          custom_palette, show_counts = TRUE, breaks = NA, 
@@ -138,7 +141,7 @@ make_heatmap <- function(grid, labels = c("agree_disagree", "satisfied_dissatisf
 }
 
 make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied",
-                                       "positive_negative", "other"),
+                                       "positive_negative", "accurate_inaccurate", "other"),
                             x_axis_label = NULL, y_axis_label = NULL) {
   if (labels == "agree_disagree") {
     y_name <- "Disagreement"
@@ -149,6 +152,9 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
   } else if (labels == "positive_negative") {
     y_name <- "Negative Response"
     x_name <- "Positive Response"
+  } else if (labels == "accurate_inaccurate") {
+    y_name <- "Inaccurate Response"
+    x_name <- "Accurate Response"
   } else if (labels == "other") {
     y_name <- y_axis_label
     x_name <- x_axis_label
@@ -191,7 +197,7 @@ make_axis_names <- function(labels = c("agree_disagree", "satisfied_dissatisfied
 make_path_diagram <- function(grid_data, grid_info, chosen_item_1, chosen_item_2, 
                               labels = c("agree_disagree", 
                                          "satisfied_dissatisfied",
-                                         "positive_negative", "other"),
+                                         "positive_negative", "accurate_inaccurate", "other"),
                               pos_labels = NULL, neg_labels = NULL, 
                               x_axis_label = NULL, y_axis_label = NULL, 
                               item_1_name = "Item 1", item_2_name = "Item 2", limesurvey = TRUE) {
