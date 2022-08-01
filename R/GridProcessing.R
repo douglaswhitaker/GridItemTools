@@ -458,6 +458,7 @@ fix_limesurvey_likert <- function(dat,
   
   if (is.null(cols)){
     cols <- 1:ncol(dat)
+    other_cols <- NULL
   } else {
     other_cols <- which(!(1:ncol(dat) %in% cols))
   }
@@ -467,9 +468,14 @@ fix_limesurvey_likert <- function(dat,
     #dat[dat[,cols] == lsvals[i], cols] <- livals[i]
   }
   dat_cols <- as.data.frame(sapply(dat_cols, as.numeric))
-  full_dat <- cbind(dat[,other_cols], dat_cols)
-  full_dat <- full_dat[,sort(c(other_cols, cols), index.return = TRUE)$ix]
-  return(full_dat)
+  if (is.null(other_cols)){
+    return(dat_cols)
+  }
+  else {
+    full_dat <- cbind(dat[,other_cols], dat_cols)
+    full_dat <- full_dat[,sort(c(other_cols, cols), index.return = TRUE)$ix]
+    return(full_dat)
+  }
 }
 
 # This is hard-coded for 5x5 grid displayed in the manner this package uses
